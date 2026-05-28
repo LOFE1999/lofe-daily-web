@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>LOFE Daily · 2026-05-18</title>
+  <style>
+    :root{--sh:0 1px 5px rgba(0,0,0,.08);--r:10px;}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+          background:#e8e8ed;color:#1c1c1e;font-size:14px;overflow-x:hidden;}
+
+    /* ── Header ── */
+    header{background:#1c1c1e;color:#fff;padding:11px 16px;
+            display:flex;align-items:center;justify-content:space-between;
+            position:sticky;top:0;z-index:300;height:44px;}
+    .ht{font-size:16px;font-weight:700;letter-spacing:-.3px;}
+    .hm{display:flex;align-items:center;gap:8px;}
+    .hbadge{font-size:11px;background:#3a3a3c;color:#aeaeb2;padding:2px 9px;border-radius:20px;}
+    .hnew{font-size:11px;background:#007aff22;color:#007aff;padding:2px 9px;border-radius:20px;}
+    .hdate{font-size:11px;color:#48484a;}
+
+    /* ── Nav ── */
+    nav{display:flex;gap:6px;padding:7px 12px;background:#fff;
+         border-bottom:1px solid #d1d1d6;overflow-x:auto;
+         scrollbar-width:none;position:sticky;top:44px;z-index:200;height:38px;}
+    nav::-webkit-scrollbar{display:none;}
+    .np{text-decoration:none;font-size:11px;font-weight:600;color:var(--c);
+         padding:3px 11px;border-radius:14px;white-space:nowrap;flex-shrink:0;
+         background:color-mix(in srgb,var(--c) 10%,white);
+         border:1.5px solid color-mix(in srgb,var(--c) 22%,white);}
+
+    /* ── Kanban board ── */
+    .board{display:flex;gap:10px;padding:10px;
+            height:calc(100vh - 82px);overflow-x:auto;align-items:flex-start;}
+    .board::-webkit-scrollbar{height:6px;}
+    .board::-webkit-scrollbar-thumb{background:#c7c7cc;border-radius:3px;}
+
+    /* ── Column ── */
+    .col{flex:0 0 300px;background:#f2f2f7;border-radius:var(--r);
+          display:flex;flex-direction:column;
+          max-height:100%;overflow:hidden;}
+    .colh{font-size:12px;font-weight:700;padding:10px 12px;
+           border-left:4px solid;display:flex;align-items:center;gap:6px;
+           background:#fff;flex-shrink:0;}
+    .cnt{font-size:10px;font-weight:600;color:#8e8e93;background:#e5e5ea;
+          padding:1px 6px;border-radius:7px;margin-left:auto;}
+    .cards{overflow-y:auto;flex:1;padding:6px;
+            scrollbar-width:thin;scrollbar-color:#d1d1d6 transparent;}
+
+    /* ── Card ── */
+    .card{background:#fff;border-radius:8px;margin-bottom:8px;
+           box-shadow:var(--sh);overflow:hidden;position:relative;}
+    .thumb{width:100%;height:160px;object-fit:cover;display:block;
+            background:#f2f2f7;}
+    .cmeta{display:flex;gap:5px;align-items:center;flex-wrap:wrap;
+            padding:8px 10px 4px;}
+    .ctag{font-size:10px;font-weight:600;color:#636366;background:#f2f2f7;
+           padding:1px 6px;border-radius:5px;}
+    .nbadge{font-size:10px;font-weight:700;color:#fff;background:#ff3b30;
+             padding:1px 6px;border-radius:5px;}
+    .dbadge{font-size:10px;color:#8e8e93;background:#f2f2f7;
+             padding:1px 6px;border-radius:5px;}
+    .ct{display:block;font-size:13px;font-weight:600;color:#1c1c1e;
+         text-decoration:none;line-height:1.4;padding:4px 10px 8px;}
+    .ct:hover{color:#007aff;}
+    .cdesc{font-size:12px;color:#48484a;line-height:1.5;
+            padding:0 10px 10px;}
+
+    /* ── Hover summary overlay ── */
+    .sum-ov{position:absolute;bottom:0;left:0;right:0;
+             max-height:0;overflow:hidden;
+             background:rgba(28,28,30,.92);color:#f2f2f7;
+             padding:0 12px;font-size:11.5px;line-height:1.65;
+             transition:max-height .3s ease,padding .3s ease;
+             border-radius:0 0 8px 8px;backdrop-filter:blur(4px);}
+    .card:hover .sum-ov{max-height:280px;padding:10px 12px;overflow-y:auto;}
+    .sum-pending{font-style:italic;color:#8e8e93;font-size:11px;}
+    .sh{font-weight:700;color:#f2f2f7;margin:7px 0 2px;font-size:11.5px;}
+    .sh:first-child{margin-top:0;}
+    .st{color:#d1d1d6;margin-bottom:2px;}
+    ul{padding-left:15px;margin:2px 0 5px;}
+    li{margin-bottom:2px;color:#d1d1d6;}
+
+    .emp{color:#c7c7cc;font-style:italic;padding:16px;font-size:12px;
+          text-align:center;line-height:1.6;}
+    .pending span{display:block;font-size:10px;color:#aeaeb2;margin-top:4px;}
+
+    @media(max-width:640px){
+      .board{flex-direction:column;height:auto;overflow-x:hidden;}
+      .col{flex:none;width:100%;max-height:none;}
+      .cards{overflow-y:visible;max-height:none;}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <span class="ht">LOFE Daily</span>
+    <div class="hm">
+      <span class="hdate">2026-05-18 23:23</span>
+      
+      <span class="hbadge">43 条</span>
+    </div>
+  </header>
+  <nav><a href="#🎵_音乐制作" class="np" style="--c:#7c3aed">🎵 音乐制作</a><a href="#🎭_娱乐" class="np" style="--c:#dc2626">🎭 娱乐</a><a href="#🧠_自我提升" class="np" style="--c:#059669">🧠 自我提升</a><a href="#📱_AI工具" class="np" style="--c:#0ea5e9">📱 AI工具</a><a href="#📱_认知科学" class="np" style="--c:#f59e0b">📱 认知科学</a><a href="#📱_数字游民" class="np" style="--c:#10b981">📱 数字游民</a><a href="#📱_音乐制作" class="np" style="--c:#a855f7">📱 音乐制作</a></nav>
+  <div class="board"><section id="🎵_音乐制作" class="col">
+          <h2 class="colh" style="border-color:#7c3aed;color:#7c3aed">
+            🎵 音乐制作<span class="cnt">24</span>
+          </h2>
+          <div class="cards"><article class="card">
+          <img class="thumb" src="https://img.youtube.com/vi/b8lvmZC-dvQ/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
+          <div class="cmeta"><span class="ctag">AudioPilz</span></div>
+          <a class="ct" href="https://youtube.com/watch?v=b8lvmZC-dvQ" target="_blank">Bad Gear - The 2000s are BACK!!!</a>
+          <div class="sum-ov"><p class="st">摘要失败（限速）: 请稍后重试</p></div>
+        </article><article class="card">
+          <img class="thumb" src="https://img.youtube.com/vi/CEO4Gc_rxeE/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
+          <div class="cmeta"><span class="ctag">True Cuckoo</span></div>
+          <a class="ct" href="https://youtube.com/watch?v=CEO4Gc_rxeE" target="_blank">Sonicware - Superbooth 2026 (with subtitles)</a>
+          <div class="sum-ov"><p class="st">摘要失败（限速）: 请稍后重试</p></div>
+        </article><article class="card">
+          <img class="thumb" src="https://img.youtube.com/vi/UaY23TSa4-0/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
+          <div class="cmeta"><span class="ctag">Venus Theory</span></div>
+          <a class="ct" href="https://youtube.com/watch?v=UaY23TSa4-0" target="_blank">The Musician's Guide to Leaving Windows</a>
+          <div class="sum-ov"><p class="st">摘要失败（限速）: 请稍后重试</p></div>
+        </article><article class="card">
+          <img class="thumb" src="https://img.youtube.com/vi/Ne6hFVfSvt0/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
+          <div class="cmeta"><span class="ctag">TAETRO</span></div>
+          <a class="ct" href="https://youtube.com/watch?v=Ne6hFVfSvt0" target="_blank">I Found a Weird Hardware Stem Separator</a>
+          <div class="sum-ov"><p class="st">摘要失败（限速）: 请稍后重试</p></div>
+        </article><article class="card">
+          <img class="thumb" src="https://img.youtube.com/vi/ab7ZelHx6fQ/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
+          <div class="cmeta"><span class="ctag">Why Logic Pro Rocks</span></div>
+          <a class="ct" href="https://youtube.com/watch?v=ab7ZelHx6fQ" target="_blank">Logic Pro Doesn’t Sound Bad… It’s You.</a>
+          <div class="sum-ov"><p class="st">摘要失败（限速）: 请稍后重试</p></div>
+        </article><article class="card">
+          <img class="thumb" src="https://img.youtube.com/vi/hGvJJAyHRyg/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
+          <div class="cmeta"><span class="ctag">Streaky</span></div>
+          <a class="ct" href="https://youtube.com/watch?v=hGvJJAyHRyg" target="_blank">How To EQ Dance Music</a>
+          <div class="sum-ov"><p class="st">摘要失败（限速）: 请稍后重试</p></div>
+        </article><article class="card">
+          <img class="thumb" src="https://img.youtube.com/vi/3QFwGuFPRT8/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
+          <div class="cmeta"><span class="ctag">iZotope</span></div>
+          <a class="ct" href="https://youtube.com/watch?v=3QFwGuFPRT8" target="_blank">How RX saves the day for music production pros </a>
+          <div class="sum-ov"><p class="st">摘要失败（限速）: 请稍后重试</p></div>
+        </article><article class="card">
+          <img class="thumb" src="https://img.youtube.com/vi/1IqL6I4VZ9E/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
+          <div class="cmeta"><span class="ctag">Beat Lab</span></div>
+          <a class="ct" href="https://youtube.com/watch?v=1IqL6I4VZ9E" target="_blank">EMOVIES EXTRA MISSION IMPOSSIBLE 3 TONIGHT MAY 2026</a>
+          <div class="sum-ov"><p class="st">摘要失败（限速）: 请稍后重试</p></div>
+        </article><article class="card">
+          <img class="thumb" src="https://img.youtube.com/vi/lEEyYdWzVkQ/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
+          <div class="cmeta"><span class="ctag">MusicTechHelpGuy</span></div>
+          <a class="ct" href="https://youtube.com/watch?v=lEEyYdWzVkQ" target="_blank">Legacy Patches are BACK in Logic 12.2 Update!</a>
+          <div class="sum-ov"><p class="st">摘要失败（限速）: 请稍后重试</p></div>
+        </article><article class="card">
+          <img class="thumb" src="https://img.youtube.com/vi/l01rHaOGfRA/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
+          <div class="cmeta"><span class="ctag">Varsity Beats</span></div>
+          <a class="ct" href="https://youtube.com/watch?v=l01rHaOGfRA" target="_blank">[2026] Chuckyy Ft Skrilla x Lil Crix Type Beat “Wayz 2 Be Great” (Prod By Str8Flamez)</a>
+          <div class="sum-ov"><p class="st">摘要失败（限速）: 请稍后重试</p></div>
+        </article><article class="card">
+          <img class="thumb" src="https://img.youtube.com/vi/_3voyG16ses/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
+          <div class="cmeta"><span class="ctag">Blezz Beats</span></div>
+          <a class="ct" href="https://youtube.com/watch?v=_3voyG16ses" target="_blank">VOCODINE Vocoder </a>
+          <div class="sum-ov"><p class="st">摘要失败（限速）: 请稍后重试</p></div>
+        </article><article class="card">
+          <img class="thumb" src="https://img.youtube.com/vi/6nt91qOxDEA/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
+          <div class="cmeta"><span class="ctag">Big Z Beats</span></div>
+          <a class="ct" href="https://youtube.com/watch?v=6nt91qOxDEA" target="_blank">How simple changes pushed this mix to 18M+ streams</a>
+          <div class="sum-ov"><p class="st">摘要失败（限速）: 请稍后重试</p></div>
+        </article><article class="card">
+          <img class="thumb" src="https://img.youtube.com/vi/qSjmVBXHuJo/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
+          <div class="cmeta"><span class="ctag">Alex Rome</span></div>
+          <a class="ct" href="https://youtube.com/watch?v=qSjmVBXHuJo" target="_blank">Why You Love Avicii's Melodies</a>
+          <div class="sum-ov"><p class="st">摘要失败（限速）: 请稍后重试</p></div>
+        </article><article class="card">
+          <img class="thumb" src="https://img.youtube.com/vi/Fzs2UCPrSQ8/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
+          <div class="cmeta"><span class="ctag">Nicole Niewinski</span></div>
+          <a class="ct" href="https://youtube.com/watch?v=Fzs2UCPrSQ8" target="_blank">How to Play 'Smells Like Teen Spirit' on Drums </a>
+          <div class="sum-ov"><p class="st">摘要失败（限速）: 请稍后重试</p></div>
+        </article><article class="card">
+          <img class="thumb" src="https://img.youtube.com/vi/URwgesL2S7E/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
+          <div class="cmeta"><span class="ctag">Songwriting Chops</span></div>
+          <a class="ct" href="https://youtube.com/watch?v=URwgesL2S7E" target="_blank">Finish Your Songs Faster With This One Secret!</a>
+          <div class="sum-ov"><p class="st">摘要失败（限速）: 请稍后重试</p></div>
+        </article><article class="card">
+          <img class="thumb" src="https://img.youtube.com/vi/obXWzGQ-r6Y/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
+          <div class="cmeta"><span class="ctag">Holistic Songwriting</span></div>
+          <a class="ct" href="https://youtube.com/watch?v=obXWzGQ-r6Y" target="_blank">The Truth About Being a Full-Time Creator No One Talks About</a>
+          <div class="sum-ov"><p class="st">摘要失败（限速）: 请稍后重试</p></div>
+        </article><article class="card">
+          <img class="thumb" src="https://img.youtube.com/vi/5aHd2EoaZSE/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
+          <div class="cmeta"><span class="ctag">Tape Notes Podcast</span></div>
+          <a class="ct" href="https://youtube.com/watch?v=5aHd2EoaZSE" target="_blank">Dave Grohl's Songwriting Advice </a>
+          <div class="sum-ov"><p class="st">摘要失败（限速）: 请稍后重试</p></div>
+        </article><article class="card">
+          <img class="thumb" src="https://img.youtube.com/vi/gaf4-Hb5Bcc/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
+          <div class="cmeta"><span class="ctag">dBs Institute</span></div>
+          <a class="ct" href="https://youtube.com/watch?v=gaf4-Hb5Bcc" target="_blank">dBs Live: Manchester </a>
+          <div class="sum-ov"><p class="st">摘要失败（限速）: 请稍后重试</p></div>
+        </article><article class="card">
+          <img class="thumb" src="https://img.youtube.com/vi/5Ewq9K_OXgw/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
+          <div class="cmeta"><span class="ctag">Sherry's Notes</span></div>
+          <a class="ct" href="https://youtube.com/watch?v=5Ewq9K_OXgw" target="_blank">快樂迷人又有錢：我們追求的鏡像人生｜Sherry's Notes 雪力的心理學筆記</a>
+          <div class="sum-ov"><p class="st">摘要失败（限速）: 请稍后重试</p></div>
+        </article><article class="card">
+          <img class="thumb" src="https://img.youtube.com/vi/EGMabOCvHfw/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
+          <div class="cmeta"><span class="ctag">Dead Wax</span></div>
+          <a class="ct" href="https://youtube.com/watch?v=EGMabOCvHfw" target="_blank">Jackson Browne's Bassist on Elvis, Little Richard, The Beatles and Beyond...</a>
+          <div class="sum-ov"><p class="st">摘要失败（限速）: 请稍后重试</p></div>
+        </article><article class="card">
+          <img class="thumb" src="https://img.youtube.com/vi/BjKu8Q82ODI/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
+          <div class="cmeta"><span class="ctag">G90 Music</span></div>
+          <a class="ct" href="https://youtube.com/watch?v=BjKu8Q82ODI" target="_blank">Pretty Ceees  -  Pop My Sh!t ( Explicit Official Video)</a>
+          <div class="sum-ov"><p class="st">摘要失败（限速）: 请稍后重试</p></div>
+        </article><article class="card">
+          <img class="thumb" src="https://img.youtube.com/vi/z_ObXcvyumw/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
+          <div class="cmeta"><span class="ctag">Andertons Synth</span></div>
+          <a class="ct" href="https://youtube.com/watch?v=z_ObXcvyumw" target="_blank">Elektron at Superbooth 2026!</a>
+          <div class="sum-ov"><p class="st">摘要失败（限速）: 请稍后重试</p></div>
+        </article><article class="card">
+          <img class="thumb" src="https://img.youtube.com/vi/dL8YZeX8hZo/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
+          <div class="cmeta"><span class="ctag">Korg UK</span></div>
+          <a class="ct" href="https://youtube.com/watch?v=dL8YZeX8hZo" target="_blank">Getting started with the Korg Grandstage X</a>
+          <div class="sum-ov"><p class="st">摘要失败（限速）: 请稍后重试</p></div>
+        </article><article class="card">
+          <img class="thumb" src="https://img.youtube.com/vi/q75_Mnj5rP8/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
+          <div class="cmeta"><span class="ctag">三分钟音乐社</span></div>
+          <a class="ct" href="https://youtube.com/watch?v=q75_Mnj5rP8" target="_blank">【和声】46-阶段三补充与总结</a>
+          <div class="sum-ov"><p class="st">摘要失败（限速）: 请稍后重试</p></div>
+        </article></div>
+        </section><section id="🎭_娱乐" class="col">
+          <h2 class="colh" style="border-color:#dc2626;color:#dc2626">
+            🎭 娱乐<span class="cnt">6</span>
+          </h2>
+          <div class="cards"><article class="card">
+          <img class="thumb" src="https://img.youtube.com/vi/CnjJPpr10vM/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
+          <div class="cmeta"><span class="ctag">Kill Tony</span></div>
+          <a class="ct" href="https://youtube.com/watch?v=CnjJPpr10vM" target="_blank">KT #768 - SHANE GILLIS + JAMES MCCANN</a>
+          <div class="sum-ov"><p class="st">[+] API configuration validated</p>
+<p class="st">[-] Processing failed: Cobalt request failed: HTTPConnectionPool(host='localhost', port=9000): Max retries exceeded with url: / (Caused by NewConnectionError("HTTPConnection(host='localhost', port=9000): Failed to establish a new connection: [Errno 61] Connection refused"))</p>
+<p class="st">[-] Error: Cobalt request failed: HTTPConnectionPool(host='localhost', port=9000): Max retries exceeded with url: / (Caused by NewConnectionError("HTTPConnection(host='localhost', port=9000): Failed to establish a new connection: [Errno 61] Connection refused"))</p></div>
+        </article><article class="card">
+          <img class="thumb" src="https://img.youtube.com/vi/AaMdXZMvT3w/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
+          <div class="cmeta"><span class="ctag">MrBeast</span></div>
+          <a class="ct" href="https://youtube.com/watch?v=AaMdXZMvT3w" target="_blank">Survive 30 Days On An Island With Your Ex, Win $250,000</a>
+          <div class="sum-ov"><p class="st">摘要失败（限速）: 请稍后重试</p></div>
+        </article><article class="card">
+          <img class="thumb" src="https://img.youtube.com/vi/4yMQC4mg7-0/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
+          <div class="cmeta"><span class="ctag">Fun Void</span></div>
+          <a class="ct" href="https://youtube.com/watch?v=4yMQC4mg7-0" target="_blank">I competed at a Jigsaw Competition with NO Experience!</a>
+          <div class="sum-ov"><p class="st">摘要失败（限速）: 请稍后重试</p></div>
+        </article><article class="card">
+          <img class="thumb" src="https://img.youtube.com/vi/DNpYymysUQo/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
+          <div class="cmeta"><span class="ctag">David Lynch Theater</span></div>
+          <a class="ct" href="https://youtube.com/watch?v=DNpYymysUQo" target="_blank">David Lynch Theater Presents:  Interview Project Trailer</a>
+          <div class="sum-ov"><p class="st">摘要失败（限速）: 请稍后重试</p></div>
+        </article><article class="card">
+          <img class="thumb" src="https://img.youtube.com/vi/Ht4VBi7xK38/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
+          <div class="cmeta"><span class="ctag">老弗兰克 Frank</span></div>
+          <a class="ct" href="https://youtube.com/watch?v=Ht4VBi7xK38" target="_blank">最帥混血兒，經典無數卻不被認可，為何說人間配不上基努里維斯？</a>
+          <div class="sum-ov"><p class="st">摘要失败（限速）: 请稍后重试</p></div>
+        </article><article class="card">
+          <img class="thumb" src="https://img.youtube.com/vi/ZrTRdtn0q40/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
+          <div class="cmeta"><span class="ctag">八戒扯闲篇</span></div>
+          <a class="ct" href="https://youtube.com/watch?v=ZrTRdtn0q40" target="_blank">NIKE是怎么伟大起来的？ </a>
+          <div class="sum-ov"><p class="st">摘要失败（限速）: 请稍后重试</p></div>
+        </article></div>
+        </section><section id="🧠_自我提升" class="col">
+          <h2 class="colh" style="border-color:#059669;color:#059669">
+            🧠 自我提升<span class="cnt">13</span>
+          </h2>
+          <div class="cards"><article class="card">
+          <img class="thumb" src="https://img.youtube.com/vi/zHnUkbNwn38/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
+          <div class="cmeta"><span class="ctag">Prof. Jiang Clips</span></div>
+          <a class="ct" href="https://youtube.com/watch?v=zHnUkbNwn38" target="_blank">This War Doesn't End. Here's Why  </a>
+          <div class="sum-ov"><p class="st">摘要失败（限速）: 请稍后重试</p></div>
+        </article><article class="card">
+          <img class="thumb" src="https://img.youtube.com/vi/8Ete4v-RaAQ/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
+          <div class="cmeta"><span class="ctag">Terry Chen 泰瑞</span></div>
+          <a class="ct" href="https://youtube.com/watch?v=8Ete4v-RaAQ" target="_blank">一口氣搞懂：加密貨幣最重要的 CLARITY 法案</a>
+          <div class="sum-ov"><p class="st">摘要失败（限速）: 请稍后重试</p></div>
+        </article><article class="card">
+          <img class="thumb" src="https://img.youtube.com/vi/VS9ci-etv_c/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
+          <div class="cmeta"><span class="ctag">二一的笔记</span></div>
+          <a class="ct" href="https://youtube.com/watch?v=VS9ci-etv_c" target="_blank">Notion's "OpenClaw" Is Here! A Better Lobster — Custom Agent In-Depth Review</a>
+          <div class="sum-ov"><p class="st">摘要失败（限速）: 请稍后重试</p></div>
+        </article><article class="card">
+          <img class="thumb" src="https://img.youtube.com/vi/rnzz0YJpc9o/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
+          <div class="cmeta"><span class="ctag">Principles by Ray Dalio</span></div>
+          <a class="ct" href="https://youtube.com/watch?v=rnzz0YJpc9o" target="_blank">Ray Dalio: Long Island University Commencement Speech</a>
+          <div class="sum-ov"><p class="st">摘要失败（限速）: 请稍后重试</p></div>
+        </article><article class="card">
+          <img class="thumb" src="https://img.youtube.com/vi/gUy4YXBMXDQ/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
+          <div class="cmeta"><span class="ctag">Nathan Nazareth</span></div>
+          <a class="ct" href="https://youtube.com/watch?v=gUy4YXBMXDQ" target="_blank">Your Dropshipping Supplier Is Scamming You (Best Supplier in 2026)</a>
+          <div class="sum-ov"><p class="st">摘要失败（限速）: 请稍后重试</p></div>
+        </article><article class="card">
+          <img class="thumb" src="https://img.youtube.com/vi/BIl5vJn6ohI/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
+          <div class="cmeta"><span class="ctag">Predictive History</span></div>
+          <a class="ct" href="https://youtube.com/watch?v=BIl5vJn6ohI" target="_blank">Game Theory #25:  Trump Visits China</a>
+          <div class="sum-ov"><p class="st">摘要失败（限速）: 请稍后重试</p></div>
+        </article><article class="card">
+          <img class="thumb" src="https://img.youtube.com/vi/ZnY8a7z167w/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
+          <div class="cmeta"><span class="ctag">Salut Coin</span></div>
+          <a class="ct" href="https://youtube.com/watch?v=ZnY8a7z167w" target="_blank">I Found the Most Undervalued Exchange Token in Crypto Right Now!!</a>
+          <div class="sum-ov"><p class="st">摘要失败（限速）: 请稍后重试</p></div>
+        </article><article class="card">
+          <img class="thumb" src="https://img.youtube.com/vi/DJrQhl3R_D4/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
+          <div class="cmeta"><span class="ctag">Eckhart Tolle</span></div>
+          <a class="ct" href="https://youtube.com/watch?v=DJrQhl3R_D4" target="_blank">What Do You Think About Near Death Experiences? </a>
+          <div class="sum-ov"><p class="st">摘要失败（限速）: 请稍后重试</p></div>
+        </article><article class="card">
+          <img class="thumb" src="https://img.youtube.com/vi/Sgjgb5BMl4s/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
+          <div class="cmeta"><span class="ctag">Exploring Alternatives</span></div>
+          <a class="ct" href="https://youtube.com/watch?v=Sgjgb5BMl4s" target="_blank">Beautiful Tiny House Built with The Most Durable Steel Frame – Better Than Wood? – FULL TOUR</a>
+          <div class="sum-ov"><p class="st">摘要失败（限速）: 请稍后重试</p></div>
+        </article><article class="card">
+          <img class="thumb" src="https://img.youtube.com/vi/G79Q2VlOFu4/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
+          <div class="cmeta"><span class="ctag">Zenn</span></div>
+          <a class="ct" href="https://youtube.com/watch?v=G79Q2VlOFu4" target="_blank">AsianJeff Shows EXACTLY Why He’s UNSTOPPABLE in UNREAL Ranked</a>
+          <div class="sum-ov"><p class="st">摘要失败（限速）: 请稍后重试</p></div>
+        </article><article class="card">
+          <img class="thumb" src="https://img.youtube.com/vi/5egG6dFaT7Y/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
+          <div class="cmeta"><span class="ctag">Aligned K9</span></div>
+          <a class="ct" href="https://youtube.com/watch?v=5egG6dFaT7Y" target="_blank">The Legacy of farmers and hunters working together - Premier Prairie Adventures</a>
+          <div class="sum-ov"><p class="st">摘要失败（限速）: 请稍后重试</p></div>
+        </article><article class="card">
+          <img class="thumb" src="https://img.youtube.com/vi/63vd3yJYBFo/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
+          <div class="cmeta"><span class="ctag">Bob Duchesne</span></div>
+          <a class="ct" href="https://youtube.com/watch?v=63vd3yJYBFo" target="_blank">GOT 'EM! Golden-cheeked Warbler and Black-capped Vireo.</a>
+          <div class="sum-ov"><p class="st">摘要失败（限速）: 请稍后重试</p></div>
+        </article><article class="card">
+          <img class="thumb" src="https://img.youtube.com/vi/TLPfeWo7xP4/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
+          <div class="cmeta"><span class="ctag">FireUserGroup</span></div>
+          <a class="ct" href="https://youtube.com/watch?v=TLPfeWo7xP4" target="_blank">别学设计了？Claude这波背刺太狠</a>
+          <div class="sum-ov"><p class="st">摘要失败（限速）: 请稍后重试</p></div>
+        </article></div>
+        </section><section id="📱_AI工具" class="col">
+          <h2 class="colh" style="border-color:#0ea5e9;color:#0ea5e9">
+            📱 AI工具<span class="cnt">0</span>
+          </h2>
+          <div class="cards"><p class="emp pending">Cookie 未配置<br><span>配置后自动抓取</span></p></div>
+        </section><section id="📱_认知科学" class="col">
+          <h2 class="colh" style="border-color:#f59e0b;color:#f59e0b">
+            📱 认知科学<span class="cnt">0</span>
+          </h2>
+          <div class="cards"><p class="emp pending">Cookie 未配置<br><span>配置后自动抓取</span></p></div>
+        </section><section id="📱_数字游民" class="col">
+          <h2 class="colh" style="border-color:#10b981;color:#10b981">
+            📱 数字游民<span class="cnt">0</span>
+          </h2>
+          <div class="cards"><p class="emp pending">Cookie 未配置<br><span>配置后自动抓取</span></p></div>
+        </section><section id="📱_音乐制作" class="col">
+          <h2 class="colh" style="border-color:#a855f7;color:#a855f7">
+            📱 音乐制作<span class="cnt">0</span>
+          </h2>
+          <div class="cards"><p class="emp pending">Cookie 未配置<br><span>配置后自动抓取</span></p></div>
+        </section></div>
+</body>
+</html>
