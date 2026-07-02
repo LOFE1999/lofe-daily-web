@@ -5,112 +5,152 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>LOFE Daily · 2026-07-01</title>
   <style>
-    :root{--sh:0 1px 5px rgba(0,0,0,.08);--r:10px;}
+    @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap');
+    :root{--r:10px;--neon:#39ff14;--neon2:#00e5ff;--pink:#ff2d95;
+           --sh:0 0 10px rgba(57,255,20,.10);}
     *{margin:0;padding:0;box-sizing:border-box;}
-    body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-          background:#e8e8ed;color:#1c1c1e;font-size:14px;overflow-x:hidden;}
+    body{font-family:'Fredoka',-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+          background:#000;color:#e6e6e6;font-size:14px;overflow-x:hidden;}
 
-    /* ── Header ── */
-    header{background:#1c1c1e;color:#fff;padding:11px 16px;
+    /* ── Header（含居中活时钟）── */
+    header{background:#000;color:#fff;padding:11px 16px;
             display:flex;align-items:center;justify-content:space-between;
-            position:sticky;top:0;z-index:300;height:44px;}
-    .ht{font-size:16px;font-weight:700;letter-spacing:-.3px;}
+            position:sticky;top:26px;z-index:300;height:44px;
+            border-bottom:1px solid #141414;}
+    .ht{font-size:20px;font-weight:700;letter-spacing:1px;
+         background:linear-gradient(90deg,#39ff14,#00e5ff,#ff2d95,#39ff14);
+         background-size:300% 100%;-webkit-background-clip:text;background-clip:text;
+         -webkit-text-fill-color:transparent;color:transparent;
+         filter:drop-shadow(0 0 6px rgba(57,255,20,.55));
+         animation:ht-shift 10s linear infinite;}
+    @keyframes ht-shift{from{background-position:0% 0;}to{background-position:300% 0;}}
+    .hclock{position:absolute;left:50%;transform:translateX(-50%);
+             font-size:17px;font-weight:600;color:#fff;letter-spacing:2px;
+             text-shadow:0 0 6px #fff,0 0 14px #fff,0 0 24px var(--neon2);
+             font-variant-numeric:tabular-nums;white-space:nowrap;}
     .hm{display:flex;align-items:center;gap:8px;}
-    .hbadge{font-size:11px;background:#3a3a3c;color:#aeaeb2;padding:2px 9px;border-radius:20px;}
-    .hnew{font-size:11px;background:#007aff22;color:#007aff;padding:2px 9px;border-radius:20px;}
-    .hdate{font-size:11px;color:#48484a;}
+    .hbadge{font-size:11px;background:#141414;color:var(--neon);padding:2px 9px;
+             border-radius:20px;text-shadow:0 0 5px var(--neon);}
+    .hnew{font-size:11px;background:#141414;color:var(--pink);padding:2px 9px;
+           border-radius:20px;text-shadow:0 0 5px var(--pink);}
+    .hdate{font-size:11px;color:#666;}
 
-    /* ── Nav ── */
-    nav{display:flex;gap:6px;padding:7px 12px;background:#fff;
-         border-bottom:1px solid #d1d1d6;overflow-x:auto;
-         scrollbar-width:none;position:sticky;top:44px;z-index:200;height:38px;}
-    nav::-webkit-scrollbar{display:none;}
-    .np{text-decoration:none;font-size:11px;font-weight:600;color:var(--c);
-         padding:3px 11px;border-radius:14px;white-space:nowrap;flex-shrink:0;
-         background:color-mix(in srgb,var(--c) 10%,white);
-         border:1.5px solid color-mix(in srgb,var(--c) 22%,white);}
+    /* ── Board：竖向堆叠的横向货架（Netflix 式）── */
+    .board{display:flex;flex-direction:column;gap:18px;padding:12px 10px 10px;
+            height:calc(100vh - 96px);overflow-y:auto;overflow-x:hidden;background:#000;}
+    .board::-webkit-scrollbar{width:8px;}
+    .board::-webkit-scrollbar-thumb{background:#39ff1455;border-radius:4px;}
 
-    /* ── Kanban board ── */
-    .board{display:flex;gap:10px;padding:10px;
-            height:calc(100vh - 82px);overflow-x:auto;align-items:flex-start;}
-    .board::-webkit-scrollbar{height:6px;}
-    .board::-webkit-scrollbar-thumb{background:#c7c7cc;border-radius:3px;}
+    /* ── Shelf：一个分类 = 一行，卡片横向 ── */
+    .shelf{display:flex;flex-direction:column;gap:7px;}
+    .shelf-head{font-size:14px;font-weight:700;padding:2px 4px 2px 10px;
+                 border-left:4px solid;display:flex;align-items:center;
+                 text-shadow:0 0 6px currentColor;position:sticky;left:2px;
+                 align-self:flex-start;}
+    .cnt{font-size:10px;font-weight:600;color:#888;background:#1a1a1a;
+          padding:1px 7px;border-radius:7px;margin-left:8px;text-shadow:none;}
+    .strip{display:flex;flex-direction:row;gap:12px;overflow-x:auto;overflow-y:hidden;
+            padding:8px 4px 16px;align-items:flex-start;
+            scrollbar-width:thin;scrollbar-color:#39ff1455 transparent;}
+    .strip::-webkit-scrollbar{height:7px;}
+    .strip::-webkit-scrollbar-thumb{background:#39ff1455;border-radius:4px;}
 
-    /* ── Column ── */
-    .col{flex:0 0 300px;background:#f2f2f7;border-radius:var(--r);
-          display:flex;flex-direction:column;
-          max-height:100%;overflow:hidden;}
-    .colh{font-size:12px;font-weight:700;padding:10px 12px;
-           border-left:4px solid;display:flex;align-items:center;gap:6px;
-           background:#fff;flex-shrink:0;}
-    .cnt{font-size:10px;font-weight:600;color:#8e8e93;background:#e5e5ea;
-          padding:1px 6px;border-radius:7px;margin-left:auto;}
-    .cards{overflow-y:auto;flex:1;padding:6px;
-            scrollbar-width:thin;scrollbar-color:#d1d1d6 transparent;}
+    /* ── Card：Netflix/Apple 海报式（图为底，信息叠加）── */
+    .card{flex:0 0 264px;height:148px;position:relative;border-radius:11px;
+           overflow:hidden;border:1px solid #1c1c1c;background:#0a0a0a;
+           transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease;}
+    .card:hover{transform:translateY(-3px);border-color:#39ff1466;
+                 box-shadow:0 8px 22px rgba(0,0,0,.55),0 0 16px #39ff1428;}
+    .thumb-link{display:block;width:100%;height:100%;cursor:pointer;position:relative;}
+    .thumb{width:100%;height:100%;object-fit:cover;display:block;}
+    /* hover：整图变暗做背景 */
+    .dim{position:absolute;inset:0;background:rgba(0,0,0,0);
+          transition:background .25s ease;pointer-events:none;}
+    .card:hover .dim{background:rgba(0,0,0,.5);}
+    /* 播放键：hover 居中浮现（行为不变）*/
+    .play{position:absolute;top:42%;left:50%;transform:translate(-50%,-50%) scale(.6);
+           font-size:30px;color:#fff;opacity:0;pointer-events:none;z-index:2;
+           transition:opacity .2s,transform .2s;
+           text-shadow:0 0 12px var(--neon2),0 0 26px var(--neon2);}
+    .card:hover .play{opacity:.95;transform:translate(-50%,-50%) scale(1);}
+    /* title+creator 合并，叠在图顶部，深色渐变保证可读 */
+    .tc{position:absolute;top:0;left:0;right:0;z-index:2;padding:9px 11px 22px;
+         background:linear-gradient(180deg,rgba(0,0,0,.82) 0%,rgba(0,0,0,0) 100%);
+         pointer-events:none;}
+    .c-title{font-size:12.5px;font-weight:600;color:#fff;line-height:1.32;
+              text-shadow:0 1px 4px rgba(0,0,0,.95);
+              display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+    .c-meta{font-size:10px;color:#cfcfcf;margin-top:3px;text-shadow:0 1px 3px rgba(0,0,0,.95);}
+    .c-new{color:var(--neon);margin-right:4px;text-shadow:0 0 5px var(--neon);}
 
-    /* ── Card ── */
-    .card{background:#fff;border-radius:8px;margin-bottom:8px;
-           box-shadow:var(--sh);overflow:hidden;position:relative;}
-    .thumb{width:100%;height:160px;object-fit:cover;display:block;
-            background:#f2f2f7;}
-    .cmeta{display:flex;gap:5px;align-items:center;flex-wrap:wrap;
-            padding:8px 10px 4px;}
-    .ctag{font-size:10px;font-weight:600;color:#636366;background:#f2f2f7;
-           padding:1px 6px;border-radius:5px;}
-    .nbadge{font-size:10px;font-weight:700;color:#fff;background:#ff3b30;
-             padding:1px 6px;border-radius:5px;}
-    .dbadge{font-size:10px;color:#8e8e93;background:#f2f2f7;
-             padding:1px 6px;border-radius:5px;}
-    .ct{display:block;font-size:13px;font-weight:600;color:#1c1c1e;
-         text-decoration:none;line-height:1.4;padding:4px 10px 8px;}
-    .ct:hover{color:#007aff;}
-    .cdesc{font-size:12px;color:#48484a;line-height:1.5;
-            padding:0 10px 10px;}
-
-    /* ── Hover summary overlay ── */
-    .sum-ov{position:absolute;bottom:0;left:0;right:0;
-             max-height:0;overflow:hidden;
-             background:rgba(28,28,30,.92);color:#f2f2f7;
-             padding:0 12px;font-size:11.5px;line-height:1.65;
-             transition:max-height .3s ease,padding .3s ease;
-             border-radius:0 0 8px 8px;backdrop-filter:blur(4px);}
-    .card:hover .sum-ov{max-height:280px;padding:10px 12px;overflow-y:auto;}
-    .sum-pending{font-style:italic;color:#8e8e93;font-size:11px;}
-    .sh{font-weight:700;color:#f2f2f7;margin:7px 0 2px;font-size:11.5px;}
+    /* ── Hover 摘要浮层：底部上拉、可上下滚（行为不变）── */
+    .sum-ov{position:absolute;bottom:0;left:0;right:0;max-height:0;overflow:hidden;
+             background:rgba(0,0,0,.86);color:#e6e6e6;padding:0 11px;z-index:3;
+             font-size:11px;line-height:1.58;
+             transition:max-height .28s ease,padding .28s ease;
+             backdrop-filter:blur(2px);border-top:1px solid #39ff1433;}
+    .card:hover .sum-ov{max-height:80px;padding:8px 11px;overflow-y:auto;}
+    .sum-pending{font-style:italic;color:#777;font-size:11px;}
+    .sh{font-weight:700;color:var(--neon);margin:7px 0 2px;font-size:11.5px;
+         text-shadow:0 0 5px var(--neon);}
     .sh:first-child{margin-top:0;}
-    .st{color:#d1d1d6;margin-bottom:2px;}
+    .st{color:#bbb;margin-bottom:2px;}
     ul{padding-left:15px;margin:2px 0 5px;}
-    li{margin-bottom:2px;color:#d1d1d6;}
+    li{margin-bottom:2px;color:#bbb;}
 
-    .emp{color:#c7c7cc;font-style:italic;padding:16px;font-size:12px;
+    .emp{color:#555;font-style:italic;padding:16px;font-size:12px;
           text-align:center;line-height:1.6;}
-    .pending span{display:block;font-size:10px;color:#aeaeb2;margin-top:4px;}
+    .pending span{display:block;font-size:10px;color:#444;margin-top:4px;}
+
+    /* ── Health ticker（顶=右→左，底=左→右，反向）── */
+    .ticker{z-index:400;background:#050505;color:#cfcfcf;height:26px;overflow:hidden;
+             display:flex;align-items:center;white-space:nowrap;font-size:11.5px;}
+    .ticker--top{position:sticky;top:0;border-bottom:1px solid #1a1a1a;}
+    .ticker--bottom{position:fixed;bottom:0;left:0;right:0;border-top:1px solid #1a1a1a;}
+    .ticker__track{display:inline-flex;flex-shrink:0;
+                    animation:tk-scroll 60s linear infinite;}
+    .ticker--bottom .ticker__track{animation-direction:reverse;}
+    .ticker:hover .ticker__track{animation-play-state:paused;}
+    .tk-i{padding:0 4px 0 0;flex-shrink:0;}
+    .tk-i::after{content:"·";padding:0 18px;color:#333;}
+    .tk-o{color:#ff453a;font-weight:700;}
+    .tk-ok{color:var(--neon);text-shadow:0 0 6px var(--neon);}
+    .tk-n{color:#666;font-weight:400;}
+    @keyframes tk-scroll{from{transform:translateX(0);}
+                          to{transform:translateX(-50%);}}
 
     @media(max-width:640px){
-      .board{flex-direction:column;height:auto;overflow-x:hidden;}
-      .col{flex:none;width:100%;max-height:none;}
-      .cards{overflow-y:visible;max-height:none;}
+      .board{height:auto;padding-bottom:40px;}
+      .card{flex:0 0 80vw;height:45vw;}
+      .hclock{display:none;}
     }
   </style>
 </head>
 <body>
+  <div class="ticker ticker--top"><div class="ticker__track"><span class="tk-i"><span class="tk-o tk-ok">🟢 系统全绿</span></span><span class="tk-i">✅ 代码备份 <span class="tk-n">(updated 4 min ago)</span></span><span class="tk-i">✅ YouTube日报 <span class="tk-n">(updated 15.9h ago)</span></span><span class="tk-i">✅ 音乐同步 <span class="tk-n">(updated 16.0h ago)</span></span><span class="tk-i">✅ 订阅cookie <span class="tk-n">(updated 11 min ago)</span></span><span class="tk-i">✅ 游戏库 <span class="tk-n">(updated 3 min ago)</span></span><span class="tk-i">✅ 捕获服务 <span class="tk-n">(listening)</span></span><span class="tk-i">⏸ 小红书 <span class="tk-n">(no cookie)</span></span><span class="tk-i">as of 2026-07-01 23:53</span><span class="tk-i"><span class="tk-o tk-ok">🟢 系统全绿</span></span><span class="tk-i">✅ 代码备份 <span class="tk-n">(updated 4 min ago)</span></span><span class="tk-i">✅ YouTube日报 <span class="tk-n">(updated 15.9h ago)</span></span><span class="tk-i">✅ 音乐同步 <span class="tk-n">(updated 16.0h ago)</span></span><span class="tk-i">✅ 订阅cookie <span class="tk-n">(updated 11 min ago)</span></span><span class="tk-i">✅ 游戏库 <span class="tk-n">(updated 3 min ago)</span></span><span class="tk-i">✅ 捕获服务 <span class="tk-n">(listening)</span></span><span class="tk-i">⏸ 小红书 <span class="tk-n">(no cookie)</span></span><span class="tk-i">as of 2026-07-01 23:53</span></div></div>
   <header>
     <span class="ht">LOFE Daily</span>
+    <span class="hclock" id="clk"></span>
     <div class="hm">
-      <span class="hdate">2026-07-01 08:02</span>
+      <span class="hdate">2026-07-01 23:59</span>
       
       <span class="hbadge">45 条</span>
     </div>
   </header>
-  <nav><a href="#🎵_音乐制作" class="np" style="--c:#7c3aed">🎵 音乐制作</a><a href="#🎭_娱乐" class="np" style="--c:#dc2626">🎭 娱乐</a><a href="#🧠_自我提升" class="np" style="--c:#059669">🧠 自我提升</a><a href="#📦_未分类" class="np" style="--c:#ea580c">📦 未分类</a><a href="#📱_AI工具" class="np" style="--c:#0ea5e9">📱 AI工具</a><a href="#📱_认知科学" class="np" style="--c:#f59e0b">📱 认知科学</a><a href="#📱_数字游民" class="np" style="--c:#10b981">📱 数字游民</a><a href="#📱_音乐制作" class="np" style="--c:#a855f7">📱 音乐制作</a></nav>
-  <div class="board"><section id="🎵_音乐制作" class="col">
-          <h2 class="colh" style="border-color:#7c3aed;color:#7c3aed">
+  <div class="board" id="board"><section id="🎵_音乐制作" class="shelf">
+          <h2 class="shelf-head" style="border-color:#7c3aed;color:#7c3aed">
             🎵 音乐制作<span class="cnt">22</span>
           </h2>
-          <div class="cards"><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/pBrhco7WR6I/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">AudioPilz</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=pBrhco7WR6I" target="_blank">9 Reasons why YOU need to BUY more Audio Gear</a>
+          <div class="strip"><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=pBrhco7WR6I" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/pBrhco7WR6I/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">9 Reasons why YOU need to BUY more Audio Gear</div>
+              <div class="c-meta">AudioPilz</div>
+            </div>
+          </a>
           <div class="sum-ov"><p class="sh">核心主题</p>
 <p class="st">视频讨论了九个理由，说明为什么即使在当前的经济环境下，购买音乐制作设备仍然是有意义的。</p>
 <p class="sh">关键观点</p>
@@ -118,9 +158,15 @@
 <p class="sh">适合人群</p>
 <p class="st">这段视频适合对音乐制作感兴趣的人，尤其是那些正在考虑购买音乐制作设备的音乐人和制作人。</p></div>
         </article><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/o-6BSasorNw/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">True Cuckoo</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=o-6BSasorNw" target="_blank">Phase8 - Let's go from normal to unruly!</a>
+          <a class="thumb-link" href="https://youtube.com/watch?v=o-6BSasorNw" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/o-6BSasorNw/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Phase8 - Let's go from normal to unruly!</div>
+              <div class="c-meta">True Cuckoo</div>
+            </div>
+          </a>
           <div class="sum-ov"><p class="sh">核心主题</p>
 <p class="st">视频讲述了音乐家Cuckoo对Phase 8乐器的实验和探索过程，展示了他如何通过各种方法修改和扩展乐器的音色。</p>
 <p class="sh">关键观点</p>
@@ -128,9 +174,15 @@
 <p class="sh">适合人群</p>
 <p class="st">对音乐实验、乐器创新和音色设计感兴趣的人可能会喜欢这个视频。</p></div>
         </article><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/mniOXxxonB4/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">Venus Theory</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=mniOXxxonB4" target="_blank">The Dystopian Reality of Online Advertising</a>
+          <a class="thumb-link" href="https://youtube.com/watch?v=mniOXxxonB4" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/mniOXxxonB4/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">The Dystopian Reality of Online Advertising</div>
+              <div class="c-meta">Venus Theory</div>
+            </div>
+          </a>
           <div class="sum-ov"><p class="sh">核心主题</p>
 <p class="st">该视频探讨了在线广告的黑暗现实，揭露了影响者营销的运作机制和其对创作者及消费者的影响。</p>
 <p class="sh">关键观点</p>
@@ -138,9 +190,15 @@
 <p class="sh">适合人群</p>
 <p class="st">对在线广告、影响者营销和数字内容创作感兴趣的人，以及希望了解在线商业运作背后机制的消费者。</p></div>
         </article><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/yyBYav_WOUE/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">TAETRO</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=yyBYav_WOUE" target="_blank">How To Decide If Music Gear Is Worth Buying</a>
+          <a class="thumb-link" href="https://youtube.com/watch?v=yyBYav_WOUE" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/yyBYav_WOUE/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Before You Buy Another Piece of Music Gear...</div>
+              <div class="c-meta">TAETRO</div>
+            </div>
+          </a>
           <div class="sum-ov"><p class="sh">核心主题</p>
 <p class="st">视频讲述如何选择合适的音乐设备，打造一个更好的音乐设置，而不是简单地增加设备数量。</p>
 <p class="sh">关键观点</p>
@@ -148,9 +206,15 @@
 <p class="sh">适合人群</p>
 <p class="st">适合对音乐制作和设备选择感兴趣的音乐爱好者和专业人士。</p></div>
         </article><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/yLjRIW0lM6c/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">Streaky</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=yLjRIW0lM6c" target="_blank">🔴 They all mix like this...</a>
+          <a class="thumb-link" href="https://youtube.com/watch?v=yLjRIW0lM6c" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/yLjRIW0lM6c/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">🔴 They all mix like this...</div>
+              <div class="c-meta">Streaky</div>
+            </div>
+          </a>
           <div class="sum-ov"><p class="sh">核心主题</p>
 <p class="st">本视频讲解了一种新的混音方法，通过创建模板和使用总线来简化混音过程，提高音质。</p>
 <p class="sh">关键观点</p>
@@ -158,50 +222,79 @@
 <p class="sh">适合人群</p>
 <p class="st">本视频适合对音乐混音感兴趣的音乐制作人、音频工程师和音乐爱好者，尤其是那些想要提高混音技能和音质的人。</p></div>
         </article><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/3QFwGuFPRT8/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">iZotope</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=3QFwGuFPRT8" target="_blank">How RX saves the day for music production pros </a>
+          <a class="thumb-link" href="https://youtube.com/watch?v=3QFwGuFPRT8" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/3QFwGuFPRT8/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">How RX saves the day for music production pros </div>
+              <div class="c-meta">iZotope</div>
+            </div>
+          </a>
           <div class="sum-ov"><p class="sh">核心主题</p>
-<p class="st">本视频可能讲述了RX软件在音乐制作中的应用和优势，展示了它如何帮助专业人士解决常见的问题。</p>
+<p class="st">这个视频可能讲述了iZotope的RX软件在音乐制作中的应用和优势，展示它如何帮助专业人士解决常见的问题。</p>
 <p class="sh">可能内容</p>
-<ul><li>RX软件的介绍和功能概览</li><li>RX在音乐制作中的实用案例和示例，例如音频修复和编辑</li></ul>
+<ul><li>RX软件的功能和特点介绍</li><li>实际案例：RX软件如何帮助音乐制作专业人士解决音频问题</li></ul>
 <p class="sh">适合人群</p>
-<p class="st">本视频适合专业音乐制作人和音频工程师，他们希望了解RX软件的功能和优势，以提高自己的工作效率和质量（基于标题推断）</p></div>
+<p class="st">这个视频适合音乐制作专业人士、音频工程师和对音乐制作软件感兴趣的用户（基于标题推断）</p></div>
         </article><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/J4RNCXObiJs/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">Beat Lab</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=J4RNCXObiJs" target="_blank">Should I Buy It? - MOK Miniraze </a>
+          <a class="thumb-link" href="https://youtube.com/watch?v=J4RNCXObiJs" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/J4RNCXObiJs/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Should I Buy It? - MOK Miniraze </div>
+              <div class="c-meta">Beat Lab</div>
+            </div>
+          </a>
           <div class="sum-ov"><p class="sh">核心主题</p>
-<p class="st">本视频可能是对MOK Miniraze产品的评测和购买建议。</p>
-<p class="sh">可能内容</p>
-<ul><li>介绍MOK Miniraze的功能和特点</li><li>对MOK Miniraze的性能和质量进行评测</li><li>比较MOK Miniraze与同类产品的优缺点</li><li>提供是否购买MOK Miniraze的建议</li></ul>
-<p class="sh">适合人群</p>
-<p class="st">本视频适合对MOK Miniraze产品感兴趣、正在考虑购买的音乐制作人或音频设备爱好者。</p>
-<p class="st">（基于标题推断）</p></div>
-        </article><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/wRnEFlmE_Vs/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">MusicTechHelpGuy</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=wRnEFlmE_Vs" target="_blank">Logic Pro 12.3 Update: Everything NEW in Beat Breaker!</a>
-          <div class="sum-ov"><p class="sh">核心主题</p>
-<p class="st">Logic Pro 12.3 更新：Beat Breaker 的新功能和使用方法。</p>
+<p class="st">视频讲解MOK Miniraze合成器的功能和特点。</p>
 <p class="sh">关键观点</p>
-<ul><li>Logic Pro 12.3 更新带来了 Beat Breaker 的新功能，包括对每个切片的滤波器控制、谐振控制和声像控制。</li><li>新的随机化功能可以对 Beat Breaker 的参数进行随机修改，增加音效的多样性。</li><li>通过示例演示了如何使用 Beat Breaker 来为音乐添加动感和节奏感。</li></ul>
+<ul><li>MOK Miniraze具有特殊的波切割振荡器，允许创建独特的声音。</li><li>合成器的界面布局类似于Minimoog，具有多种声音预设和扩展库。</li><li>合成器具有丰富的功能，包括滤波器、环调制、颤音和音高弯曲等。</li></ul>
 <p class="sh">适合人群</p>
-<p class="st">适合使用 Logic Pro 的音乐制作人和音频工程师，特别是那些对 Beat Breaker 插件感兴趣的人。</p></div>
+<p class="st">对电子音乐制作和合成器感兴趣的人，尤其是那些想要了解MOK Miniraze功能和特点的音乐制作人和音效设计师。</p></div>
         </article><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/U1_nZG7XbEc/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">Varsity Beats</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=U1_nZG7XbEc" target="_blank">This Unbalanced Rhythm Keeps You Hooked</a>
+          <a class="thumb-link" href="https://youtube.com/watch?v=9NPAhZ7ll8o" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/9NPAhZ7ll8o/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Logic Pro 12.3 Update: Grid Lines ON TOP OF Regions!</div>
+              <div class="c-meta">MusicTechHelpGuy</div>
+            </div>
+          </a>
           <div class="sum-ov"><p class="sh">核心主题</p>
-<p class="st">这个视频可能会探讨音乐中不平衡的节奏如何吸引听众的注意力。</p>
-<p class="sh">可能内容</p>
-<ul><li>解释不平衡节奏在音乐中的作用和特点</li><li>分析不平衡节奏在不同音乐风格中的应用和效果</li></ul>
+<p class="st">本视频讲解了Logic Pro 12.3更新中新增的前景网格线功能，并展示了如何使用和自定义这些网格线。</p>
+<p class="sh">关键观点</p>
+<ul><li>Logic Pro 12.3更新增加了前景网格线功能，允许用户在音频区域上显示网格线。</li><li>用户可以自定义网格线的颜色和亮度以适应自己的需求。</li><li>前景网格线功能可以提高音频编辑的精度，尤其是在处理鼓和其他瞬态材料时。</li></ul>
 <p class="sh">适合人群</p>
-<p class="st">这个视频可能适合对音乐理论、节奏和创作感兴趣的音乐爱好者和专业人士（基于标题推断）</p></div>
+<p class="st">本视频适合使用Logic Pro的音乐制作人和音频工程师，特别是那些对软件更新和新功能感兴趣的人。</p></div>
         </article><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/_3voyG16ses/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">Blezz Beats</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=_3voyG16ses" target="_blank">VOCODINE Vocoder </a>
+          <a class="thumb-link" href="https://youtube.com/watch?v=U1_nZG7XbEc" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/U1_nZG7XbEc/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">This Unbalanced Rhythm Keeps You Hooked</div>
+              <div class="c-meta">Varsity Beats</div>
+            </div>
+          </a>
+          <div class="sum-ov"><p class="sh">核心主题</p>
+<p class="st">视频讲解了巴萨诺瓦音乐中独特的不均衡节奏，并探讨了其结构和应用。</p>
+<p class="sh">关键观点</p>
+<ul><li>巴萨诺瓦音乐中的不均衡节奏是五拍跨越两小节，具有均匀的间隔，产生循环效果。</li><li>这种节奏与古巴的“son clave”节奏类似，但有所不同，被称为巴西克拉夫或巴萨诺瓦克拉夫。</li><li>这种节奏有变体，包括3-2和2-3版本，并被广泛应用于现代巴萨诺瓦音乐中。</li></ul>
+<p class="sh">适合人群</p>
+<p class="st">对音乐理论、节奏和巴萨诺瓦音乐感兴趣的人应该观看这个视频。</p></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=_3voyG16ses" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/_3voyG16ses/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">VOCODINE Vocoder </div>
+              <div class="c-meta">Blezz Beats</div>
+            </div>
+          </a>
           <div class="sum-ov"><p class="sh">核心主题</p>
 <p class="st">本视频讲解了如何在Logic Pro中使用VOCODINE Vocoder插件，包括设置、录音和使用技巧。</p>
 <p class="sh">关键观点</p>
@@ -209,9 +302,15 @@
 <p class="sh">适合人群</p>
 <p class="st">适合使用Logic Pro的音乐制作人和音频工程师，尤其是那些想要使用VOCODINE Vocoder插件创造独特音效的人。</p></div>
         </article><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/naMTi1q9-sw/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">Big Z Beats</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=naMTi1q9-sw" target="_blank">The 1 type of plugin every producer needs</a>
+          <a class="thumb-link" href="https://youtube.com/watch?v=naMTi1q9-sw" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/naMTi1q9-sw/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">The 1 type of plugin every producer needs</div>
+              <div class="c-meta">Big Z Beats</div>
+            </div>
+          </a>
           <div class="sum-ov"><p class="sh">核心主题</p>
 <p class="st">视频讲述了音乐制作中一个必不可少的插件类型——多频段压缩器。</p>
 <p class="sh">关键观点</p>
@@ -219,9 +318,15 @@
 <p class="sh">适合人群</p>
 <p class="st">适合所有音乐制作人和音频工程师，尤其是那些想要提高混音质量和简化工作流程的人。</p></div>
         </article><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/CRs1sAs994Y/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">Alex Rome</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=CRs1sAs994Y" target="_blank">Why This Song is Genius (Swedish House Mafia)</a>
+          <a class="thumb-link" href="https://youtube.com/watch?v=CRs1sAs994Y" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/CRs1sAs994Y/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Why Swedish House Mafia's Greyhound is So Addictive</div>
+              <div class="c-meta">Alex Rome</div>
+            </div>
+          </a>
           <div class="sum-ov"><p class="sh">核心主题</p>
 <p class="st">视频分析Swedish House Mafia的歌曲《Greyhound》为什么那么吸引人。</p>
 <p class="sh">关键观点</p>
@@ -229,9 +334,15 @@
 <p class="sh">适合人群</p>
 <p class="st">适合对音乐制作和电子音乐感兴趣的人，特别是那些想了解歌曲制作和音效设计的音乐爱好者和初学者。</p></div>
         </article><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/Fzs2UCPrSQ8/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">Nicole Niewinski</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=Fzs2UCPrSQ8" target="_blank">How to Play 'Smells Like Teen Spirit' on Drums </a>
+          <a class="thumb-link" href="https://youtube.com/watch?v=Fzs2UCPrSQ8" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/Fzs2UCPrSQ8/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">How to Play 'Smells Like Teen Spirit' on Drums </div>
+              <div class="c-meta">Nicole Niewinski</div>
+            </div>
+          </a>
           <div class="sum-ov"><p class="sh">核心主题</p>
 <p class="st">本视频教您如何在鼓上演奏涅槃乐队的《Smells Like Teen Spirit》。</p>
 <p class="sh">关键观点</p>
@@ -239,9 +350,15 @@
 <p class="sh">适合人群</p>
 <p class="st">适合对鼓演奏感兴趣的初学者或涅槃乐队的粉丝。</p></div>
         </article><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/URwgesL2S7E/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">Songwriting Chops</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=URwgesL2S7E" target="_blank">Finish Your Songs Faster With This One Secret!</a>
+          <a class="thumb-link" href="https://youtube.com/watch?v=URwgesL2S7E" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/URwgesL2S7E/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Finish Your Songs Faster With This One Secret!</div>
+              <div class="c-meta">Songwriting Chops</div>
+            </div>
+          </a>
           <div class="sum-ov"><p class="sh">核心主题</p>
 <p class="st">这个视频教你如何通过找到一个功能性的歌曲标题来更快地完成歌曲创作。</p>
 <p class="sh">关键观点</p>
@@ -249,29 +366,47 @@
 <p class="sh">适合人群</p>
 <p class="st">这个视频适合所有想要提高歌曲创作效率和质量的歌曲创作者和词曲作者。</p></div>
         </article><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/emNxsR2lj9k/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">Holistic Songwriting</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=emNxsR2lj9k" target="_blank">Why Most Success Advice Is Useless </a>
+          <a class="thumb-link" href="https://youtube.com/watch?v=oCl6ic1ckK8" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/oCl6ic1ckK8/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">The Genius of “Manchild” — Harmony, Humor & Delayed Resolution </div>
+              <div class="c-meta">Holistic Songwriting</div>
+            </div>
+          </a>
           <div class="sum-ov"><p class="sh">核心主题</p>
-<p class="st">视频讲述了为什么大多数成功建议都是无用的，鼓励创作者专注于自己的热情和价值观，而不是仅仅追求外部的成功和认可。</p>
+<p class="st">视频分析Sabrina Carpenter的歌曲"Manchild"，探讨其和声、幽默和延迟解决的音乐技巧。</p>
 <p class="sh">关键观点</p>
-<ul><li>许多成功故事都是幸存者偏见的结果，我们只听到成功的人的故事，而忽略了那些没有成功的人的经历。</li><li>过于关注外部的成功和认可可能会导致艺术家失去对自己作品的热情和意义。</li><li>专注于自己的价值观、手艺、好奇心和诚信比追求外部的成功更重要，因为这些是可以控制和真正重要的东西。</li></ul>
+<ul><li>歌曲"Manchild"通过延迟解决来制造音乐上的吸引力，尽管其和声循环很简单。</li><li>歌词中使用的幽默和自嘲手法使歌曲更具趣味性和深度。</li><li>该歌曲的制作，尤其是Jack Antonoff的制作技巧，通过添加各种乐器和声音来增强歌曲的趣味性和动态感。</li></ul>
 <p class="sh">适合人群</p>
-<p class="st">对创作、艺术和自我价值观感兴趣的人，尤其是那些正在寻找如何保持动力和热情的艺术家和创作者。</p></div>
+<p class="st">对音乐制作、歌曲创作和音乐分析感兴趣的人，尤其是想要学习如何通过音乐技巧来增强歌曲吸引力的音乐人和爱好者。</p></div>
         </article><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/YNYyaIbbyV0/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">Tape Notes Podcast</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=YNYyaIbbyV0" target="_blank">How To Turn An Acoustic Song Into A Stadium Banger </a>
+          <a class="thumb-link" href="https://youtube.com/watch?v=5Uce5cwRBPE" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/5Uce5cwRBPE/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Writing A 1 Billion Stream Hit </div>
+              <div class="c-meta">Tape Notes Podcast</div>
+            </div>
+          </a>
           <div class="sum-ov"><p class="sh">核心主题</p>
-<p class="st">本视频讲述如何将原声歌曲改编成体育场摇滚乐，分享音乐制作和编曲的经验。</p>
+<p class="st">这段视频讲述了歌曲《Stargazing》创作的幕后故事和过程。</p>
 <p class="sh">关键观点</p>
-<ul><li>视频中提到了使用大型踢鼓和四分音符节奏来创造体育场摇滚的感觉。</li><li>介绍了如何通过添加钢琴、吉他和人声等元素来丰富歌曲的层次感。</li><li>讨论了使用合适的混音技术，如侧链压缩和空间效果，来使歌曲听起来更宽广和有活力。</li></ul>
+<ul><li>歌曲《Stargazing》的创作过程始于两位音乐人在Malibu的一次写歌之旅。</li><li>他们最初并没有觉得这首歌会如此特别，但在不断的修改和完善后，它成为了一个令人惊艳的作品。</li><li>音乐人强调了在创作过程中保持舒适和自然的环境的重要性，例如在Airbnb租的房子里写歌。</li></ul>
 <p class="sh">适合人群</p>
-<p class="st">本视频适合对音乐制作、编曲和混音技术感兴趣的音乐人、制作人和音频工程师。</p></div>
+<p class="st">对音乐创作过程和幕后故事感兴趣的人，尤其是那些喜欢了解歌曲创作的灵感和过程的音乐爱好者。</p></div>
         </article><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/09YIb5N8wLU/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">dBs Institute</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=09YIb5N8wLU" target="_blank">dBs Institute Courses </a>
+          <a class="thumb-link" href="https://youtube.com/watch?v=09YIb5N8wLU" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/09YIb5N8wLU/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">dBs Institute Courses </div>
+              <div class="c-meta">dBs Institute</div>
+            </div>
+          </a>
           <div class="sum-ov"><p class="sh">核心主题</p>
 <p class="st">该视频介绍了dBs Institute的声乐艺术和音乐制作课程，旨在帮助艺术家、歌手和制作人发展独特的声乐风格和音乐制作技能。</p>
 <p class="sh">关键观点</p>
@@ -279,9 +414,15 @@
 <p class="sh">适合人群</p>
 <p class="st">该视频适合对音乐制作、声乐艺术和音乐行业感兴趣的艺术家、歌手和制作人，尤其是那些想要发展独特的声乐风格和音乐制作技能的年轻人。</p></div>
         </article><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/ytY9fJ7nw70/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">Sherry's Notes</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=ytY9fJ7nw70" target="_blank">Falling Early Isn't a Bad Thing: Life Is Just a Cycle of Falling and Getting Back Up ft. Li Yu </a>
+          <a class="thumb-link" href="https://youtube.com/watch?v=ytY9fJ7nw70" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/ytY9fJ7nw70/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Falling Early Isn't a Bad Thing: Life Is Just a Cycle of Falling and Getting Back Up ft. Li Yu </div>
+              <div class="c-meta">Sherry's Notes</div>
+            </div>
+          </a>
           <div class="sum-ov"><p class="sh">核心主题</p>
 <p class="st">这个视频讲的是关于如何克服冒牌者症候群，找到自己的真实自我，并学会接受自己。</p>
 <p class="sh">关键观点</p>
@@ -289,20 +430,32 @@
 <p class="sh">适合人群</p>
 <p class="st">这个视频适合对自我成长、时尚和个人发展感兴趣的人，特别是那些正在寻找如何建立自信和克服自我怀疑的年轻人。</p></div>
         </article><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/EGMabOCvHfw/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">Dead Wax</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=EGMabOCvHfw" target="_blank">Jackson Browne's Bassist on Elvis, Little Richard, The Beatles and Beyond...</a>
+          <a class="thumb-link" href="https://youtube.com/watch?v=EGMabOCvHfw" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/EGMabOCvHfw/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Jackson Browne's Bassist on Elvis, Little Richard, The Beatles and Beyond...</div>
+              <div class="c-meta">Dead Wax</div>
+            </div>
+          </a>
           <div class="sum-ov"><p class="sh">核心主题</p>
-<p class="st">本视频可能是对杰克逊·布朗的贝司手的访谈，讨论他与埃尔维斯、リトル・リチャード、披头士乐队等音乐传奇人物的合作和经历。</p>
+<p class="st">本视频可能是一位与杰克逊·布朗合作的贝斯手，分享他对音乐传奇人物如埃尔维斯、小理查德和披头士乐队等的看法和经历。</p>
 <p class="sh">可能内容</p>
-<ul><li>访谈嘉宾分享他与埃尔维斯、リトル・リチャード、披头士乐队等音乐传奇人物合作的故事</li><li>讨论这些音乐传奇人物对他音乐生涯的影响和启发</li><li>分享他与杰克逊·布朗合作的经历和幕后故事</li></ul>
+<ul><li>贝斯手与杰克逊·布朗的合作经历</li><li>贝斯手对埃尔维斯、 小理查德和披头士乐队等音乐传奇人物的看法和影响</li><li>贝斯手在音乐行业的其他合作和经历</li></ul>
 <p class="sh">适合人群</p>
-<p class="st">本视频适合对音乐，尤其是摇滚和流行音乐历史感兴趣的观众，特别是那些喜欢埃尔维斯、リトル・リチャード、披头士乐队和杰克逊·布朗音乐的粉丝。</p>
+<p class="st">本视频适合对音乐，特别是对摇滚乐和音乐历史感兴趣的人群，尤其是杰克逊·布朗和其他音乐传奇人物的粉丝。</p>
 <p class="st">（基于标题推断）</p></div>
         </article><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/5y9imVtOvD8/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">Andertons Synth</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=5y9imVtOvD8" target="_blank">Korg Phase 8 - The Acoustic + Analogue Synth You Need To Hear!</a>
+          <a class="thumb-link" href="https://youtube.com/watch?v=5y9imVtOvD8" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/5y9imVtOvD8/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Korg Phase 8 - The Acoustic + Analogue Synth You Need To Hear!</div>
+              <div class="c-meta">Andertons Synth</div>
+            </div>
+          </a>
           <div class="sum-ov"><p class="sh">核心主题</p>
 <p class="st">本视频介绍Korg Phase 8，一种声学和模拟合成器，展示其功能和演示如何使用。</p>
 <p class="sh">关键观点</p>
@@ -310,34 +463,52 @@
 <p class="sh">适合人群</p>
 <p class="st">对电子音乐制作、合成器和音乐创作感兴趣的人，尤其是那些寻求新的声音和创作方法的音乐家和制作人。</p></div>
         </article><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/dL8YZeX8hZo/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">Korg UK</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=dL8YZeX8hZo" target="_blank">Getting started with the Korg Grandstage X</a>
+          <a class="thumb-link" href="https://youtube.com/watch?v=dL8YZeX8hZo" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/dL8YZeX8hZo/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Getting started with the Korg Grandstage X</div>
+              <div class="c-meta">Korg UK</div>
+            </div>
+          </a>
           <div class="sum-ov"><p class="sh">核心主题</p>
-<p class="st">本视频可能是关于如何开始使用Korg Grandstage X键盘乐器的入门指南。</p>
-<p class="sh">可能内容</p>
-<ul><li>介绍Korg Grandstage X的基本功能和特性</li><li>提供一步一步的设置和配置指南</li><li>演示如何使用Grandstage X创建和编辑声音</li><li>讨论如何将Grandstage X与其他设备或软件集成</li></ul>
+<p class="st">本视频讲解Korg Grandstage X键盘的入门使用方法。</p>
+<p class="sh">关键观点</p>
+<ul><li>介绍了Korg Grandstage X键盘的配件和连接方式。</li><li>演示了如何选择和编辑声音，包括混响、EQ和音色调整。</li><li>介绍了键盘的分层和分割功能，以及节奏伴奏功能。</li></ul>
 <p class="sh">适合人群</p>
-<p class="st">本视频适合刚刚购买或计划购买Korg Grandstage X的音乐爱好者和专业人士，他们需要基本的入门指南和操作帮助（基于标题推断）</p></div>
+<p class="st">适合刚刚购买Korg Grandstage X键盘的音乐爱好者或专业音乐人，帮助他们快速上手并发挥键盘的全部功能。</p></div>
         </article><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/FpQWrOZHmBY/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">三分钟音乐社</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=FpQWrOZHmBY" target="_blank">【视唱练耳】64-和弦听辨引入“转位七和弦”</a>
+          <a class="thumb-link" href="https://youtube.com/watch?v=FpQWrOZHmBY" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/FpQWrOZHmBY/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">【视唱练耳】64-和弦听辨引入“转位七和弦”</div>
+              <div class="c-meta">三分钟音乐社</div>
+            </div>
+          </a>
           <div class="sum-ov"><p class="sh">核心主题</p>
-<p class="st">本视频可能讲解音乐理论中的视唱练耳，特别是关于转位七和弦的听辨引入。</p>
+<p class="st">本视频主要讲解视唱练耳中关于转位七和弦的听辨技巧。</p>
 <p class="sh">可能内容</p>
-<ul><li>介绍转位七和弦的基本概念和定义</li><li>提供实践例子或练习来帮助听众辨别转位七和弦</li></ul>
+<ul><li>介绍转位七和弦的基本概念和音乐理论基础</li><li>提供具体的听辨练习和示例，帮助观众掌握转位七和弦的识别技巧</li></ul>
 <p class="sh">适合人群</p>
-<p class="st">本视频适合对音乐理论，尤其是视唱练耳感兴趣的音乐爱好者或学生（基于标题推断）</p></div>
+<p class="st">本视频适合对音乐理论和视唱练耳感兴趣的音乐爱好者和学生，特别是那些已经有一定音乐基础想要提高听辨能力的人。（基于标题推断）</p></div>
         </article></div>
-        </section><section id="🎭_娱乐" class="col">
-          <h2 class="colh" style="border-color:#dc2626;color:#dc2626">
+        </section><section id="🎭_娱乐" class="shelf">
+          <h2 class="shelf-head" style="border-color:#dc2626;color:#dc2626">
             🎭 娱乐<span class="cnt">6</span>
           </h2>
-          <div class="cards"><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/yJHlRHk5e-8/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">Kill Tony</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=yJHlRHk5e-8" target="_blank">KT #774 - JOE DEROSA + MIKE FINOIA</a>
+          <div class="strip"><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=yJHlRHk5e-8" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/yJHlRHk5e-8/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">KT #774 - JOE DEROSA + MIKE FINOIA</div>
+              <div class="c-meta">Kill Tony</div>
+            </div>
+          </a>
           <div class="sum-ov"><p class="sh">核心主题</p>
 <p class="st">本视频是关于一档名为"Kill Tony"的直播节目的录制，节目中有两位嘉宾Joe Derosa和Mike Finoia，以及多位参与者通过抽签方式上台表演和分享故事。</p>
 <p class="sh">关键观点</p>
@@ -345,9 +516,15 @@
 <p class="sh">适合人群</p>
 <p class="st">喜欢喜剧和脱口秀的观众可能会对这个视频感兴趣，因为它包含了多个幽默的故事和对话。</p></div>
         </article><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/iYlODtkyw_I/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">MrBeast</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=iYlODtkyw_I" target="_blank">Survive 30 Days Chained To A Stranger, Win $250,000</a>
+          <a class="thumb-link" href="https://youtube.com/watch?v=iYlODtkyw_I" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/iYlODtkyw_I/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Survive 30 Days Chained To A Stranger, Win $250,000</div>
+              <div class="c-meta">MrBeast</div>
+            </div>
+          </a>
           <div class="sum-ov"><p class="sh">核心主题</p>
 <p class="st">视频讲述的是一位名叫艾莉森的女性参加一个挑战，她需要和一系列陌生人被铐在一起生活30天，如果成功就能赢得25万美元的奖励。</p>
 <p class="sh">关键观点</p>
@@ -355,86 +532,133 @@
 <p class="sh">适合人群</p>
 <p class="st">喜欢真人秀、挑战类节目和心理游戏的人可能会对这个视频感兴趣。</p></div>
         </article><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/e88tGAl5OHQ/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">Fun Void</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=e88tGAl5OHQ" target="_blank">Bill Burr Hates Chain Restaurants - ANIMATED</a>
+          <a class="thumb-link" href="https://youtube.com/watch?v=e88tGAl5OHQ" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/e88tGAl5OHQ/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Bill Burr Hates Chain Restaurants - ANIMATED</div>
+              <div class="c-meta">Fun Void</div>
+            </div>
+          </a>
           <div class="sum-ov"><p class="sh">核心主题</p>
-<p class="st">该视频可能是关于美国喜剧演员比尔·伯尔（Bill Burr）对连锁餐厅的看法的动画解说。</p>
-<p class="sh">可能内容</p>
-<ul><li>动画视频中可能会展现比尔·伯尔的喜剧表演片段，内容涉及他对连锁餐厅的不满和吐槽。</li><li>视频可能会通过动画的形式来增强喜剧效果，并使比尔·伯尔的观点更具视觉吸引力。</li></ul>
+<p class="st">该视频讲述了美国喜剧演员Bill Burr对连锁餐厅的不满和吐槽。</p>
+<p class="sh">关键观点</p>
+<ul><li>Bill Burr批评连锁餐厅让顾客自己动手完成订单的部分内容，如自己取调味品或盖杯盖。</li><li>他认为顾客已经支付了钱，应该由餐厅工作人员完成整个订单，而不是让顾客自己做一部分。</li><li>他还讽刺了连锁餐厅的企业文化和顾客服务理念，认为他们过于注重省事和降低成本。</li></ul>
 <p class="sh">适合人群</p>
-<p class="st">该视频可能适合喜欢喜剧和对美食文化感兴趣的人群，尤其是那些熟悉比尔·伯尔作品的观众（基于标题推断）</p></div>
+<p class="st">喜欢幽默和社会评论的观众，特别是那些对餐厅服务和企业文化感兴趣的人可能会喜欢这个视频。</p></div>
         </article><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/DNpYymysUQo/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">David Lynch Theater</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=DNpYymysUQo" target="_blank">David Lynch Theater Presents:  Interview Project Trailer</a>
+          <a class="thumb-link" href="https://youtube.com/watch?v=DNpYymysUQo" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/DNpYymysUQo/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">David Lynch Theater Presents:  Interview Project Trailer</div>
+              <div class="c-meta">David Lynch Theater</div>
+            </div>
+          </a>
           <div class="sum-ov"><p class="sh">核心主题</p>
-<p class="st">这段视频可能是对大卫·林奇剧院的一个访谈项目的预告片，展示了该项目的内容和特色。</p>
-<p class="sh">可能内容</p>
-<ul><li>介绍大卫·林奇剧院的访谈项目的概念和目标</li><li>展示该项目中的一些访谈片段或预告片</li></ul>
+<p class="st">视频介绍了“访谈项目”，一个横跨美国的20,000英里的公路旅行访谈记录片。</p>
+<p class="sh">关键观点</p>
+<ul><li>“访谈项目”是一次没有预先计划的公路旅行，团队在路上采访了数百位来自不同背景的人。</li><li>这个项目让人们通过分享自己的故事和经历，展现出人类的多样性和共通性。</li><li>通过采访，人们可以分享自己的梦想、回忆、计划和感受，展现出人类生活的丰富性。</li></ul>
 <p class="sh">适合人群</p>
-<p class="st">这段视频可能适合对大卫·林奇的作品和访谈项目感兴趣的观众，尤其是那些对艺术、电影和文化领域的访谈内容感兴趣的人。</p>
-<p class="st">（基于标题推断）</p></div>
+<p class="st">对人类故事、社会学和纪录片感兴趣的人应该观看这个视频。</p></div>
         </article><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/hdXo2snnZ4Y/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">老弗兰克 Frank</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=hdXo2snnZ4Y" target="_blank">如果人生是一場行為藝術，那麼恭喜你見到了活著的的傳奇！</a>
+          <a class="thumb-link" href="https://youtube.com/watch?v=hdXo2snnZ4Y" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/hdXo2snnZ4Y/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">如果人生是一場行為藝術，那麼恭喜你見到了活著的的傳奇！</div>
+              <div class="c-meta">老弗兰克 Frank</div>
+            </div>
+          </a>
           <div class="sum-ov"><p class="sh">核心主题</p>
-<p class="st">这视频可能讲述的是老弗兰克 Frank如何将人生视为一场行为艺术，并分享自己在这方面的经历和见解。</p>
+<p class="st">这部视频可能是一个关于人生哲学和自我激励的演讲或分享，老弗兰克 Frank 将通过一个独特的视角来阐释人生的意义和价值。</p>
 <p class="sh">可能内容</p>
-<ul><li>老弗兰克 Frank可能会分享他自己的人生经历和故事，阐述如何将生活中的每一刻视为艺术的创作过程。</li><li>视频可能包含一些行为艺术的元素或表演，展示老弗兰克 Frank如何通过艺术表达自己和自己的生活哲学。</li></ul>
+<ul><li>老弗兰克 Frank 可能会分享他自己的生活经历和故事，作为人生行為藝術的例子。</li><li>视频中可能包含一些励志和哲学性的内容，鼓励观众从新的角度看待自己的生活和人生目标。</li></ul>
 <p class="sh">适合人群</p>
-<p class="st">这视频可能适合对行为艺术、生活哲学和个人成长感兴趣的观众，尤其是那些喜欢老弗兰克 Frank风格的粉丝。</p>
-<p class="st">（基于标题推断）</p></div>
+<p class="st">这部视频可能适合那些对人生哲学、自我激励和个人成长感兴趣的人，尤其是那些正在寻找新的生活观念和灵感的人。（基于标题推断）</p></div>
         </article><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/ZrTRdtn0q40/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">八戒扯闲篇</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=ZrTRdtn0q40" target="_blank">NIKE是怎么伟大起来的？ </a>
+          <a class="thumb-link" href="https://youtube.com/watch?v=ZrTRdtn0q40" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/ZrTRdtn0q40/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">NIKE是怎么伟大起来的？ </div>
+              <div class="c-meta">八戒扯闲篇</div>
+            </div>
+          </a>
           <div class="sum-ov"><p class="sh">核心主题</p>
-<p class="st">本视频可能讲述了NIKE品牌的发展历史和成功之路。</p>
-<p class="sh">可能内容</p>
-<ul><li>NIKE的创立和早期发展</li><li>NIKE如何通过创新营销和产品设计成为体育品牌领导者</li><li>NIKE的成功案例和标志性广告活动</li></ul>
+<p class="st">NIKE是如何成为一个伟大的品牌的</p>
+<p class="sh">关键观点</p>
+<ul><li>NIKE的成功在于其对技术的追求和营销能力</li><li>NIKE的品牌基因包括对技术的追求和对运动的热爱</li><li>NIKE的营销策略包括找到合适的运动员代言和创造吸引人的广告</li></ul>
 <p class="sh">适合人群</p>
-<p class="st">本视频适合对品牌发展和营销策略感兴趣的观众，尤其是对体育品牌和创新营销案例有兴趣的人。（基于标题推断）</p></div>
+<p class="st">对品牌营销和运动鞋行业感兴趣的人</p></div>
         </article></div>
-        </section><section id="🧠_自我提升" class="col">
-          <h2 class="colh" style="border-color:#059669;color:#059669">
+        </section><section id="🧠_自我提升" class="shelf">
+          <h2 class="shelf-head" style="border-color:#059669;color:#059669">
             🧠 自我提升<span class="cnt">12</span>
           </h2>
-          <div class="cards"><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/NhJ1fqtsmc8/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">Terry Chen 泰瑞</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=NhJ1fqtsmc8" target="_blank">10 支價值投資股：是性價比，還是價值陷阱？</a>
+          <div class="strip"><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=NhJ1fqtsmc8" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/NhJ1fqtsmc8/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">10 支價值投資股：是性價比，還是價值陷阱？</div>
+              <div class="c-meta">Terry Chen 泰瑞</div>
+            </div>
+          </a>
           <div class="sum-ov"><p class="sh">核心主题</p>
-<p class="st">该视频可能会讨论10支价值投资股票的分析，帮助投资者判断这些股票是性价比高的投资机会还是价值陷阱。</p>
+<p class="st">该视频可能会讨论10支被认为具有投资价值的股票，分析它们是否真正具有性价比或可能是价值陷阱。</p>
 <p class="sh">可能内容</p>
-<ul><li>介绍价值投资的基本概念和原则</li><li>分析10支具体股票的基本面、财务表现和市场趋势</li><li>讨论如何判断一支股票是价值陷阱还是投资机会</li></ul>
+<ul><li>介绍10支被认为具有投资价值的股票，并对其进行基本分析</li><li>讨论这些股票的潜在风险和价值陷阱，帮助投资者做出更明智的决定</li></ul>
 <p class="sh">适合人群</p>
-<p class="st">该视频适合对股票投资感兴趣的个人，特别是那些对价值投资策略有兴趣或正在寻找投资建议的人。（基于标题推断）</p></div>
+<p class="st">该视频适合对股票投资感兴趣的个人，尤其是那些正在寻找价值投资机会并希望避免潜在陷阱的投资者。</p>
+<p class="st">（基于标题推断）</p></div>
         </article><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/VS9ci-etv_c/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">二一的笔记</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=VS9ci-etv_c" target="_blank">Notion's "OpenClaw" Is Here! A Better Lobster — Custom Agent In-Depth Review</a>
+          <a class="thumb-link" href="https://youtube.com/watch?v=VS9ci-etv_c" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/VS9ci-etv_c/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Notion's "OpenClaw" Is Here! A Better Lobster — Custom Agent In-Depth Review</div>
+              <div class="c-meta">二一的笔记</div>
+            </div>
+          </a>
           <div class="sum-ov"><p class="sh">核心主题</p>
-<p class="st">这段视频可能是对Notion的"OpenClaw"功能进行深入的评测和介绍，特别是关于自定义代理的功能。</p>
-<p class="sh">可能内容</p>
-<ul><li>介绍Notion的"OpenClaw"功能及其特点</li><li>深入评测自定义代理功能的优缺点和使用方法</li><li>与其他功能或工具的比较，探讨其优势和劣势</li></ul>
-<p class="sh">适合人群</p>
-<p class="st">这段视频可能适合对Notion工具感兴趣的用户，尤其是那些想要深入了解和利用其高级功能来提高工作效率的人。（基于标题推断）</p></div>
-        </article><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/wniw-4AUCsk/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">Principles by Ray Dalio</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=wniw-4AUCsk" target="_blank">The Changing World Order: Ray Dalio</a>
-          <div class="sum-ov"><p class="sh">核心主题</p>
-<p class="st">雷·达利奥（Ray Dalio）探讨了过去500年中10个最强大的帝国的兴衰规律，以及世界秩序的变化。</p>
+<p class="st">Notion 的 "OpenClaw" 和 "Custom Agent" 功能可以帮助用户更好地管理任务和知识，并实现自动化和智能化。</p>
 <p class="sh">关键观点</p>
-<ul><li>雷·达利奥通过研究历史上的强大帝国（如荷兰、英国、美国和中国）及其货币的兴衰，发现了一个大约250年的循环模式。</li><li>这个循环模式包括帝国的崛起、巅峰、衰落和转型，通常伴随着重大冲突和战争。</li><li>他使用八个指标来衡量一个帝国的实力，包括教育、创新、经济输出、军事实力和货币地位等。</li></ul>
+<ul><li>Notion 的 Custom Agent 功能可以让用户创建虚拟员工来自动执行任务和处理数据。</li><li>用户可以通过自然语言来配置 Agent 的工作流程和规则。</li><li>Agent 可以与 Notion 的其他功能和第三方工具进行集成，实现更高效的工作流程。</li></ul>
 <p class="sh">适合人群</p>
-<p class="st">对全球政治、经济和历史规律感兴趣的人，尤其是那些希望了解世界秩序变化背后的深层逻辑和模式的人。</p></div>
+<p class="st">对 Notion 和知识管理感兴趣的用户，尤其是知识工作者和需要管理大量信息的个人。</p></div>
         </article><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/_dTKOXlvdZ8/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">Nathan Nazareth</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=_dTKOXlvdZ8" target="_blank">I Started a Dropshipping Store in 24 Hours Using ONLY AI</a>
+          <a class="thumb-link" href="https://youtube.com/watch?v=Egj2E4zFNy8" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/Egj2E4zFNy8/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">The Tribute System: The new World Order</div>
+              <div class="c-meta">Principles by Ray Dalio</div>
+            </div>
+          </a>
+          <div class="sum-ov"><p class="sh">核心主题</p>
+<p class="st">视频讨论了全球政治格局的变化，特别是美国和中国在世界秩序中的角色转变。</p>
+<p class="sh">关键观点</p>
+<ul><li>全球政治格局正在发生变化，受到五大力量的驱动，包括债务货币经济、内部政治和社会秩序、国际世界秩序、自然灾害和技术进步。</li><li>美国在全球事务中的作用正在减弱，导致其他国家重新评估自己的联盟和战略。</li><li>中国的崛起和其独特的外交方式，包括“朝贡体系”和“孙子兵法”，将对未来全球政治产生重大影响。</li></ul>
+<p class="sh">适合人群</p>
+<p class="st">对全球政治、国际关系和地缘政治感兴趣的人，尤其是那些关注美国和中国之间关系发展的人。</p></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=_dTKOXlvdZ8" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/_dTKOXlvdZ8/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">I Started a Dropshipping Store in 24 Hours Using ONLY AI</div>
+              <div class="c-meta">Nathan Nazareth</div>
+            </div>
+          </a>
           <div class="sum-ov"><p class="sh">核心主题</p>
 <p class="st">视频讲述了使用AI工具在24小时内创建一个无库存店铺（dropshipping store），并测试其盈利能力。</p>
 <p class="sh">关键观点</p>
@@ -442,9 +666,15 @@
 <p class="sh">适合人群</p>
 <p class="st">对电子商务、无库存店铺和AI应用感兴趣的人，尤其是想要快速启动在线业务的初学者。</p></div>
         </article><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/Sa5kffYLvBE/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">Predictive History</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=Sa5kffYLvBE" target="_blank">Dante #12 (Final): Purgatory Cantos 26-33</a>
+          <a class="thumb-link" href="https://youtube.com/watch?v=Sa5kffYLvBE" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/Sa5kffYLvBE/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Dante #12 (Final): Purgatory Cantos 26-33</div>
+              <div class="c-meta">Predictive History</div>
+            </div>
+          </a>
           <div class="sum-ov"><p class="sh">核心主题</p>
 <p class="st">本视频讲解了但丁的《神曲》中的《炼狱篇》第26-33歌，探讨了自然法则与神圣法则的区别，以及但丁对人类和天使的看法。</p>
 <p class="sh">关键观点</p>
@@ -452,40 +682,63 @@
 <p class="sh">适合人群</p>
 <p class="st">对文学，尤其是但丁的《神曲》，以及哲学和精神成长感兴趣的人。</p></div>
         </article><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/WsMNGBZRT74/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">Salut Coin</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=WsMNGBZRT74" target="_blank">最近鏈上回暖，連續抓到兩隻小金狗，我是怎麽做到的？</a>
+          <a class="thumb-link" href="https://youtube.com/watch?v=WsMNGBZRT74" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/WsMNGBZRT74/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">最近鏈上回暖，連續抓到兩隻小金狗，我是怎麽做到的？</div>
+              <div class="c-meta">Salut Coin</div>
+            </div>
+          </a>
           <div class="sum-ov"><p class="sh">核心主题</p>
-<p class="st">该视频可能讲述了频道主如何在链上游戏或投资中连续获得两次成功，特别是获得了两只“小金狗”，并分享了他们的经验和策略。</p>
-<p class="sh">可能内容</p>
-<ul><li>频道主可能分享了他们的游戏或投资策略和技巧</li><li>他们可能会解释如何识别和抓住机会，特别是在链上游戏或投资中</li></ul>
-<p class="sh">适合人群</p>
-<p class="st">该视频可能适合对链上游戏、投资或加密货币感兴趣的观众，特别是那些希望学习成功策略和经验的人。（基于标题推断）</p></div>
-        </article><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/dzsA8K02kPg/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">Eckhart Tolle</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=dzsA8K02kPg" target="_blank">What Most People Get Wrong About Themselves </a>
-          <div class="sum-ov"><p class="sh">核心主题</p>
-<p class="st">视频探讨了人类对自己的误解，强调了意识的重要性和个人觉醒对世界的影响。</p>
+<p class="st">视频讲述了作者最近在链上交易的经验，特别是如何抓住两只小金狗（代币）并获得了几十倍的收益。</p>
 <p class="sh">关键观点</p>
-<ul><li>视频指出，人们常常低估自己的重要性，认为自己在宇宙中是微不足道的，但实际上，每个人都是宇宙意识的一部分，具有无限的价值。</li><li>视频讨论了意识和大脑的关系，质疑了主流科学认为意识是大脑化学反应的副产品的观点。</li><li>视频鼓励人们在与他人互动时要有意识地表达自己，避免被无意识的信息所影响，并通过觉醒和成长来改变世界。</li></ul>
+<ul><li>作者分享了自己在链上交易的策略，包括如何判断热点叙事和技术指标。</li><li>作者提到了GMGN工具的使用，包括开启KOL、持币大户和Dex付费等功能来辅助交易。</li><li>作者强调了控制情绪和避免贪婪的重要性，特别是在面对高风险的交易时。</li></ul>
 <p class="sh">适合人群</p>
-<p class="st">这个视频适合对自我意识、个人成长和精神探索感兴趣的人，尤其是那些寻求更深入理解自己在世界中的位置和意义的人。</p></div>
+<p class="st">适合对链上交易和加密货币感兴趣的人，特别是那些想要学习如何抓住小金狗和提高交易技巧的投资者。</p></div>
         </article><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/Y4EpaFWUWks/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">Exploring Alternatives</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=Y4EpaFWUWks" target="_blank">Stunning Modern Tiny House with Smart Functional Interior Design! FULL TOUR</a>
+          <a class="thumb-link" href="https://youtube.com/watch?v=vSyMKS7g0NQ" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/vSyMKS7g0NQ/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Why Most People Don't Understand This Is Their Awakening </div>
+              <div class="c-meta">Eckhart Tolle</div>
+            </div>
+          </a>
           <div class="sum-ov"><p class="sh">核心主题</p>
-<p class="st">本视频可能是一场关于现代微型房屋的内部设计和功能特点的全面介绍。</p>
+<p class="st">本视频可能探讨了人类的痛苦和内心冲突，并揭示了这些痛苦背后的真相和人们对其的误解。</p>
 <p class="sh">可能内容</p>
-<ul><li>微型房屋的空间利用和布局介绍</li><li>智能家具和功能性设计的展示</li><li>微型房屋生活的优点和挑战讨论</li></ul>
+<ul><li>讨论痛苦的本质和它如何影响我们的生活和心灵状态</li><li>探索人们对痛苦的常见误解和如何将其转化为个人成长和觉醒的机会</li></ul>
 <p class="sh">适合人群</p>
-<p class="st">该视频适合对微型房屋生活、现代设计和智能家居装饰感兴趣的人群。</p>
-<p class="st">（基于标题推断）</p></div>
+<p class="st">本视频可能适合寻求内心平静、精神成长和自我觉醒的人们，尤其是那些对冥想、正念和个人发展感兴趣的个体。（基于标题推断）</p></div>
         </article><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/FKpfsLuTYOI/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">Zenn</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=FKpfsLuTYOI" target="_blank">Were Ancient Humans Loyal to One Partner?</a>
+          <a class="thumb-link" href="https://youtube.com/watch?v=Y4EpaFWUWks" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/Y4EpaFWUWks/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Stunning Modern Tiny House with Smart Functional Interior Design! FULL TOUR</div>
+              <div class="c-meta">Exploring Alternatives</div>
+            </div>
+          </a>
+          <div class="sum-ov"><p class="sh">核心主题</p>
+<p class="st">这个视频讲的是一位建筑师Noah Van Hall Bush带领观众参观了一套现代化的微型房屋，展示了其智能功能和内部设计。</p>
+<p class="sh">关键观点</p>
+<ul><li>微型房屋采用标准的2x4住宅建设技术，拥有26英尺的长度和10英尺的宽度。</li><li>设计师强调了使用高品质材料，如金属外墙和木质装饰，以确保房屋的耐用性和美观。</li><li>微型房屋内部设计注重功能性和舒适度，包括厨房、餐厅、卧室和浴室等区域。</li></ul>
+<p class="sh">适合人群</p>
+<p class="st">对微型房屋设计和建筑感兴趣的人，尤其是那些考虑购买或建造微型房屋的人，可以从这个视频中获得灵感和参考。</p></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=FKpfsLuTYOI" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/FKpfsLuTYOI/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Were Ancient Humans Loyal to One Partner?</div>
+              <div class="c-meta">Zenn</div>
+            </div>
+          </a>
           <div class="sum-ov"><p class="sh">核心主题</p>
 <p class="st">视频探讨了古代人类是否对一个伴侣忠诚，揭示了人类历史上忠诚和多配偶的复杂性。</p>
 <p class="sh">关键观点</p>
@@ -493,56 +746,84 @@
 <p class="sh">适合人群</p>
 <p class="st">对人类历史、社会学和人际关系感兴趣的人可能会对这个视频感兴趣，因为它提供了对古代人类配偶关系的独特视角。</p></div>
         </article><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/vMFEcPTeBX8/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">Aligned K9</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=vMFEcPTeBX8" target="_blank">Stand-in-hands…Step One?</a>
+          <a class="thumb-link" href="https://youtube.com/watch?v=vMFEcPTeBX8" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/vMFEcPTeBX8/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Stand-in-hands…Step One?</div>
+              <div class="c-meta">Aligned K9</div>
+            </div>
+          </a>
           <div class="sum-ov"><p class="sh">核心主题</p>
-<p class="st">本视频可能讲述的是如何训练狗的第一步，特别是关于“站立在手中”的训练技巧。</p>
-<p class="sh">可能内容</p>
-<ul><li>介绍“站立在手中”的训练目的和重要性</li><li>演示如何开始第一步的训练，包括环境准备和初步命令</li></ul>
+<p class="st">该视频讲述了如何训练一只狗站在主人手上或特定物体上，通过逐步的训练和奖励来实现这一目标。</p>
+<p class="sh">关键观点</p>
+<ul><li>训练开始时使用两个稳定的表面，如触摸板和水泥块，让狗的前后爪分别站在上面。</li><li>随着训练的进展，逐渐减小表面的大小和稳定性，增加训练的难度。</li><li>使用奖励和口头命令来鼓励和引导狗完成所需的行为。</li></ul>
 <p class="sh">适合人群</p>
-<p class="st">本视频适合有狗的主人，尤其是那些刚开始训练自己的宠物的初学者。（基于标题推断）</p></div>
+<p class="st">该视频适合狗主人，尤其是那些对狗训练和行为改造感兴趣的人。</p></div>
         </article><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/jN9jDvqn7ro/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">Bob Duchesne</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=jN9jDvqn7ro" target="_blank">These ATLANTIC PUFFINS Are Close Enough To TOUCH.</a>
+          <a class="thumb-link" href="https://youtube.com/watch?v=jN9jDvqn7ro" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/jN9jDvqn7ro/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">These ATLANTIC PUFFINS Are Close Enough To TOUCH.</div>
+              <div class="c-meta">Bob Duchesne</div>
+            </div>
+          </a>
           <div class="sum-ov"><p class="sh">核心主题</p>
-<p class="st">本视频可能记录了大西洋海鹦的近距离观察和互动，展示了这些鸟类的独特特征和行为。</p>
-<p class="sh">可能内容</p>
-<ul><li>视频中可能包含大西洋海鹦的栖息地、饮食和社会行为的介绍</li><li>观察者可能分享了观察和接近这些鸟类的经历和技巧</li></ul>
+<p class="st">该视频讲述了在马奇亚斯海豹岛（Machias Seal Island）上近距离观察大西洋鸻（Atlantic Puffins）的独特体验。</p>
+<p class="sh">关键观点</p>
+<ul><li>观看大西洋鸻的机会非常稀少，且需要经过严格的安排和天气许可。</li><li>除了大西洋鸻外，马奇亚斯海豹岛也是其他几种鸟类的栖息地，包括剃刀鸟、普通海鸦和黑 Guillemot。</li><li>观察这些鸟类的行为和生活习性，包括它们的交配、筑巢和抚养幼鸟的过程。</li><li>马奇亚斯海豹岛是观察这些鸟类的理想地点，因为它们在这里非常亲近人类，不会飞走。</li></ul>
 <p class="sh">适合人群</p>
-<p class="st">本视频可能适合对野生动物、鸟类观察和自然保护感兴趣的人群，尤其是那些喜欢观鸟和大自然的爱好者。</p>
-<p class="st">（基于标题推断）</p></div>
+<p class="st">该视频适合对野生动物，特别是鸟类观察感兴趣的人，以及那些喜欢探索独特自然景观的人。</p></div>
         </article><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/NwGKjaWRhIw/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">FireUserGroup</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=NwGKjaWRhIw" target="_blank">Breaking! Claude taken offline by the White House and "raided" by Alibaba? Netizens: Didn't you s...</a>
+          <a class="thumb-link" href="https://youtube.com/watch?v=NwGKjaWRhIw" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/NwGKjaWRhIw/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Breaking! Claude taken offline by the White House and "raided" by Alibaba? Netizens: Didn't you s...</div>
+              <div class="c-meta">FireUserGroup</div>
+            </div>
+          </a>
           <div class="sum-ov"><p class="sh">核心主题</p>
-<p class="st">视频可能讲述的是Claude被白宫下线和阿里巴巴“突袭”的事件，以及网民对此的反应。</p>
+<p class="st">视频可能讲述了Claude被白宫下线和阿里巴巴“突袭”的事件，引发了网民的热烈讨论和反应。</p>
 <p class="sh">可能内容</p>
-<ul><li>视频中可能会讨论Claude是什么样的平台或服务，以及为什么会被白宫下线。</li><li>视频可能还会涉及阿里巴巴与此事件的关系，以及网民对整个事件的评论和反应。</li></ul>
+<ul><li>视频可能会介绍Claude是什么以及它被下线的原因</li><li>视频可能会讨论阿里巴巴与此事件的关系以及网民的反应和评论</li></ul>
 <p class="sh">适合人群</p>
-<p class="st">该视频可能适合对科技新闻、国际事件和网络热点感兴趣的人群。</p>
-<p class="st">（基于标题推断）</p></div>
+<p class="st">该视频适合对科技新闻和互联网事件感兴趣的观众，尤其是那些关注人工智能和网络安全相关话题的人（基于标题推断）</p></div>
         </article></div>
-        </section><section id="📦_未分类" class="col">
-          <h2 class="colh" style="border-color:#ea580c;color:#ea580c">
+        </section><section id="📦_未分类" class="shelf">
+          <h2 class="shelf-head" style="border-color:#ea580c;color:#ea580c">
             📦 未分类<span class="cnt">5</span>
           </h2>
-          <div class="cards"><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/_0JR3HjzqVE/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">PrankZoid</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=_0JR3HjzqVE" target="_blank">He Laughed… Then Had to Explain Why 💀</a>
+          <div class="strip"><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=_0JR3HjzqVE" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/_0JR3HjzqVE/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">He Laughed… Then Had to Explain Why 💀</div>
+              <div class="c-meta">PrankZoid</div>
+            </div>
+          </a>
           <div class="sum-ov"><p class="sh">核心主题</p>
-<p class="st">视频内容可能是关于一个幽默的恶作剧或尴尬场面，某人笑了之后不得不解释原因。</p>
-<p class="sh">可能内容</p>
-<ul><li>视频中可能包含一个主角对某件事情的反应，例如一个笑话或一个恶作剧。</li><li>解释部分可能是视频的高潮，包含了令人尴尬或难堪的时刻。</li></ul>
+<p class="st">视频讲述了一则关于大脚怪最喜欢的三明治的笑话，以及随后的一系列尝试解释笑话的对话。</p>
+<p class="sh">关键观点</p>
+<ul><li>视频中提到了一个关于大脚怪最喜欢的三明治的笑话，内容是“Island Boy”。</li><li>笑话的效果取决于讲述者的表达方式和听众的理解。</li><li>视频中的人物尝试解释笑话，但最终没有给出明确的答案。</li><li>视频强调了幽默的主观性和讲述方式的重要性。</li></ul>
 <p class="sh">适合人群</p>
-<p class="st">这个视频可能适合喜欢幽默和恶作剧内容的观众，尤其是那些喜欢轻松和娱乐性的内容的人（基于标题推断）</p></div>
+<p class="st">喜欢轻松幽默内容和对话式视频的人可能会对这个视频感兴趣。</p></div>
         </article><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/O5Qo-e3-CVA/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">Why Logic Pro Rules</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=O5Qo-e3-CVA" target="_blank">Logic Pro 12.3 Update: Here's What's New!</a>
+          <a class="thumb-link" href="https://youtube.com/watch?v=O5Qo-e3-CVA" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/O5Qo-e3-CVA/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Logic Pro 12.3 Update: Here's What's New!</div>
+              <div class="c-meta">Why Logic Pro Rules</div>
+            </div>
+          </a>
           <div class="sum-ov"><p class="sh">核心主题</p>
 <p class="st">本视频讲解了Logic Pro 12.3更新的新功能和增强特性。</p>
 <p class="sh">关键观点</p>
@@ -550,57 +831,104 @@
 <p class="sh">适合人群</p>
 <p class="st">本视频适合使用Logic Pro的音乐制作人和音频编辑师，特别是那些想要了解最新更新特性和功能的用户。</p></div>
         </article><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/v12nfPL-yvk/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">Ame in a van</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=v12nfPL-yvk" target="_blank">Peaceful Day in a Life of a lonely girl ...🌲 </a>
+          <a class="thumb-link" href="https://youtube.com/watch?v=v12nfPL-yvk" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/v12nfPL-yvk/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Peaceful Day in a Life of a lonely girl ...🌲 </div>
+              <div class="c-meta">Ame in a van</div>
+            </div>
+          </a>
           <div class="sum-ov"><p class="sh">核心主题</p>
-<p class="st">视频可能记录了一个孤独女孩在宁静环境中度过的一天，展现她的日常生活和情感体验。</p>
-<p class="sh">可能内容</p>
-<ul><li>视频中可能包含女孩在自然环境中散步、冥想或从事其他放松活动的场景。</li><li>可能会有女孩的内心独白或旁白，分享她的感受、想法和生活经历。</li></ul>
+<p class="st">视频记录了一个孤独女孩在自然环境中度过的一天，包含了她与自然的互动、独白和情感表达。</p>
+<p class="sh">关键观点</p>
+<ul><li>女孩在河流中玩耍，感受大自然的美丽和宁静。</li><li>她驾驶房车穿过葡萄园，享受风景如画的景色。</li><li>女孩表达了自己对孤独和存在主义问题的思考，通过歌唱和独白表达了自己的情感。</li></ul>
 <p class="sh">适合人群</p>
-<p class="st">这部视频可能适合那些喜欢生活方式、自我提升和情感故事的观众，尤其是那些对孤独、自我反思和自然环境感兴趣的人。（基于标题推断）</p></div>
+<p class="st">喜欢自然、音乐和真实情感表达的人可能会对这个视频感兴趣。</p></div>
         </article><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/Dgss4DSc-o0/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">脱口秀播客</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=Dgss4DSc-o0" target="_blank">高晓松：荷兰为什么能崛起？因为它比所有帝国都更会“算账”｜ 荷兰东印度公司如何改写现代世界｜ VOC、殖民贸易与资本主义的黑暗开端｜国王退场，公司登场：荷兰如何开启现代资本主义时代 ｜ 荷兰 ｜世界杯</a>
+          <a class="thumb-link" href="https://youtube.com/watch?v=Dgss4DSc-o0" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/Dgss4DSc-o0/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">高晓松：荷兰为什么能崛起？因为它比所有帝国都更会“算账”｜ 荷兰东印度公司如何改写现代世界｜ VOC、殖民贸易与资本主义的黑暗开端｜国王退场，公司登场：荷兰如何开启现代资本主义时代 ｜ 荷兰 ｜世界杯</div>
+              <div class="c-meta">脱口秀播客</div>
+            </div>
+          </a>
           <div class="sum-ov"><p class="sh">核心主题</p>
-<p class="st">这个视频可能是关于高晓松对荷兰崛起的原因和荷兰东印度公司在现代世界中的影响的分析和讨论。</p>
+<p class="st">本视频可能探讨荷兰崛起的历史原因，特别是荷兰东印度公司在现代资本主义发展中的作用。</p>
 <p class="sh">可能内容</p>
-<ul><li>荷兰东印度公司的历史和作用</li><li>荷兰的殖民贸易和资本主义发展</li><li>荷兰在现代世界中的地位和影响</li></ul>
+<ul><li>荷兰东印度公司的历史及其对现代世界的影响</li><li>荷兰的殖民贸易和资本主义的发展</li><li>荷兰如何通过公司运作取代传统的国王权力，开启现代资本主义时代</li></ul>
 <p class="sh">适合人群</p>
-<p class="st">这个视频可能适合对历史、经济和政治感兴趣的人群，尤其是那些对荷兰历史和资本主义发展有兴趣的观众。</p>
+<p class="st">本视频适合对历史、经济和政治感兴趣的观众，特别是那些想了解荷兰崛起背后的原因和现代资本主义的起源的人。</p>
 <p class="st">（基于标题推断）</p></div>
         </article><article class="card">
-          <img class="thumb" src="https://img.youtube.com/vi/7kG09RfEsNc/mqdefault.jpg" loading="lazy" onerror="this.style.display='none'">
-          <div class="cmeta"><span class="ctag">G90</span></div>
-          <a class="ct" href="https://youtube.com/watch?v=7kG09RfEsNc" target="_blank">#slimshady had everyone #freaking out after his #first #freestyle on #sway #thedeathofslimshady</a>
+          <a class="thumb-link" href="https://youtube.com/watch?v=7kG09RfEsNc" target="_blank" title="在新窗口打开视频">
+            <img class="thumb" src="https://img.youtube.com/vi/7kG09RfEsNc/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">#slimshady had everyone #freaking out after his #first #freestyle on #sway #thedeathofslimshady</div>
+              <div class="c-meta">G90</div>
+            </div>
+          </a>
           <div class="sum-ov"><p class="sh">核心主题</p>
-<p class="st">这个视频可能是关于Slim Shady（埃米纳姆的化名）在Sway节目中的首次即兴说唱表演，讲述他如何让所有人感到震惊和兴奋。</p>
-<p class="sh">可能内容</p>
-<ul><li>Slim Shady在Sway节目中的即兴说唱表演片段</li><li>对Slim Shady的说唱风格和技巧的分析</li><li>Slim Shady的背景介绍和他在音乐界的影响</li></ul>
+<p class="st">视频展示了Slim Shady的首次即兴说唱表演，内容涉及黑暗幽默和社会评论。</p>
+<p class="sh">关键观点</p>
+<ul><li>Slim Shady的即兴说唱涉及黑暗和暴力主题，引起观众的强烈反应。</li><li>内容包含对社会问题的评论，如家庭暴力、战争和毒品滥用。</li><li>Slim Shady的说唱风格充满挑衅和不敬，使用幽默和讽刺来表达他的观点。</li></ul>
 <p class="sh">适合人群</p>
-<p class="st">这个视频可能适合喜欢嘻哈音乐、埃米纳姆和Slim Shady的粉丝，以及对音乐和文化趋势感兴趣的人（基于标题推断）</p></div>
+<p class="st">该视频适合成年观众，尤其是那些喜欢嘻哈音乐和黑暗幽默的粉丝。</p></div>
         </article></div>
-        </section><section id="📱_AI工具" class="col">
-          <h2 class="colh" style="border-color:#0ea5e9;color:#0ea5e9">
+        </section><section id="📱_AI工具" class="shelf">
+          <h2 class="shelf-head" style="border-color:#0ea5e9;color:#0ea5e9">
             📱 AI工具<span class="cnt">0</span>
           </h2>
-          <div class="cards"><p class="emp pending">Cookie 未配置<br><span>配置后自动抓取</span></p></div>
-        </section><section id="📱_认知科学" class="col">
-          <h2 class="colh" style="border-color:#f59e0b;color:#f59e0b">
+          <div class="strip"><p class="emp pending">Cookie 未配置<br><span>配置后自动抓取</span></p></div>
+        </section><section id="📱_认知科学" class="shelf">
+          <h2 class="shelf-head" style="border-color:#f59e0b;color:#f59e0b">
             📱 认知科学<span class="cnt">0</span>
           </h2>
-          <div class="cards"><p class="emp pending">Cookie 未配置<br><span>配置后自动抓取</span></p></div>
-        </section><section id="📱_数字游民" class="col">
-          <h2 class="colh" style="border-color:#10b981;color:#10b981">
+          <div class="strip"><p class="emp pending">Cookie 未配置<br><span>配置后自动抓取</span></p></div>
+        </section><section id="📱_数字游民" class="shelf">
+          <h2 class="shelf-head" style="border-color:#10b981;color:#10b981">
             📱 数字游民<span class="cnt">0</span>
           </h2>
-          <div class="cards"><p class="emp pending">Cookie 未配置<br><span>配置后自动抓取</span></p></div>
-        </section><section id="📱_音乐制作" class="col">
-          <h2 class="colh" style="border-color:#a855f7;color:#a855f7">
+          <div class="strip"><p class="emp pending">Cookie 未配置<br><span>配置后自动抓取</span></p></div>
+        </section><section id="📱_音乐制作" class="shelf">
+          <h2 class="shelf-head" style="border-color:#a855f7;color:#a855f7">
             📱 音乐制作<span class="cnt">0</span>
           </h2>
-          <div class="cards"><p class="emp pending">Cookie 未配置<br><span>配置后自动抓取</span></p></div>
+          <div class="strip"><p class="emp pending">Cookie 未配置<br><span>配置后自动抓取</span></p></div>
         </section></div>
+  <div class="ticker ticker--bottom"><div class="ticker__track"><span class="tk-i"><span class="tk-o tk-ok">🟢 系统全绿</span></span><span class="tk-i">✅ 代码备份 <span class="tk-n">(updated 4 min ago)</span></span><span class="tk-i">✅ YouTube日报 <span class="tk-n">(updated 15.9h ago)</span></span><span class="tk-i">✅ 音乐同步 <span class="tk-n">(updated 16.0h ago)</span></span><span class="tk-i">✅ 订阅cookie <span class="tk-n">(updated 11 min ago)</span></span><span class="tk-i">✅ 游戏库 <span class="tk-n">(updated 3 min ago)</span></span><span class="tk-i">✅ 捕获服务 <span class="tk-n">(listening)</span></span><span class="tk-i">⏸ 小红书 <span class="tk-n">(no cookie)</span></span><span class="tk-i">as of 2026-07-01 23:53</span><span class="tk-i"><span class="tk-o tk-ok">🟢 系统全绿</span></span><span class="tk-i">✅ 代码备份 <span class="tk-n">(updated 4 min ago)</span></span><span class="tk-i">✅ YouTube日报 <span class="tk-n">(updated 15.9h ago)</span></span><span class="tk-i">✅ 音乐同步 <span class="tk-n">(updated 16.0h ago)</span></span><span class="tk-i">✅ 订阅cookie <span class="tk-n">(updated 11 min ago)</span></span><span class="tk-i">✅ 游戏库 <span class="tk-n">(updated 3 min ago)</span></span><span class="tk-i">✅ 捕获服务 <span class="tk-n">(listening)</span></span><span class="tk-i">⏸ 小红书 <span class="tk-n">(no cookie)</span></span><span class="tk-i">as of 2026-07-01 23:53</span></div></div>
+  <script>
+    // 居中活时钟（全英文标签，到秒）
+    const clk=document.getElementById('clk'),p=n=>String(n).padStart(2,'0');
+    const WD=['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'];
+    const MO=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+    function tick(){const d=new Date();
+      clk.textContent=`${WD[d.getDay()]} · ${p(d.getDate())} ${MO[d.getMonth()]} ${d.getFullYear()} · ${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;}
+    tick();setInterval(tick,1000);
+
+    // 卡片 >7 的行自动缓慢滚动；方向逐行交替（第1滚动行 左→右，下一 右→左…）；hover 暂停
+    (function(){
+      let k=0;
+      document.querySelectorAll('.strip').forEach(s=>{
+        if(s.querySelectorAll('.card').length<=7) return;
+        let dir=(k%2===0)?1:-1; k++;
+        const mx=()=>s.scrollWidth-s.clientWidth;
+        if(dir<0) s.scrollLeft=mx();
+        let paused=false;
+        s.addEventListener('mouseenter',()=>{paused=true;});
+        s.addEventListener('mouseleave',()=>{paused=false;});
+        setInterval(()=>{
+          if(paused||mx()<=0) return;
+          s.scrollLeft+=dir*0.4;                 // 0.4px/33ms ≈ 12px/s，很慢
+          if(s.scrollLeft<=0)dir=1; else if(s.scrollLeft>=mx())dir=-1;
+        },33);
+      });
+    })();
+  </script>
 </body>
 </html>

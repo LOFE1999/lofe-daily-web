@@ -1,0 +1,1581 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>LOFE Saved · 2026-07-02</title>
+  <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=UnifrakturCook:wght@700&family=Pirata+One&family=Grenze+Gotisch:wght@600&family=MedievalSharp&family=Orbitron:wght@500;700&family=Audiowide&family=Michroma&family=Chakra+Petch:wght@500;700&family=Share+Tech+Mono&family=Wallpoet&display=swap" rel="stylesheet">
+  <style>
+    @font-face{font-family:'OpenDyslexic';font-weight:400;font-display:swap;
+      src:url('https://cdn.jsdelivr.net/npm/@fontsource/opendyslexic@5/files/opendyslexic-latin-400-normal.woff2') format('woff2');}
+    @font-face{font-family:'OpenDyslexic';font-weight:700;font-display:swap;
+      src:url('https://cdn.jsdelivr.net/npm/@fontsource/opendyslexic@5/files/opendyslexic-latin-700-normal.woff2') format('woff2');}
+    :root{--r:10px;--neon:#e6e6e6;--neon2:#00e5ff;--pink:#ff2d95;
+           --sh:0 0 10px rgba(230,230,230,.10);
+           --goth:'UnifrakturMaguntia';      /* 分类标题哥特体，⌘+点击分类标题循环 */
+           --goth-hdr:'UnifrakturMaguntia';} /* LOFE/view 大标题+下拉哥特体，⌘+点击 LOFE 循环 */
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'OpenDyslexic','Fredoka',-apple-system,BlinkMacSystemFont,sans-serif;
+          background:#000;color:#e6e6e6;font-size:14px;overflow-x:hidden;}
+
+    /* ── Header（含居中活时钟）── */
+    header{background:#000;color:#fff;padding:11px 16px;
+            display:flex;align-items:center;justify-content:space-between;
+            position:sticky;top:0;z-index:300;height:44px;
+            border-bottom:1px solid #141414;}
+    .ht{font-family:var(--goth-hdr),'UnifrakturMaguntia',serif;font-size:27px;font-weight:400;letter-spacing:.5px;
+         background:linear-gradient(90deg,#ff0040,#ff8a00,#ffe600,#39ff14,#00e5ff,#2d7bff,#b14eff,#ff2d95);
+         -webkit-background-clip:text;background-clip:text;
+         -webkit-text-fill-color:transparent;color:transparent;
+         animation:ht-hue 9s linear infinite;cursor:pointer;}
+    @keyframes ht-hue{from{filter:hue-rotate(0deg) drop-shadow(0 0 6px rgba(255,255,255,.45));}
+                       to{filter:hue-rotate(360deg) drop-shadow(0 0 6px rgba(255,255,255,.45));}}
+    .ht-wrap{position:relative;}
+    .ht-sl,.ht-caret{font-size:20px;}
+    .ht-menu{position:absolute;top:100%;left:0;margin-top:10px;display:none;z-index:500;
+              min-width:190px;padding:9px;background:rgba(10,10,10,.96);
+              border:1px solid #333;border-radius:14px;backdrop-filter:blur(8px);
+              box-shadow:0 16px 44px rgba(0,0,0,.72),0 0 26px rgba(0,229,255,.14);
+              font-family:var(--goth-hdr),'UnifrakturMaguntia',serif;overflow:visible;}
+    .ht-menu::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+              background:linear-gradient(90deg,#00e5ff,#ff2d95);}
+    .ht-menu.show{display:block;animation:htm-in .16s ease;}
+    @keyframes htm-in{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:none;}}
+    .ht-mi{position:relative;display:flex;align-items:center;gap:11px;padding:9px 15px;
+            font-size:24px;color:#e6e6e6;cursor:pointer;border-radius:9px;transition:.15s;
+            white-space:nowrap;}
+    .ht-mi:hover{background:#1c1c1c;}
+    /* 下拉文字也全光谱霓虹变色（soon 项保持灰） */
+    .ht-mi:not(.soon),.ht-si:not(.soon){color:#ff2d95;animation:ht-hue 9s linear infinite;}
+    .ht-arrow{margin-left:auto;padding-left:16px;font-size:20px;opacity:.5;}
+    .ht-mi.soon{color:#5a5a5a;cursor:default;}
+    .ht-mi.soon:hover{background:#141414;}
+    /* 二级：悬停平台向右滑出选视图 */
+    .ht-submenu{position:absolute;left:100%;top:-9px;margin-left:6px;display:none;z-index:600;
+                 min-width:150px;padding:9px;background:rgba(10,10,10,.96);
+                 border:1px solid #333;border-radius:14px;backdrop-filter:blur(8px);
+                 box-shadow:0 16px 44px rgba(0,0,0,.72),0 0 26px rgba(0,229,255,.14);}
+    .ht-submenu::before{content:'';position:absolute;top:0;left:-10px;width:12px;height:100%;}
+    .ht-mi.has-sub:hover>.ht-submenu{display:block;animation:sub-in .16s ease;}
+    @keyframes sub-in{from{opacity:0;transform:translateX(-8px);}to{opacity:1;transform:none;}}
+    .ht-si{padding:8px 15px;border-radius:9px;cursor:pointer;color:#e6e6e6;
+            font-size:22px;transition:.15s;white-space:nowrap;}
+    .ht-si:hover{background:#1c1c1c;padding-left:20px;}
+    .ht-si.active{color:#fff;text-shadow:0 0 8px var(--neon2);}
+    .ht-si.soon{color:#5a5a5a;cursor:default;}
+    .ht-si.soon:hover{background:transparent;padding-left:15px;}
+    .hcenter{position:absolute;left:50%;transform:translateX(-50%);
+              display:flex;align-items:center;gap:16px;}
+    .hclock{font-family:'UnifrakturMaguntia',serif;
+             font-size:28px;font-weight:400;color:#ff2b2b;letter-spacing:1px;
+             text-shadow:0 0 8px #ff2b2b,0 0 18px rgba(255,43,43,.4);
+             font-variant-numeric:tabular-nums;white-space:nowrap;}
+    /* 白霓虹音乐按钮：时钟与右侧组件之间、无圆圈、放大发光 */
+    .music-btn{position:absolute;right:19%;top:50%;transform:translateY(-50%);
+                border:none;background:none;color:#fff;font-size:26px;line-height:1;
+                cursor:pointer;padding:4px;text-shadow:0 0 8px #fff,0 0 18px rgba(255,255,255,.7);
+                transition:transform .2s,text-shadow .2s;}
+    .music-btn:hover{transform:translateY(-50%) scale(1.18);
+                      text-shadow:0 0 12px #fff,0 0 26px #fff,0 0 40px rgba(255,255,255,.6);}
+    /* ── 页内异形音乐播放器：样式由 7899 的 widget.html 注入（#lofe-music），此处不需 ── */
+    .hm{display:flex;align-items:center;gap:8px;}
+    .hbadge{font-size:11px;background:#141414;color:var(--neon);padding:2px 9px;
+             border-radius:20px;text-shadow:0 0 5px var(--neon);}
+    .hnew{font-size:11px;background:#141414;color:var(--pink);padding:2px 9px;
+           border-radius:20px;text-shadow:0 0 5px var(--pink);}
+    .hdate{font-size:11px;color:#666;}
+
+    /* ── Board：竖向堆叠的横向货架（Netflix 式）── */
+    .board{display:flex;flex-direction:column;gap:6px;padding:6px 8px;
+            height:calc(100vh - 70px);overflow-y:auto;overflow-x:hidden;background:#000;}
+    .board::-webkit-scrollbar{width:8px;}
+    .board::-webkit-scrollbar-thumb{background:#22222255;border-radius:4px;}
+
+    /* ── Shelf：一个分类 = 一行，卡片横向 ── */
+    .shelf{position:relative;}
+    .shelf-head{position:absolute;top:5px;left:10px;z-index:6;
+                 font-family:var(--goth),'UnifrakturMaguntia',serif;
+                 font-size:20px;font-weight:400;letter-spacing:.5px;
+                 padding:1px 10px;border-radius:7px;
+                 border-left:3px solid;display:flex;align-items:center;
+                 background:rgba(0,0,0,.5);backdrop-filter:blur(3px);cursor:pointer;
+                 text-shadow:0 0 7px currentColor,0 0 16px currentColor;}
+    .cnt{font-family:'Chakra Petch',monospace;font-size:10px;font-weight:600;
+          color:#888;background:#1a1a1a;padding:1px 7px;border-radius:7px;
+          margin-left:9px;text-shadow:none;letter-spacing:0;}
+    .strip{display:flex;flex-direction:row;gap:5px;overflow-x:auto;overflow-y:hidden;
+            padding:6px 2px 4px;align-items:flex-start;
+            scrollbar-width:none;scrollbar-color:transparent transparent;}
+    .strip::-webkit-scrollbar{height:6px;}
+    .strip::-webkit-scrollbar-thumb{background:transparent;}
+
+    /* ── Card：Netflix/Apple 海报式（图为底，信息叠加）── */
+    .card{flex:0 0 320px;height:180px;position:relative;border-radius:11px;
+           overflow:hidden;border:1px solid #1c1c1c;background:#0a0a0a;
+           transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease;}
+    .card:hover{transform:translateY(-3px);border-color:#22222266;
+                 box-shadow:0 8px 22px rgba(0,0,0,.55),0 0 16px #22222228;}
+    .thumb-link{display:block;width:100%;height:100%;cursor:pointer;position:relative;}
+    .thumb{width:100%;height:100%;object-fit:cover;display:block;}
+    /* hover：整图变暗做背景 */
+    .dim{position:absolute;inset:0;background:rgba(0,0,0,0);
+          transition:background .25s ease;pointer-events:none;}
+    .card:hover .dim{background:rgba(0,0,0,.5);}
+    /* 播放键：hover 居中浮现（行为不变）*/
+    .play{position:absolute;top:42%;left:50%;transform:translate(-50%,-50%) scale(.6);
+           font-size:30px;color:#fff;opacity:0;pointer-events:none;z-index:2;
+           transition:opacity .2s,transform .2s;
+           text-shadow:0 0 12px var(--neon2),0 0 26px var(--neon2);}
+    .card:hover .play{opacity:.95;transform:translate(-50%,-50%) scale(1);}
+    /* title+creator 合并，叠在图顶部，深色渐变保证可读 */
+    .tc{position:absolute;bottom:0;left:0;right:0;z-index:2;padding:28px 11px 8px;text-align:left;
+         background:linear-gradient(0deg,rgba(0,0,0,.62) 0%,rgba(0,0,0,0) 100%);
+         opacity:.5;pointer-events:none;transition:opacity .25s;}
+    .card:hover .tc{opacity:0;}   /* hover 时淡出，让位上拉摘要 */
+    .c-date{position:absolute;bottom:8px;right:11px;z-index:2;font-size:10px;
+             color:#cfcfcf;opacity:.5;pointer-events:none;
+             text-shadow:0 1px 3px rgba(0,0,0,.95);transition:opacity .25s;}
+    .card:hover .c-date{opacity:0;}
+    /* 归档按钮（hover 显示，play 右侧上方角）*/
+    .arch-btn{position:absolute;top:8px;right:8px;z-index:5;width:26px;height:26px;
+               border:none;border-radius:7px;background:rgba(0,0,0,.55);color:#fff;
+               font-size:13px;cursor:pointer;opacity:0;transition:opacity .2s,background .2s;
+               display:flex;align-items:center;justify-content:center;backdrop-filter:blur(3px);}
+    .card:hover .arch-btn{opacity:.9;}
+    .arch-btn:hover{background:#ff2b2b;opacity:1;}
+    /* 归档后的卡默认隐藏；点 Archive 区展开 */
+    .card.archived{display:none;}
+    .strip.show-arch .card.archived{display:block;}
+    /* 每行最右的 Archive 区 */
+    .arch-pile{flex:0 0 120px;height:180px;border-radius:11px;border:1px dashed #444;
+                background:#0a0a0a;display:none;flex-direction:column;align-items:center;
+                justify-content:center;gap:6px;cursor:pointer;color:#999;
+                font-size:12px;transition:.2s;}
+    .arch-pile:hover{border-color:#ff2b2b;color:#ddd;}
+    .arch-pile .ap-ic{font-size:26px;}
+    .arch-pile .ap-n{font-size:11px;color:#ff2b2b;font-weight:700;}
+    .strip.show-arch .arch-pile{border-color:#ff2b2b;color:#fff;}
+    .c-title{font-size:12.5px;font-weight:600;color:#fff;line-height:1.32;
+              text-shadow:0 1px 4px rgba(0,0,0,.95);
+              display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+    .c-meta{font-size:10px;color:#cfcfcf;margin-top:3px;text-shadow:0 1px 3px rgba(0,0,0,.95);}
+    .c-new{color:var(--neon);margin-right:4px;text-shadow:0 0 5px var(--neon);}
+
+    /* ── Hover 摘要浮层：底部上拉、可上下滚（行为不变）── */
+    .sum-ov{position:absolute;bottom:0;left:0;right:0;max-height:0;overflow:hidden;
+             background:rgba(0,0,0,.86);color:#e6e6e6;padding:0 11px;z-index:3;
+             font-size:11px;line-height:1.58;
+             transition:max-height .28s ease,padding .28s ease;
+             backdrop-filter:blur(2px);border-top:1px solid #22222233;}
+    .card:hover .sum-ov{max-height:80px;padding:8px 11px;overflow-y:auto;}
+    /* 观看进度条（底部，红色；看完变白）*/
+    .pbar{position:absolute;left:0;right:0;bottom:0;height:3px;
+           background:rgba(255,255,255,.14);z-index:4;}
+    .pfill{height:100%;width:0;background:#ff2b2b;box-shadow:0 0 6px #ff2b2b;transition:width .3s;}
+    .card.watched .pfill{background:#fff;box-shadow:0 0 6px #fff;}
+    .card.watched::after{content:'✓';position:absolute;top:6px;right:8px;z-index:4;
+      color:#fff;font-size:11px;font-weight:700;text-shadow:0 0 5px #000,0 0 8px #000;}
+    .sum-pending{font-style:italic;color:#777;font-size:11px;}
+    .sh{font-weight:700;color:var(--neon);margin:7px 0 2px;font-size:11.5px;
+         text-shadow:0 0 5px var(--neon);}
+    .sh:first-child{margin-top:0;}
+    .st{color:#bbb;margin-bottom:2px;}
+    ul{padding-left:15px;margin:2px 0 5px;}
+    li{margin-bottom:2px;color:#bbb;}
+
+    .emp{color:#555;font-style:italic;padding:16px;font-size:12px;
+          text-align:center;line-height:1.6;}
+    .pending span{display:block;font-size:10px;color:#444;margin-top:4px;}
+
+    /* ── Health ticker（顶=右→左，底=左→右，反向）── */
+    .ticker{z-index:400;background:#050505;color:#cfcfcf;height:26px;overflow:hidden;
+             display:flex;align-items:center;white-space:nowrap;font-size:11.5px;}
+    .ticker--top{position:sticky;top:0;border-bottom:1px solid #1a1a1a;}
+    .ticker--bottom{position:fixed;bottom:0;left:0;right:0;border-top:1px solid #1a1a1a;}
+    .ticker__track{display:inline-flex;flex-shrink:0;
+                    animation:tk-scroll 90s linear infinite;}
+    .ticker:hover .ticker__track{animation-play-state:paused;}
+    .tk-i{padding:0 4px 0 0;flex-shrink:0;}
+    .tk-i::after{content:"·";padding:0 18px;color:#333;}
+    .tk-o{color:#ff453a;font-weight:700;}
+    .tk-ok{color:var(--neon);text-shadow:0 0 6px var(--neon);}
+    .tk-n{color:#666;font-weight:400;}
+    @keyframes tk-scroll{from{transform:translateX(0);}
+                          to{transform:translateX(-50%);}}
+
+    /* ── 页内浮动播放器（可拖动 + 缩放）── */
+    .player{position:fixed;right:22px;bottom:40px;width:440px;height:280px;
+             z-index:900;display:none;flex-direction:column;background:#0a0a0a;
+             border:1px solid #22222266;border-radius:10px;overflow:hidden;
+             box-shadow:0 12px 44px rgba(0,0,0,.72),0 0 22px #22222233;
+             min-width:280px;min-height:200px;}
+    .player.show{display:flex;}
+    .player-bar{height:30px;flex-shrink:0;background:#111;cursor:move;
+                 display:flex;align-items:center;justify-content:space-between;
+                 padding:0 6px 0 11px;border-bottom:1px solid #222;}
+    .player-title{font-size:11px;color:#cfcfcf;white-space:nowrap;overflow:hidden;
+                   text-overflow:ellipsis;margin-right:8px;}
+    .player-close{background:none;border:none;color:#aaa;font-size:15px;
+                   cursor:pointer;padding:2px 6px;line-height:1;}
+    .player-close:hover{color:var(--neon);text-shadow:0 0 6px var(--neon);}
+    .player-body{flex:1;position:relative;background:#000;}
+    .player-body iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
+    .player-resize{position:absolute;left:0;top:0;width:16px;height:16px;
+                    cursor:nwse-resize;z-index:6;
+                    background:linear-gradient(315deg,transparent 45%,#ffffff66 45%);}
+
+    @media(max-width:640px){
+      .board{height:auto;padding-bottom:40px;}
+      .card{flex:0 0 80vw;height:45vw;}
+      .hcenter{display:none;}
+      .player{width:92vw;right:4vw;}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="ht-wrap">
+      <span class="ht" id="lofe-ht">LOFE <span class="ht-sl">/</span> <span id="lofe-cat">Social Media</span> <span class="ht-sl">/</span> <span id="lofe-plat">YouTube</span> <span class="ht-sl">/</span> <span id="lofe-view">Saved</span> <span class="ht-caret">▾</span></span>
+      <div class="ht-menu" id="lofe-menu">
+        <div class="ht-mi has-sub">Social Media<span class="ht-arrow">›</span>
+          <div class="ht-submenu">
+            <div class="ht-mi has-sub">YouTube<span class="ht-arrow">›</span>
+              <div class="ht-submenu">
+                <div class="ht-si" data-href="index.html">Daily</div>
+                <div class="ht-si active" data-href="saved.html">Saved</div>
+              </div>
+            </div>
+            <div class="ht-mi has-sub soon">RedNote<span class="ht-arrow">›</span>
+              <div class="ht-submenu"><div class="ht-si soon">soon</div></div>
+            </div>
+            <div class="ht-mi has-sub soon">Instagram<span class="ht-arrow">›</span>
+              <div class="ht-submenu"><div class="ht-si soon">soon</div></div>
+            </div>
+            <div class="ht-mi has-sub soon">X<span class="ht-arrow">›</span>
+              <div class="ht-submenu"><div class="ht-si soon">soon</div></div>
+            </div>
+            <div class="ht-mi has-sub soon">Bilibili<span class="ht-arrow">›</span>
+              <div class="ht-submenu"><div class="ht-si soon">soon</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="ht-mi has-sub soon">Personal<span class="ht-arrow">›</span>
+          <div class="ht-submenu"><div class="ht-si soon">soon</div></div>
+        </div>
+        <div class="ht-mi has-sub soon">AI<span class="ht-arrow">›</span>
+          <div class="ht-submenu"><div class="ht-si soon">soon</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="hcenter">
+      <span class="hclock" id="clk"></span>
+    </div>
+    <button class="music-btn" id="music-btn" title="网易云音乐（页内小窗）" aria-label="音乐">♫</button>
+    <div class="hm">
+      <span class="hdate">2026-07-02 06:57</span>
+      
+      <span class="hbadge">77 条</span>
+    </div>
+  </header>
+  <div class="board" id="board"><section id="Music" class="shelf">
+          <h2 class="shelf-head" style="border-color:#00e5ff;color:#00e5ff">
+            🎵 Music<span class="cnt">29</span>
+          </h2>
+          <div class="strip"><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=fXIEmMDwc7E" target="_blank" data-vid="fXIEmMDwc7E" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/fXIEmMDwc7E/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Determining chord progressions in a song</div>
+              <div class="c-meta">Karen Ramirez</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="fXIEmMDwc7E" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=fgaAbRWe5HQ" target="_blank" data-vid="fgaAbRWe5HQ" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/fgaAbRWe5HQ/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">this is how i see the world</div>
+              <div class="c-meta">Bennett Coast</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="fgaAbRWe5HQ" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=ywF4SFfwKs8" target="_blank" data-vid="ywF4SFfwKs8" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/ywF4SFfwKs8/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">This feels like CHEATING (drum groove hack)</div>
+              <div class="c-meta">Zahand / LotusTunes</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="ywF4SFfwKs8" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=ywHAFNRJPyw" target="_blank" data-vid="ywHAFNRJPyw" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/ywHAFNRJPyw/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">J Dilla's Magic Trick - Recreating Erykah's "Didn't Cha Know"</div>
+              <div class="c-meta">Digging The Greats</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="ywHAFNRJPyw" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=rrSIFSmXXZw" target="_blank" data-vid="rrSIFSmXXZw" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/rrSIFSmXXZw/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Axl Rose Greatest Singing Moments and Guest Appearances</div>
+              <div class="c-meta">Justin Liva</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="rrSIFSmXXZw" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=emFf5URI9no" target="_blank" data-vid="emFf5URI9no" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/emFf5URI9no/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Scott Joplin - Bethena performed by Phillip Dyson</div>
+              <div class="c-meta">Phillip Dyson</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="emFf5URI9no" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=yQlAVy-aos0" target="_blank" data-vid="yQlAVy-aos0" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/yQlAVy-aos0/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">boogie woogie piano</div>
+              <div class="c-meta">Gaspard Ricevuto</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="yQlAVy-aos0" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=hXR4iKJE1PM" target="_blank" data-vid="hXR4iKJE1PM" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/hXR4iKJE1PM/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Swanee River Boogie | cover by Eeco Rijken Rapp (Albert Ammons)</div>
+              <div class="c-meta">Eeco Rijken Rapp</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="hXR4iKJE1PM" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=O0SWQExz0v0" target="_blank" data-vid="O0SWQExz0v0" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/O0SWQExz0v0/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Boogie Woogie Stomp at Four Different Speeds / Synthesia</div>
+              <div class="c-meta">EscapeTheBox:Piano</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="O0SWQExz0v0" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=MDBgOyEN2OU" target="_blank" data-vid="MDBgOyEN2OU" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/MDBgOyEN2OU/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">must-see! “Stand by Me” Cover Story  （Acapella Soul） Wonderful！New York  Central Park</div>
+              <div class="c-meta">tomoyoshi katayama 片山智義</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="MDBgOyEN2OU" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=J6N6N6KpHV4" target="_blank" data-vid="J6N6N6KpHV4" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/J6N6N6KpHV4/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Chuck Berry . You never can tell (C'est la vie) . Solo Piano</div>
+              <div class="c-meta">FC88Keys</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="J6N6N6KpHV4" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=L-Ds-FXGGQg" target="_blank" data-vid="L-Ds-FXGGQg" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/L-Ds-FXGGQg/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Bruce Springsteen - You Never Can Tell (Leipzig 7/7/13)</div>
+              <div class="c-meta">Bruce Springsteen</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="L-Ds-FXGGQg" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=yEec2Ui7ErQ" target="_blank" data-vid="yEec2Ui7ErQ" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/yEec2Ui7ErQ/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">You never can tell (Chuck Berry) - piano version played by Hannes Otahal</div>
+              <div class="c-meta">w. schroeder</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="yEec2Ui7ErQ" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=0wWEMHj6C7c" target="_blank" data-vid="0wWEMHj6C7c" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/0wWEMHj6C7c/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Gershwin: Summertime (The Pianos Of Cha'n)</div>
+              <div class="c-meta">PianoAdventure</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="0wWEMHj6C7c" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=kqCNnRbHhW8" target="_blank" data-vid="kqCNnRbHhW8" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/kqCNnRbHhW8/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Bethena - Scott Joplin piano tutorial</div>
+              <div class="c-meta">My Sheet Music Transcriptions</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="kqCNnRbHhW8" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=CLgSrAOmVAw" target="_blank" data-vid="CLgSrAOmVAw" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/CLgSrAOmVAw/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">老王樂隊｜那些失眠的夜與難以忘懷的事 Sleepless nights and haunting memories (Official)</div>
+              <div class="c-meta">老王樂隊</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="CLgSrAOmVAw" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=E7ZpS_XMIPU" target="_blank" data-vid="E7ZpS_XMIPU" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/E7ZpS_XMIPU/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Beginner Boogie Woogie #2</div>
+              <div class="c-meta">Fast Track Piano</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="E7ZpS_XMIPU" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=LSGTkfVwvDM" target="_blank" data-vid="LSGTkfVwvDM" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/LSGTkfVwvDM/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">BOOGIE WOOGIE PIANO: My 'TOP' 3 Left Hand Boogie Woogie Patterns For Piano</div>
+              <div class="c-meta">Creative Piano Academy</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="LSGTkfVwvDM" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=39BCD-iX-uE" target="_blank" data-vid="39BCD-iX-uE" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/39BCD-iX-uE/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Boogie Woogie Piano Lesson</div>
+              <div class="c-meta">PianoFast</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="39BCD-iX-uE" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=K4lrOXYPgfk" target="_blank" data-vid="K4lrOXYPgfk" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/K4lrOXYPgfk/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">5. A Goodbye to Friends - The Legend of 1900</div>
+              <div class="c-meta">pok9er</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="K4lrOXYPgfk" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=U7GJY-7hVkY" target="_blank" data-vid="U7GJY-7hVkY" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/U7GJY-7hVkY/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">FKJ - Tokyo</div>
+              <div class="c-meta">Fkj</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="U7GJY-7hVkY" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=mXyx0THUVkI" target="_blank" data-vid="mXyx0THUVkI" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/mXyx0THUVkI/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">21 End Title - The Shawshank  Redemption: Original  Motion Picture</div>
+              <div class="c-meta">PunisherSoundtrack</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="mXyx0THUVkI" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=8b04Ws3CtLE" target="_blank" data-vid="8b04Ws3CtLE" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/8b04Ws3CtLE/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">18 And That Right Soon - The Shawshank  Redemption: Original  Motion Picture Soundtrack</div>
+              <div class="c-meta">PunisherSoundtrack</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="8b04Ws3CtLE" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=JwF-aPc_gjo" target="_blank" data-vid="JwF-aPc_gjo" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/JwF-aPc_gjo/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">洛基唱鄉村歌曲</div>
+              <div class="c-meta">超粒方</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="JwF-aPc_gjo" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=2d6o6ZgOGAY" target="_blank" data-vid="2d6o6ZgOGAY" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/2d6o6ZgOGAY/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">[中字|羅馬拼音|日本語] [Live] 僕が死のうと思ったのは  - 中島美嘉 - 曾經我也想過一了百了</div>
+              <div class="c-meta">Mirror Music</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="2d6o6ZgOGAY" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=atUuy4_m4NE" target="_blank" data-vid="atUuy4_m4NE" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/atUuy4_m4NE/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Don't Get Too Close Nathaniel Rateliff</div>
+              <div class="c-meta">atlee feingold</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="atUuy4_m4NE" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=aSgU0gNL2Ac" target="_blank" data-vid="aSgU0gNL2Ac" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/aSgU0gNL2Ac/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">How long will I love you - Jon Boden, Sam Sweeney & Ben Coleman</div>
+              <div class="c-meta">Kaowkarn Khantathasiri</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="aSgU0gNL2Ac" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=hi4pzKvuEQM" target="_blank" data-vid="hi4pzKvuEQM" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/hi4pzKvuEQM/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Chet Faker - Gold (Official Music Video)</div>
+              <div class="c-meta">Chet Faker</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="hi4pzKvuEQM" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=49xsEr77YCc" target="_blank" data-vid="49xsEr77YCc" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/49xsEr77YCc/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">張震嶽 A-Yue【路口】Official Music Video</div>
+              <div class="c-meta">滾石唱片 ROCK RECORDS</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="49xsEr77YCc" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article></div>
+        </section><section id="Chinese" class="shelf">
+          <h2 class="shelf-head" style="border-color:#ff2d95;color:#ff2d95">
+            🀄 Chinese<span class="cnt">10</span>
+          </h2>
+          <div class="strip"><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=mZDhNBbc738" target="_blank" data-vid="mZDhNBbc738" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/mZDhNBbc738/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">時年90歲的農場主Don 開門後發現一位年輕女的孩頭發凌亂 衣衫襤褸的站在自己面前 在屋外的寒風中 她光著腳 沒穿鞋.......</div>
+              <div class="c-meta">謎案追蹤</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="mZDhNBbc738" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=oCjzJny5Ahg" target="_blank" data-vid="oCjzJny5Ahg" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/oCjzJny5Ahg/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">华裔作家哈金批评中国小粉红具有义和团心态</div>
+              <div class="c-meta">美国之音中文网</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="oCjzJny5Ahg" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=0ua7vuXg8BY" target="_blank" data-vid="0ua7vuXg8BY" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/0ua7vuXg8BY/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">知道的越多，越不幸福？无知是福吗？</div>
+              <div class="c-meta">大问题Dialectic</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="0ua7vuXg8BY" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=kTld_HLTBL8" target="_blank" data-vid="kTld_HLTBL8" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/kTld_HLTBL8/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">第二百三十五集 死藤草/大麻對靈性提升的幫助</div>
+              <div class="c-meta">Ruowen Huang</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="kTld_HLTBL8" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=WsnQsKt9ccw" target="_blank" data-vid="WsnQsKt9ccw" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/WsnQsKt9ccw/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">趁主人不在偷嚐幾口！比特犬秒露心虛眼神內心戲全都錄｜@setn</div>
+              <div class="c-meta">三立新聞網SETN</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="WsnQsKt9ccw" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=ZRKiI3XThpA" target="_blank" data-vid="ZRKiI3XThpA" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/ZRKiI3XThpA/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">[隱攝]如果相親的時候穿著將軍戰衣的話⋯| 小區的傢伙們</div>
+              <div class="c-meta">小區的傢伙們</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="ZRKiI3XThpA" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=gTOX5BorXGk" target="_blank" data-vid="gTOX5BorXGk" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/gTOX5BorXGk/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">離奇越獄事件改編，技術宅開局只有鉛筆和紙，耗時400天突破南非最嚴監獄|哇薩比抓馬Wasabi Drama</div>
+              <div class="c-meta">哇萨比抓马 WasabiDrama</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="gTOX5BorXGk" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=Z-HJ6YV8l7k" target="_blank" data-vid="Z-HJ6YV8l7k" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/Z-HJ6YV8l7k/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">宋冬野   07 六層樓</div>
+              <div class="c-meta">Gariber</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="Z-HJ6YV8l7k" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=6ggRUWKcPWE" target="_blank" data-vid="6ggRUWKcPWE" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/6ggRUWKcPWE/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">跟我一起搬家 & 來偷看一下我的新家 2019 🏠| Empty Apartment Tour & Moving Vlog</div>
+              <div class="c-meta">TheKellyYang</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="6ggRUWKcPWE" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=_UC-txSAKuE" target="_blank" data-vid="_UC-txSAKuE" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/_UC-txSAKuE/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">外國色盲Youtuber被揭發在說謊！[h3h3] [中文字幕]</div>
+              <div class="c-meta">Jam HOHOHO</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="_UC-txSAKuE" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article></div>
+        </section><section id="Film_&_Doc" class="shelf">
+          <h2 class="shelf-head" style="border-color:#b14eff;color:#b14eff">
+            🎬 Film & Doc<span class="cnt">9</span>
+          </h2>
+          <div class="strip"><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=1dQNj8x9ka8" target="_blank" data-vid="1dQNj8x9ka8" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/1dQNj8x9ka8/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Robin Williams Genie Outtakes (Aladdin 1992) 4K Remastered + bloopers</div>
+              <div class="c-meta">Blackout's Box - Blackout / Michael Biggins</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="1dQNj8x9ka8" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=q1adV0O7JmA" target="_blank" data-vid="q1adV0O7JmA" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/q1adV0O7JmA/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Dogs & us - The secrets of an unbreakable friendship | DW Documentary</div>
+              <div class="c-meta">DW Documentary</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="q1adV0O7JmA" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=O7YnbGszcb8" target="_blank" data-vid="O7YnbGszcb8" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/O7YnbGszcb8/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Everyone Everywhere Needs Waymond Wang (and Ke Huy Quan)</div>
+              <div class="c-meta">Pop Culture Detective</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="O7YnbGszcb8" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=wCyrkdfeJ3I" target="_blank" data-vid="wCyrkdfeJ3I" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/wCyrkdfeJ3I/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Angelina Jolie's Story is Actually Wild | Part 1</div>
+              <div class="c-meta">Kolo Kino</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="wCyrkdfeJ3I" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=BXTLsQBJSVc" target="_blank" data-vid="BXTLsQBJSVc" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/BXTLsQBJSVc/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">FIRE (POZAR)</div>
+              <div class="c-meta">DAVID LYNCH THEATER</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="BXTLsQBJSVc" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=AcbBxudNkGg" target="_blank" data-vid="AcbBxudNkGg" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/AcbBxudNkGg/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">一口气看完《黑暗物质三部曲》第一季，原著比哈利波特还受欢迎，熊孩子和北极熊打怪升级（合集版）| 抓马·英剧</div>
+              <div class="c-meta">抓馬劇好看</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="AcbBxudNkGg" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=m_3V3m4EvKY" target="_blank" data-vid="m_3V3m4EvKY" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/m_3V3m4EvKY/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">一次性痛快看完热血格斗神作《拳愿阿修罗》1-12全集，燃爆的爽剧！【宇哥讲电影】</div>
+              <div class="c-meta">宇哥侃故事</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="m_3V3m4EvKY" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=diD4fie9ktk" target="_blank" data-vid="diD4fie9ktk" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/diD4fie9ktk/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">在哪些瞬間，你感覺到靈魂被拯救了，抑鬱必看的奇幻溫情電影《墜入》|哇薩比抓馬Wasabi Drama</div>
+              <div class="c-meta">哇萨比抓马 WasabiDrama</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="diD4fie9ktk" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=4YGHW-YQPR0" target="_blank" data-vid="4YGHW-YQPR0" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/4YGHW-YQPR0/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">【木鱼微剧场】这令人绝望的教育体制《超脱》</div>
+              <div class="c-meta">木鱼水心</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="4YGHW-YQPR0" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article></div>
+        </section><section id="Talk" class="shelf">
+          <h2 class="shelf-head" style="border-color:#ff9a00;color:#ff9a00">
+            🎙 Talk<span class="cnt">8</span>
+          </h2>
+          <div class="strip"><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=SAdSJOAHQV4" target="_blank" data-vid="SAdSJOAHQV4" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/SAdSJOAHQV4/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">David Foster Wallace on Fame, Writing, and Why Success Didn’t Make Him Happy l Charlie Rose Rewind</div>
+              <div class="c-meta">Charlie Rose</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="SAdSJOAHQV4" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=wdBdAQtLp_k" target="_blank" data-vid="wdBdAQtLp_k" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/wdBdAQtLp_k/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Hasidic Jews' Views on Intimate Relationships & Modern Culture | NYC 🇺🇸 (Ep.3)</div>
+              <div class="c-meta">Peter Santenello</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="wdBdAQtLp_k" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=o6RfsikIPuc" target="_blank" data-vid="o6RfsikIPuc" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/o6RfsikIPuc/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Tom Waits - Gente de Expressão interview 1992 (full)</div>
+              <div class="c-meta">LouisianaToTheFrench</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="o6RfsikIPuc" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=a04GaHUB7Qk" target="_blank" data-vid="a04GaHUB7Qk" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/a04GaHUB7Qk/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Jordan Peterson Shares The Best Major To Get You Laid | Flagrant U with Andrew Schulz</div>
+              <div class="c-meta">FLAGRANT</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="a04GaHUB7Qk" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=K7FIky7wplI" target="_blank" data-vid="K7FIky7wplI" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/K7FIky7wplI/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">'Black English': How AAVE Developed From Slave Resistance & African Dialects | The Breakdown</div>
+              <div class="c-meta">BETNetworks</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="K7FIky7wplI" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=Y1PsF2q5-20" target="_blank" data-vid="Y1PsF2q5-20" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/Y1PsF2q5-20/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">How traditional culture is destroyed explains why Chinese have bad manners</div>
+              <div class="c-meta">Lei's Real Talk</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="Y1PsF2q5-20" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=UFtg2yZW0cU" target="_blank" data-vid="UFtg2yZW0cU" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/UFtg2yZW0cU/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Dean Martin Interview 1987 - Talking about Dean Paul's death</div>
+              <div class="c-meta">Deano Martin</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="UFtg2yZW0cU" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=T0vGARCpRjk" target="_blank" data-vid="T0vGARCpRjk" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/T0vGARCpRjk/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Ice Cube Talks About His Son Acting His Sex Scenes – The Graham Norton Show</div>
+              <div class="c-meta">The Graham Norton Show</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="T0vGARCpRjk" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article></div>
+        </section><section id="Tech" class="shelf">
+          <h2 class="shelf-head" style="border-color:#2d7bff;color:#2d7bff">
+            💻 Tech<span class="cnt">8</span>
+          </h2>
+          <div class="strip"><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=InUhESC5HyE" target="_blank" data-vid="InUhESC5HyE" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/InUhESC5HyE/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">【保姆级教程】🔥效果炸裂！AI制作💰快速盈利3D动画影片，全赛道通用！解决人物一致性问题｜0基础轻松上手📈 轻松在家赚钱！</div>
+              <div class="c-meta">大米Jojo</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="InUhESC5HyE" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=sdVWKpqZaXg" target="_blank" data-vid="sdVWKpqZaXg" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/sdVWKpqZaXg/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">LFA: How Toyota Made a Supercar Unlike Anything Else</div>
+              <div class="c-meta">THE SQUIDD</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="sdVWKpqZaXg" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=TAVNfqGhlYk" target="_blank" data-vid="TAVNfqGhlYk" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/TAVNfqGhlYk/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">First Mod on the Cadillac ATS! (I Should Have Done This a Long Time Ago...)</div>
+              <div class="c-meta">RDMotoring</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="TAVNfqGhlYk" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=paKhqNqTRyc" target="_blank" data-vid="paKhqNqTRyc" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/paKhqNqTRyc/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Removing driver side door panel 2015 Ford Taurus</div>
+              <div class="c-meta">Ken Kyle Racing</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="paKhqNqTRyc" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=JwApFGwMIMQ" target="_blank" data-vid="JwApFGwMIMQ" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/JwApFGwMIMQ/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">How This Chair Conquered the World</div>
+              <div class="c-meta">neo</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="JwApFGwMIMQ" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=NLVwq8jCb8o" target="_blank" data-vid="NLVwq8jCb8o" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/NLVwq8jCb8o/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Mac mini M1芯片开箱：这是我第一次开箱 Mac mini</div>
+              <div class="c-meta">钟文泽</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="NLVwq8jCb8o" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=7XNtyxG3XC4" target="_blank" data-vid="7XNtyxG3XC4" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/7XNtyxG3XC4/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">【无聊的开箱】苹果新出的智能音箱测评：把2799的HomePod当椅子坐？</div>
+              <div class="c-meta">无聊的开箱</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="7XNtyxG3XC4" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=g2-FGC4bLBc" target="_blank" data-vid="g2-FGC4bLBc" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/g2-FGC4bLBc/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Puma Uproar ASG "Charlotte Basketball": Review & On-Feet</div>
+              <div class="c-meta">Sean Go</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="g2-FGC4bLBc" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article></div>
+        </section><section id="Gaming" class="shelf">
+          <h2 class="shelf-head" style="border-color:#39ff14;color:#39ff14">
+            🎮 Gaming<span class="cnt">8</span>
+          </h2>
+          <div class="strip"><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=KeOe8fvjQl8" target="_blank" data-vid="KeOe8fvjQl8" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/KeOe8fvjQl8/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">服了你！原版趕工成神作，炒個冷飯又成神作！《生化危機4 重製版》鑒賞【就知道玩遊戲2023】</div>
+              <div class="c-meta">Gamker攻壳官方频道</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="KeOe8fvjQl8" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=8BbG1Jr94o8" target="_blank" data-vid="8BbG1Jr94o8" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/8BbG1Jr94o8/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">一口气了解全球游戏产业 | 为什么最近各大科技巨头纷纷入局?</div>
+              <div class="c-meta">小Lin说</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="8BbG1Jr94o8" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=GNaVaHBFqX4" target="_blank" data-vid="GNaVaHBFqX4" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/GNaVaHBFqX4/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Baldur's Gate 3 Complete Beginner's Guide - BG3</div>
+              <div class="c-meta">Lucky Ghost</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="GNaVaHBFqX4" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=TbZ3HzvFEto" target="_blank" data-vid="TbZ3HzvFEto" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/TbZ3HzvFEto/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Half-Life: 25th Anniversary Documentary</div>
+              <div class="c-meta">Valve</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="TbZ3HzvFEto" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=JpXhKK4htEw" target="_blank" data-vid="JpXhKK4htEw" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/JpXhKK4htEw/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">《遊戲大作推薦》超過十萬則98%壓倒性好評，10款必玩經典好遊｜遊戲介紹、心得｜尼路｜全字幕</div>
+              <div class="c-meta">Nero尼路</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="JpXhKK4htEw" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=1JoNrvDL62w" target="_blank" data-vid="1JoNrvDL62w" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/1JoNrvDL62w/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">【不止遊戲】這是一期幫你解決很多遊戲問題的節目</div>
+              <div class="c-meta">森纳映画</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="1JoNrvDL62w" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=UMwt1Lfocgc" target="_blank" data-vid="UMwt1Lfocgc" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/UMwt1Lfocgc/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">[爐石] 秘密法術獵 -  野生的大老鼠出現啦!!</div>
+              <div class="c-meta">sowhan Q</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="UMwt1Lfocgc" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=y5wRGXhQ_0M" target="_blank" data-vid="y5wRGXhQ_0M" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/y5wRGXhQ_0M/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">【小墨吃鸡教学】毒圈的隐藏机制 知道的人都躺着进前10了 第六期 【绝地求生教学】</div>
+              <div class="c-meta">【小墨不是小莫】官方频道 欢迎订阅</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="y5wRGXhQ_0M" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article></div>
+        </section><section id="Other" class="shelf">
+          <h2 class="shelf-head" style="border-color:#00ffc8;color:#00ffc8">
+            🗂 Other<span class="cnt">5</span>
+          </h2>
+          <div class="strip"><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=j9xJtGaXmFo" target="_blank" data-vid="j9xJtGaXmFo" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/j9xJtGaXmFo/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">DON'T DO THIS! (Punta Cana, Dominican Republic)</div>
+              <div class="c-meta">Jacob and Jenny</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="j9xJtGaXmFo" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=QWNkhQkyd0I" target="_blank" data-vid="QWNkhQkyd0I" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/QWNkhQkyd0I/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">I'm Back!!  A Tour of My New RV!!!  Safari Trek</div>
+              <div class="c-meta">Ramblin Michigander</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="QWNkhQkyd0I" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=o75RN9i2qGU" target="_blank" data-vid="o75RN9i2qGU" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/o75RN9i2qGU/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Had More Power Than Tyson... One Punch Knockouts and the True Story of Tommy Morrison</div>
+              <div class="c-meta">VoteSport</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="o75RN9i2qGU" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=3zJC3dYOOv4" target="_blank" data-vid="3zJC3dYOOv4" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/3zJC3dYOOv4/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">10 Advanced 3 Ball Juggling Tricks</div>
+              <div class="c-meta">George Powell</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="3zJC3dYOOv4" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=YXmY9m6WO1c" target="_blank" data-vid="YXmY9m6WO1c" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/YXmY9m6WO1c/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">30 EASY 3 BALLS JUGGLING TRICKS | J95</div>
+              <div class="c-meta">Thejuggler95</div>
+            </div>
+            
+          </a>
+          <button class="arch-btn" data-vid="YXmY9m6WO1c" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          
+          <div class="pbar"><div class="pfill"></div></div>
+        </article></div>
+        </section></div>
+  <div class="ticker ticker--bottom"><div class="ticker__track"><span class="tk-i"><span class="tk-o tk-ok">🟢 All Systems Go</span></span><span class="tk-i">✅ Code Backup <span class="tk-n">(updated 0 min ago)</span></span><span class="tk-i">✅ Game Library <span class="tk-n">(updated 10 min ago)</span></span><span class="tk-i">✅ YT Cookie <span class="tk-n">(updated 2.1h ago)</span></span><span class="tk-i">✅ YouTube Digest <span class="tk-n">(updated 22.9h ago)</span></span><span class="tk-i">✅ Music Sync <span class="tk-n">(updated 23.0h ago)</span></span><span class="tk-i">✅ Capture Server <span class="tk-n">(listening)</span></span><span class="tk-i">⏸ RedNote <span class="tk-n">(no cookie)</span></span><span class="tk-i">as of 2026-07-02 06:53</span><span class="tk-i"><span class="tk-o tk-ok">🟢 All Systems Go</span></span><span class="tk-i">✅ Code Backup <span class="tk-n">(updated 0 min ago)</span></span><span class="tk-i">✅ Game Library <span class="tk-n">(updated 10 min ago)</span></span><span class="tk-i">✅ YT Cookie <span class="tk-n">(updated 2.1h ago)</span></span><span class="tk-i">✅ YouTube Digest <span class="tk-n">(updated 22.9h ago)</span></span><span class="tk-i">✅ Music Sync <span class="tk-n">(updated 23.0h ago)</span></span><span class="tk-i">✅ Capture Server <span class="tk-n">(listening)</span></span><span class="tk-i">⏸ RedNote <span class="tk-n">(no cookie)</span></span><span class="tk-i">as of 2026-07-02 06:53</span></div></div>
+  <div class="player" id="lofe-player">
+    <div class="player-bar" id="lofe-bar">
+      <span class="player-title" id="lofe-ptitle"></span>
+      <button class="player-close" id="lofe-close" title="关闭">✕</button>
+    </div>
+    <div class="player-body"><div id="lofe-frame"></div></div>
+    <div class="player-resize" id="lofe-resize"></div>
+  </div>
+  <div id="lofe-music"></div>
+  <script>
+    // ── 居中活时钟（全数字；⌘/Ctrl+点击 换字体）──
+    const clk=document.getElementById('clk'),p=n=>String(n).padStart(2,'0');
+    function tick(){const d=new Date();
+      clk.textContent=`${d.getFullYear()}/${p(d.getMonth()+1)}/${p(d.getDate())} · ${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())} · ${d.getDay()+1}/7`;}
+    tick();setInterval(tick,1000);
+
+    // ── ♫：注入异形音乐播放器组件（7899 的 widget），页内直接渲染、无外框 ──
+    const NEAPI='http://127.0.0.1:7899', mhost=document.getElementById('lofe-music');
+    let musicLoaded=false, musicVisible=false;
+    const loadScript=src=>new Promise((res,rej)=>{const s=document.createElement('script');
+      s.src=src;s.onload=res;s.onerror=rej;document.head.appendChild(s);});
+    async function initMusic(){
+      const v='?v='+Date.now();                    // 破缓存，永远拉最新 widget
+      const frag=await fetch(NEAPI+'/widget'+v).then(r=>r.text()).catch(()=>null);
+      if(!frag){ alert('音乐服务没在跑（localhost:7899）'); return false; }
+      mhost.innerHTML=frag;                       // 注入异形播放器（含 <style> 与 DOM）
+      await loadScript(NEAPI+'/widget.js'+v);      // 逻辑脚本自初始化
+      musicLoaded=true; return true;
+    }
+    document.getElementById('music-btn').addEventListener('click',async()=>{
+      if(!musicLoaded){ if(await initMusic()) musicVisible=true; return; }
+      musicVisible=!musicVisible; mhost.style.display=musicVisible?'block':'none';
+    });
+    const CF=["'Orbitron',sans-serif","'Audiowide',cursive","'Michroma',sans-serif","'Chakra Petch',sans-serif","'Share Tech Mono',monospace","'Wallpoet',cursive"];
+    let cfi=parseInt(localStorage.getItem('lofe_cf2')||'0',10)||0;
+    const applyCF=()=>{clk.style.fontFamily=CF[cfi%CF.length];};
+    applyCF(); clk.style.cursor='pointer'; clk.title='⌘+点击 换字体';
+    clk.addEventListener('click',e=>{ if(e.metaKey||e.ctrlKey){ cfi=(cfi+1)%CF.length; localStorage.setItem('lofe_cf2',cfi); applyCF(); } });
+
+    // ── 分类标题哥特字体（⌘/Ctrl+点击任一分类标题循环换体，同时钟逻辑）──
+    const GF=["'UnifrakturMaguntia'","'UnifrakturCook'","'Pirata One'","'Grenze Gotisch'","'MedievalSharp'"];
+    let gfi=parseInt(localStorage.getItem('lofe_gf')||'0',10)||0;
+    const applyGF=()=>document.documentElement.style.setProperty('--goth',GF[gfi%GF.length]);
+    applyGF();
+    document.querySelectorAll('.shelf-head').forEach(h=>{
+      h.title='⌘+点击 换分类字体';
+      h.addEventListener('click',e=>{ if(e.metaKey||e.ctrlKey){ gfi=(gfi+1)%GF.length; localStorage.setItem('lofe_gf',gfi); applyGF(); } });
+    });
+
+    // ── LOFE / daily 下拉菜单（daily 为当前视图；saved/work/Betty 待实现）──
+    const ht=document.getElementById('lofe-ht'), htMenu=document.getElementById('lofe-menu'),
+          catEl=document.getElementById('lofe-cat');
+    // ⌘/Ctrl+点击 LOFE：循环 LOFE/YouTube/view 大标题 + 整个菜单的哥特字体（独立记忆）
+    const GFH=GF;
+    let gfhi=parseInt(localStorage.getItem('lofe_gfh')||'0',10)||0;
+    const applyGFH=()=>document.documentElement.style.setProperty('--goth-hdr',GFH[gfhi%GFH.length]);
+    applyGFH(); ht.title='点击展开 · ⌘+点击换字体';
+    ht.addEventListener('click',e=>{ e.stopPropagation();
+      if(e.metaKey||e.ctrlKey){ gfhi=(gfhi+1)%GFH.length; localStorage.setItem('lofe_gfh',gfhi); applyGFH(); return; }
+      htMenu.style.left=catEl.offsetLeft+'px';   // 一级菜单从 Social Media(大类)处下拉
+      htMenu.classList.toggle('show'); });
+    htMenu.addEventListener('click',e=>e.stopPropagation());   // 菜单内点击不冒泡触发关闭
+    document.addEventListener('click',()=>htMenu.classList.remove('show'));
+    htMenu.querySelectorAll('.ht-si').forEach(si=>{        // 二级=视图，点击跳转
+      si.addEventListener('click',()=>{
+        if(si.classList.contains('soon')||si.classList.contains('active')) return;
+        const href=si.dataset.href; if(href) location.href=href; });
+    });
+
+    // ── 观看进度（localStorage；仅统计本站小窗播放）──
+    const PROG=JSON.parse(localStorage.getItem('lofe_prog')||'{}');
+    const vidOf=c=>{const a=c.querySelector('.thumb-link[data-vid]');return a?a.getAttribute('data-vid'):null;};
+    function paintBar(c){const v=vidOf(c);if(!v)return;const f=PROG[v]||0;
+      const fl=c.querySelector('.pfill');if(fl)fl.style.width=(Math.min(1,f)*100)+'%';
+      c.classList.toggle('watched',f>=0.9);}
+    function reflow(){
+      const board=document.getElementById('board'),done=[];
+      document.querySelectorAll('.shelf:not(.shelf-watched) .strip').forEach(strip=>{
+        const cards=[...strip.querySelectorAll('.card')];
+        cards.forEach(c=>{if((PROG[vidOf(c)]||0)>=0.9)done.push(c);});
+        cards.filter(c=>(PROG[vidOf(c)]||0)<0.9)
+             .sort((a,b)=>(PROG[vidOf(a)]||0)-(PROG[vidOf(b)]||0))
+             .forEach(c=>strip.appendChild(c));
+      });
+      let w=document.getElementById('shelf-watched');
+      if(done.length){
+        if(!w){w=document.createElement('section');w.id='shelf-watched';w.className='shelf shelf-watched';
+          w.innerHTML='<h2 class="shelf-head" style="border-color:#888;color:#888">✅ Watched<span class="cnt">0</span></h2><div class="strip"></div>';
+          board.appendChild(w);}
+        const ws=w.querySelector('.strip'); done.forEach(c=>ws.appendChild(c));
+        w.querySelector('.cnt').textContent=ws.querySelectorAll('.card').length;
+      }
+    }
+    document.querySelectorAll('.card').forEach(paintBar); reflow();
+
+    // ── 归档（localStorage；每行最右 Archive 区，点开展开；不取关）──
+    const ARCH=JSON.parse(localStorage.getItem('lofe_arch')||'{}');
+    function applyArchive(){
+      document.querySelectorAll('.shelf:not(.shelf-watched) .strip').forEach(strip=>{
+        let pile=strip.querySelector('.arch-pile');
+        if(!pile){
+          pile=document.createElement('div'); pile.className='arch-pile';
+          pile.innerHTML='<span class="ap-ic">🗄</span><span>Archive</span><span class="ap-n">0</span>';
+          pile.addEventListener('click',()=>strip.classList.toggle('show-arch'));
+        }
+        const cards=[...strip.querySelectorAll('.card')];
+        cards.filter(c=>!ARCH[vidOf(c)]).forEach(c=>{c.classList.remove('archived');strip.appendChild(c);});
+        strip.appendChild(pile);
+        const arch=cards.filter(c=>ARCH[vidOf(c)]);
+        arch.forEach(c=>{c.classList.add('archived');strip.appendChild(c);});
+        pile.querySelector('.ap-n').textContent=arch.length;
+        pile.style.display=arch.length?'flex':'none';
+      });
+    }
+    document.querySelectorAll('.arch-btn').forEach(b=>{
+      b.addEventListener('click',e=>{ e.preventDefault(); e.stopPropagation();
+        const v=b.dataset.vid; if(ARCH[v]) delete ARCH[v]; else ARCH[v]=true;
+        localStorage.setItem('lofe_arch',JSON.stringify(ARCH)); applyArchive(); });
+    });
+    applyArchive();
+
+    // 卡片 >7 的行自动缓慢滚动；方向逐行交替（第1滚动行 左→右，下一 右→左…）；hover 暂停
+    (function(){
+      let k=0;
+      document.querySelectorAll('.strip').forEach(s=>{
+        if(s.querySelectorAll('.card').length<=7) return;
+        let dir=(k%2===0)?1:-1; k++;
+        const mx=()=>s.scrollWidth-s.clientWidth;
+        if(dir<0) s.scrollLeft=mx();
+        let pos=s.scrollLeft, paused=false;
+        s.addEventListener('mouseenter',()=>{paused=true;});
+        s.addEventListener('mouseleave',()=>{paused=false;});
+        setInterval(()=>{
+          if(paused) return; const m=mx(); if(m<=0) return;
+          if(pos>m) pos=m;                       // 内容/尺寸变化后夹回
+          pos+=dir*0.5;                          // 0.5px/33ms ≈ 15px/s
+          if(pos<=0){pos=0;dir=1;} else if(pos>=m){pos=m;dir=-1;}
+          s.scrollLeft=pos;                      // 浮点累加,避免整数取整卡住不反弹
+        },33);
+      });
+    })();
+
+    // ── 页内小窗播放（YouTube IFrame API 追踪进度；可拖动 + 缩放）──
+    const P=document.getElementById('lofe-player'), T=document.getElementById('lofe-ptitle');
+    let ytP=null,cur=null,pTimer=null,apiReady=false;
+    (function(){var t=document.createElement('script');t.src='https://www.youtube.com/iframe_api';document.head.appendChild(t);})();
+    // 页面加载即预建播放器（隐藏容器里）；点击时在手势内 loadVideoById→带声播放，
+    // 避免首次走 new YT.Player 的异步 onReady 丢失手势 → 被浏览器拦成暂停灰罩（雾感）
+    window.onYouTubeIframeAPIReady=()=>{
+      ytP=new YT.Player('lofe-frame',{height:'100%',width:'100%',
+        playerVars:{rel:0,playsinline:1,modestbranding:1},
+        events:{onReady:()=>{apiReady=true;},onStateChange:onState}}); };
+    function saveProg(){ if(!ytP||!ytP.getDuration||!cur)return;
+      const d=ytP.getDuration(),t=ytP.getCurrentTime();
+      if(d>0){ PROG[cur]=Math.min(1,t/d); localStorage.setItem('lofe_prog',JSON.stringify(PROG));
+        const c=[...document.querySelectorAll('.card')].find(x=>vidOf(x)===cur); if(c)paintBar(c); } }
+    function onState(e){ clearInterval(pTimer); if(e.data===1){pTimer=setInterval(saveProg,2000);} else {saveProg();} }
+    function openP(vid,title){ cur=vid; T.textContent=title||''; P.classList.add('show');
+      if(!apiReady||!ytP){ setTimeout(()=>openP(vid,title),200); return; }
+      ytP.loadVideoById(vid); }   // 手势内加载→带声播放，无暂停灰罩
+    function closeP(){ saveProg(); if(ytP&&ytP.stopVideo)ytP.stopVideo(); P.classList.remove('show'); reflow(); }
+    document.getElementById('lofe-close').addEventListener('click',closeP);
+    document.querySelectorAll('.thumb-link[data-vid]').forEach(a=>{
+      a.addEventListener('click',e=>{ const vid=a.getAttribute('data-vid'); if(!vid)return; e.preventDefault();
+        const c=a.closest('.card'),tt=c&&c.querySelector('.c-title'); openP(vid,tt?tt.textContent:''); });
+    });
+    const bar=document.getElementById('lofe-bar'), rz=document.getElementById('lofe-resize');
+    let drag=false,rzing=false,ox=0,oy=0,sx=0,sy=0,sw=0,sh=0,sL=0,sT=0;
+    const shield=v=>{const f=P.querySelector('iframe');if(f)f.style.pointerEvents=v;};
+    bar.addEventListener('mousedown',e=>{ drag=true; const r=P.getBoundingClientRect();
+      ox=e.clientX-r.left; oy=e.clientY-r.top; P.style.right='auto'; P.style.bottom='auto';
+      shield('none'); document.body.style.userSelect='none'; });
+    rz.addEventListener('mousedown',e=>{ rzing=true; e.preventDefault(); e.stopPropagation();
+      sx=e.clientX; sy=e.clientY; const r=P.getBoundingClientRect();
+      sw=r.width; sh=r.height; sL=r.left; sT=r.top;
+      P.style.right='auto'; P.style.bottom='auto'; P.style.left=sL+'px'; P.style.top=sT+'px';
+      shield('none'); document.body.style.userSelect='none'; });
+    window.addEventListener('mousemove',e=>{
+      if(drag){ P.style.left=(e.clientX-ox)+'px'; P.style.top=(e.clientY-oy)+'px'; }
+      else if(rzing){ const nw=Math.max(280,sw-(e.clientX-sx)),nh=Math.max(200,sh-(e.clientY-sy));
+        P.style.width=nw+'px'; P.style.height=nh+'px';
+        P.style.left=(sL+(sw-nw))+'px'; P.style.top=(sT+(sh-nh))+'px'; }
+    });
+    window.addEventListener('mouseup',()=>{ drag=false; rzing=false; shield(''); document.body.style.userSelect=''; });
+  </script>
+</body>
+</html>
