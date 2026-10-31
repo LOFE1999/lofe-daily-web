@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>LOFE Daily · 2026-10-31</title>
+  <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=UnifrakturCook:wght@700&family=Pirata+One&family=Grenze+Gotisch:wght@600&family=MedievalSharp&family=Orbitron:wght@500;700&family=Audiowide&family=Michroma&family=Chakra+Petch:wght@500;700&family=Share+Tech+Mono&family=Wallpoet&display=swap" rel="stylesheet">
+  <style>
+    @font-face{font-family:'OpenDyslexic';font-weight:400;font-display:swap;
+      src:url('https://cdn.jsdelivr.net/npm/@fontsource/opendyslexic@5/files/opendyslexic-latin-400-normal.woff2') format('woff2');}
+    @font-face{font-family:'OpenDyslexic';font-weight:700;font-display:swap;
+      src:url('https://cdn.jsdelivr.net/npm/@fontsource/opendyslexic@5/files/opendyslexic-latin-700-normal.woff2') format('woff2');}
+    :root{--r:10px;--neon:#e6e6e6;--neon2:#00e5ff;--pink:#ff2d95;
+           --sh:0 0 10px rgba(230,230,230,.10);
+           --goth:'UnifrakturMaguntia';      /* 分类标题哥特体，⌘+点击分类标题循环 */
+           --goth-hdr:'UnifrakturMaguntia';} /* LOFE/view 大标题+下拉哥特体，⌘+点击 LOFE 循环 */
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'OpenDyslexic','Fredoka',-apple-system,BlinkMacSystemFont,sans-serif;
+          background:#000;color:#e6e6e6;font-size:14px;overflow-x:hidden;}
+
+    /* ── Header（含居中活时钟）── */
+    header{background:#000;color:#fff;padding:11px 16px;
+            display:flex;align-items:center;justify-content:space-between;
+            position:sticky;top:0;z-index:300;height:44px;
+            border-bottom:1px solid #141414;}
+    .ht{font-family:var(--goth-hdr),'UnifrakturMaguntia',serif;font-size:27px;font-weight:400;letter-spacing:.5px;white-space:nowrap;
+         background:linear-gradient(90deg,#ff0040,#ff8a00,#ffe600,#39ff14,#00e5ff,#2d7bff,#b14eff,#ff2d95);
+         -webkit-background-clip:text;background-clip:text;
+         -webkit-text-fill-color:transparent;color:transparent;
+         animation:ht-hue 9s linear infinite;cursor:pointer;}
+    @keyframes ht-hue{from{filter:hue-rotate(0deg) drop-shadow(0 0 6px rgba(255,255,255,.45));}
+                       to{filter:hue-rotate(360deg) drop-shadow(0 0 6px rgba(255,255,255,.45));}}
+    .ht-wrap{position:relative;}
+    .ht-sl,.ht-caret{font-size:20px;}
+    .ht-menu{position:absolute;top:100%;left:0;margin-top:10px;display:none;z-index:500;
+              min-width:190px;padding:9px;background:rgba(10,10,10,.96);
+              border:1px solid #333;border-radius:14px;backdrop-filter:blur(8px);
+              box-shadow:0 16px 44px rgba(0,0,0,.72),0 0 26px rgba(0,229,255,.14);
+              font-family:var(--goth-hdr),'UnifrakturMaguntia',serif;overflow:visible;}
+    .ht-menu::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+              background:linear-gradient(90deg,#00e5ff,#ff2d95);}
+    .ht-menu.show{display:block;animation:htm-in .16s ease;}
+    @keyframes htm-in{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:none;}}
+    .ht-mi{position:relative;display:flex;align-items:center;gap:11px;padding:9px 15px;
+            font-size:24px;color:#e6e6e6;cursor:pointer;border-radius:9px;transition:.15s;
+            white-space:nowrap;}
+    .ht-mi:hover{background:#1c1c1c;}
+    /* 下拉文字也全光谱霓虹变色（soon 项保持灰） */
+    .ht-mi:not(.soon),.ht-si:not(.soon){color:#ff2d95;animation:ht-hue 9s linear infinite;}
+    .ht-arrow{margin-left:auto;padding-left:16px;font-size:20px;opacity:.5;}
+    .ht-mi.soon{color:#5a5a5a;cursor:default;}
+    .ht-mi.soon:hover{background:#141414;}
+    /* 二级：悬停平台向右滑出选视图 */
+    .ht-submenu{position:absolute;left:100%;top:-9px;margin-left:6px;display:none;z-index:600;
+                 min-width:150px;padding:9px;background:rgba(10,10,10,.96);
+                 border:1px solid #333;border-radius:14px;backdrop-filter:blur(8px);
+                 box-shadow:0 16px 44px rgba(0,0,0,.72),0 0 26px rgba(0,229,255,.14);}
+    .ht-submenu::before{content:'';position:absolute;top:0;left:-10px;width:12px;height:100%;}
+    .ht-mi.has-sub:hover>.ht-submenu{display:block;animation:sub-in .16s ease;}
+    @keyframes sub-in{from{opacity:0;transform:translateX(-8px);}to{opacity:1;transform:none;}}
+    .ht-si{padding:8px 15px;border-radius:9px;cursor:pointer;color:#e6e6e6;
+            font-size:22px;transition:.15s;white-space:nowrap;}
+    .ht-si:hover{background:#1c1c1c;padding-left:20px;}
+    .ht-si.active{color:#fff;text-shadow:0 0 8px var(--neon2);}
+    .ht-si.soon{color:#5a5a5a;cursor:default;}
+    .ht-si.soon:hover{background:transparent;padding-left:15px;}
+    .hcenter{position:absolute;left:50%;transform:translateX(-50%);
+              display:flex;align-items:center;gap:16px;}
+    .hclock{font-family:'UnifrakturMaguntia',serif;
+             font-size:28px;font-weight:400;color:#ff2b2b;letter-spacing:1px;
+             text-shadow:0 0 8px #ff2b2b,0 0 18px rgba(255,43,43,.4);
+             font-variant-numeric:tabular-nums;white-space:nowrap;}
+    /* 白霓虹音乐按钮：正常流(在 .hm 右侧组内)，不再绝对定位避免窄窗重叠 */
+    .music-btn{border:none;background:none;color:#fff;font-size:22px;line-height:1;flex-shrink:0;
+                cursor:pointer;padding:0 3px;text-shadow:0 0 8px #fff,0 0 16px rgba(255,255,255,.7);
+                transition:transform .2s,text-shadow .2s;}
+    .music-btn:hover{transform:scale(1.18);
+                      text-shadow:0 0 12px #fff,0 0 26px #fff,0 0 40px rgba(255,255,255,.6);}
+    /* ── 页内异形音乐播放器：样式由 7899 的 widget.html 注入（#lofe-music），此处不需 ── */
+    .hm{display:flex;align-items:center;gap:8px;}
+    .hbadge{font-size:11px;background:#141414;color:var(--neon);padding:2px 9px;
+             border-radius:20px;text-shadow:0 0 5px var(--neon);}
+    .hnew{font-size:11px;background:#141414;color:var(--pink);padding:2px 9px;
+           border-radius:20px;text-shadow:0 0 5px var(--pink);}
+    .hdate{font-size:11px;color:#666;}
+
+    /* ── Board：竖向堆叠的横向货架（Netflix 式）── */
+    .board{display:flex;flex-direction:column;gap:6px;padding:6px 8px;
+            height:calc(100vh - 70px);overflow-y:auto;overflow-x:hidden;background:#000;}
+    .board::-webkit-scrollbar{width:8px;}
+    .board::-webkit-scrollbar-thumb{background:#22222255;border-radius:4px;}
+
+    /* ── Shelf：一个分类 = 一行，卡片横向 ── */
+    .shelf{position:relative;}
+    .shelf-head{position:absolute;top:5px;left:10px;z-index:6;
+                 font-family:var(--goth),'UnifrakturMaguntia',serif;
+                 font-size:20px;font-weight:400;letter-spacing:.5px;
+                 padding:1px 10px;border-radius:7px;
+                 border-left:3px solid;display:flex;align-items:center;
+                 background:rgba(0,0,0,.5);backdrop-filter:blur(3px);cursor:pointer;
+                 text-shadow:0 0 7px currentColor,0 0 16px currentColor;}
+    .cnt{font-family:'Chakra Petch',monospace;font-size:10px;font-weight:600;
+          color:#888;background:#1a1a1a;padding:1px 7px;border-radius:7px;
+          margin-left:9px;text-shadow:none;letter-spacing:0;}
+    .strip{display:flex;flex-direction:row;gap:5px;overflow-x:auto;overflow-y:hidden;
+            padding:6px 2px 4px;align-items:flex-start;
+            scrollbar-width:none;scrollbar-color:transparent transparent;}
+    .strip::-webkit-scrollbar{height:6px;}
+    .strip::-webkit-scrollbar-thumb{background:transparent;}
+
+    /* ── Card：Netflix/Apple 海报式（图为底，信息叠加）── */
+    .card{flex:0 0 320px;height:180px;position:relative;border-radius:11px;
+           overflow:hidden;border:1px solid #1c1c1c;background:#0a0a0a;
+           transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease;}
+    .card:hover{transform:translateY(-3px);border-color:#22222266;
+                 box-shadow:0 8px 22px rgba(0,0,0,.55),0 0 16px #22222228;}
+    .thumb-link{display:block;width:100%;height:100%;cursor:pointer;position:relative;}
+    .thumb{width:100%;height:100%;object-fit:cover;display:block;}
+    /* hover：整图变暗做背景 */
+    .dim{position:absolute;inset:0;background:rgba(0,0,0,0);
+          transition:background .25s ease;pointer-events:none;}
+    .card:hover .dim{background:rgba(0,0,0,.5);}
+    /* 播放键：hover 居中浮现（行为不变）*/
+    .play{position:absolute;top:42%;left:50%;transform:translate(-50%,-50%) scale(.6);
+           font-size:30px;color:#fff;opacity:0;pointer-events:none;z-index:2;
+           transition:opacity .2s,transform .2s;
+           text-shadow:0 0 12px var(--neon2),0 0 26px var(--neon2);}
+    .card:hover .play{opacity:.95;transform:translate(-50%,-50%) scale(1);}
+    /* title+creator 合并，叠在图顶部，深色渐变保证可读 */
+    .tc{position:absolute;bottom:0;left:0;right:0;z-index:2;padding:28px 11px 8px;text-align:left;
+         background:linear-gradient(0deg,rgba(0,0,0,.62) 0%,rgba(0,0,0,0) 100%);
+         opacity:.5;pointer-events:none;transition:opacity .25s;}
+    .card:hover .tc{opacity:0;}   /* hover 时淡出，让位上拉摘要 */
+    .c-date{position:absolute;bottom:8px;right:11px;z-index:2;font-size:10px;
+             color:#cfcfcf;opacity:.5;pointer-events:none;
+             text-shadow:0 1px 3px rgba(0,0,0,.95);transition:opacity .25s;}
+    .card:hover .c-date{opacity:0;}
+    /* 归档按钮（hover 显示，play 右侧上方角）*/
+    .arch-btn{position:absolute;top:8px;right:8px;z-index:5;width:26px;height:26px;
+               border:none;border-radius:7px;background:rgba(0,0,0,.55);color:#fff;
+               font-size:13px;cursor:pointer;opacity:0;transition:opacity .2s,background .2s;
+               display:flex;align-items:center;justify-content:center;backdrop-filter:blur(3px);}
+    .card:hover .arch-btn{opacity:.9;}
+    .arch-btn:hover{background:#ff2b2b;opacity:1;}
+    /* 归档后的卡默认隐藏；点 Archive 区展开 */
+    .card.archived{display:none;}
+    .strip.show-arch .card.archived{display:block;}
+    /* 每行最右的 Archive 区 */
+    .arch-pile{flex:0 0 120px;height:180px;border-radius:11px;border:1px dashed #444;
+                background:#0a0a0a;display:none;flex-direction:column;align-items:center;
+                justify-content:center;gap:6px;cursor:pointer;color:#999;
+                font-size:12px;transition:.2s;}
+    .arch-pile:hover{border-color:#ff2b2b;color:#ddd;}
+    .arch-pile .ap-ic{font-size:26px;}
+    .arch-pile .ap-n{font-size:11px;color:#ff2b2b;font-weight:700;}
+    .strip.show-arch .arch-pile{border-color:#ff2b2b;color:#fff;}
+    .c-title{font-size:12.5px;font-weight:600;color:#fff;line-height:1.32;
+              text-shadow:0 1px 4px rgba(0,0,0,.95);
+              display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+    .c-meta{font-size:10px;color:#cfcfcf;margin-top:3px;text-shadow:0 1px 3px rgba(0,0,0,.95);}
+    .c-new{color:var(--neon);margin-right:4px;text-shadow:0 0 5px var(--neon);}
+
+    /* ── Hover 摘要浮层：底部上拉、可上下滚（行为不变）── */
+    .sum-ov{position:absolute;bottom:0;left:0;right:0;max-height:0;overflow:hidden;
+             background:rgba(0,0,0,.86);color:#e6e6e6;padding:0 11px;z-index:3;
+             font-size:11px;line-height:1.58;
+             transition:max-height .28s ease,padding .28s ease;
+             backdrop-filter:blur(2px);border-top:1px solid #22222233;}
+    .card:hover .sum-ov{max-height:80px;padding:8px 11px;overflow-y:auto;}
+    /* 观看进度条（底部，红色；看完变白）*/
+    .pbar{position:absolute;left:0;right:0;bottom:0;height:3px;
+           background:rgba(255,255,255,.14);z-index:4;}
+    .pfill{height:100%;width:0;background:#ff2b2b;box-shadow:0 0 6px #ff2b2b;transition:width .3s;}
+    .card.watched .pfill{background:#fff;box-shadow:0 0 6px #fff;}
+    .card.watched::after{content:'✓';position:absolute;top:6px;right:8px;z-index:4;
+      color:#fff;font-size:11px;font-weight:700;text-shadow:0 0 5px #000,0 0 8px #000;}
+    .sum-pending{font-style:italic;color:#777;font-size:11px;}
+    .sh{font-weight:700;color:var(--neon);margin:7px 0 2px;font-size:11.5px;
+         text-shadow:0 0 5px var(--neon);}
+    .sh:first-child{margin-top:0;}
+    .st{color:#bbb;margin-bottom:2px;}
+    ul{padding-left:15px;margin:2px 0 5px;}
+    li{margin-bottom:2px;color:#bbb;}
+
+    .emp{color:#555;font-style:italic;padding:16px;font-size:12px;
+          text-align:center;line-height:1.6;}
+    .pending span{display:block;font-size:10px;color:#444;margin-top:4px;}
+
+    /* ── Health ticker（顶=右→左，底=左→右，反向）── */
+    .ticker{z-index:400;background:#050505;color:#cfcfcf;height:26px;overflow:hidden;
+             display:flex;align-items:center;white-space:nowrap;font-size:11.5px;}
+    .ticker--top{position:sticky;top:0;border-bottom:1px solid #1a1a1a;}
+    .ticker--bottom{position:fixed;bottom:0;left:0;right:0;border-top:1px solid #1a1a1a;}
+    .ticker__track{display:inline-flex;flex-shrink:0;
+                    animation:tk-scroll 90s linear infinite;}
+    .ticker:hover .ticker__track{animation-play-state:paused;}
+    .tk-i{padding:0 4px 0 0;flex-shrink:0;}
+    .tk-i::after{content:"·";padding:0 18px;color:#333;}
+    .tk-o{color:#ff453a;font-weight:700;}
+    .tk-ok{color:var(--neon);text-shadow:0 0 6px var(--neon);}
+    .tk-n{color:#666;font-weight:400;}
+    @keyframes tk-scroll{from{transform:translateX(0);}
+                          to{transform:translateX(-50%);}}
+
+    /* ── 页内浮动播放器（可拖动 + 缩放）── */
+    .player{position:fixed;right:22px;bottom:40px;width:440px;height:280px;
+             z-index:900;display:none;flex-direction:column;background:#0a0a0a;
+             border:1px solid #22222266;border-radius:10px;overflow:hidden;
+             box-shadow:0 12px 44px rgba(0,0,0,.72),0 0 22px #22222233;
+             min-width:280px;min-height:200px;}
+    .player.show{display:flex;}
+    .player-bar{height:30px;flex-shrink:0;background:#111;cursor:move;
+                 display:flex;align-items:center;justify-content:space-between;
+                 padding:0 6px 0 11px;border-bottom:1px solid #222;}
+    .player-title{font-size:11px;color:#cfcfcf;white-space:nowrap;overflow:hidden;
+                   text-overflow:ellipsis;margin-right:8px;}
+    .player-close{background:none;border:none;color:#aaa;font-size:15px;
+                   cursor:pointer;padding:2px 6px;line-height:1;}
+    .player-close:hover{color:var(--neon);text-shadow:0 0 6px var(--neon);}
+    .player-body{flex:1;position:relative;background:#000;}
+    .player-body iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
+    .player-resize{position:absolute;left:0;top:0;width:16px;height:16px;
+                    cursor:nwse-resize;z-index:6;
+                    background:linear-gradient(315deg,transparent 45%,#ffffff66 45%);}
+
+    /* 整体等比缩放交给 JS(fit)，布局永远按桌面版渲染，任何窗口都不重叠 */
+    /* 分类折叠：收起时标题回到正常流(不再绝对浮动重叠)，单行干净显示 */
+    .shelf.collapsed .strip{display:none;}
+    .shelf.collapsed .shelf-head{position:static;display:inline-flex;margin:5px 0 4px 10px;}
+    .shelf.collapsed .shelf-head::after{content:'▸';margin-left:9px;font-size:11px;opacity:.75;}
+    /* ══ 素描 / 纸质模式（开灯关灯切换）══ */
+    .theme-btn{background:none;border:none;cursor:pointer;font-size:16px;padding:2px 5px;
+      color:var(--neon);opacity:.7;transition:.2s;line-height:1;}
+    .theme-btn:hover{opacity:1;transform:scale(1.14);}
+    body.sketch{background:#c4b08a url('paper.png');background-size:700px;
+      background-attachment:fixed;color:#33291a;}
+    body.sketch .board{background:transparent;}
+    /* 整页做旧：电影颗粒 + 暗角焦边（不挡点击） */
+    body.sketch::before{content:'';position:fixed;inset:0;z-index:9997;pointer-events:none;
+      background:url('grain.png');background-size:256px;opacity:.16;mix-blend-mode:multiply;
+      animation:grain 1.1s steps(2) infinite;}
+    @keyframes grain{0%{transform:translate(0,0)}50%{transform:translate(-6px,4px)}100%{transform:translate(4px,-5px)}}
+    body.sketch::after{content:'';position:fixed;inset:0;z-index:9996;pointer-events:none;
+      background:
+        radial-gradient(ellipse 118% 116% at 50% 44%, transparent 50%, rgba(70,46,16,.30) 80%, rgba(38,22,6,.62) 100%),
+        radial-gradient(circle at 100% 0%, rgba(30,16,4,.5), transparent 22%),
+        radial-gradient(circle at 0% 100%, rgba(30,16,4,.42), transparent 20%);}
+    body.sketch .theme-btn{color:#2a2620;}
+    body.sketch header{background:transparent;border-bottom:1px solid #b7ad90;}
+    body.sketch .ticker{background:rgba(233,225,201,.9);color:#3a332a;border-color:#c3b997;}
+    body.sketch .tk-ok,body.sketch .tk-n,body.sketch .tk-i::after{color:#3a332a;text-shadow:none;}
+    /* 任意图片 → 素描线稿（SVG边缘滤镜），正片叠底融进纸面 */
+    /* 荒野大镖客式做旧老照片：棕褐 + 褪色 + 颗粒感由卡片暗角托 */
+    body.sketch img,body.sketch .thumb{filter:sepia(.92) contrast(1.12) brightness(.88) saturate(.72);}
+    body.sketch .card{background:#c9b691;border-color:#8a7c5c;
+      box-shadow:inset 0 0 38px rgba(55,40,18,.42),inset 0 0 90px rgba(55,40,18,.2),2px 3px 0 rgba(70,55,30,.24);}
+    body.sketch .card:hover{box-shadow:inset 0 0 30px rgba(55,40,18,.34),3px 4px 0 rgba(70,55,30,.34);border-color:#6b5d3e;}
+    /* 文字全黑铅笔、去霓虹去动画 */
+    body.sketch .ht,body.sketch .ht *{background:none!important;-webkit-text-fill-color:#2a2620!important;
+      color:#2a2620!important;animation:none!important;filter:none!important;text-shadow:none!important;}
+    body.sketch .ht-menu{background:#efe8d3;border-color:#b7ad90;}
+    body.sketch .ht-menu::before{background:#8a7f60;}
+    body.sketch .ht-mi,body.sketch .ht-si{color:#2a2620!important;-webkit-text-fill-color:#2a2620!important;
+      background:none!important;animation:none!important;text-shadow:none!important;}
+    body.sketch .ht-mi.soon,body.sketch .ht-si.soon{color:#9a9078!important;-webkit-text-fill-color:#9a9078!important;}
+    body.sketch .shelf-head{color:#2a2620!important;border-color:#6b6350!important;
+      background:rgba(255,252,242,.72)!important;text-shadow:none!important;backdrop-filter:none;}
+    body.sketch .cnt{color:#6b6350;background:#e0d8c0;}
+    body.sketch .hclock{color:#3a2a12!important;text-shadow:none!important;
+      font-family:'Courier New',Courier,monospace!important;letter-spacing:1px;}
+    body.sketch .music-btn{color:#2a2620;text-shadow:none;}
+    body.sketch .hbadge,body.sketch .hdate,body.sketch .hnew{background:none!important;
+      box-shadow:none!important;color:#4a3d20!important;text-shadow:none!important;
+      font-family:'Courier New',Courier,monospace;letter-spacing:.3px;}
+    body.sketch .hnew{color:#7a3510!important;filter:sepia(.7) saturate(.5) brightness(.75);}  /* 🆕蓝标褪褐 */
+    body.sketch .c-title,body.sketch .c-creator,body.sketch .c-date,body.sketch .c-meta,
+    body.sketch .sh,body.sketch .sum-ov{color:#2a2620!important;text-shadow:none!important;}
+    body.sketch .tc{background:linear-gradient(0deg,rgba(233,225,201,.75),transparent);}
+    body.sketch .pfill{background:#3a332a!important;box-shadow:none!important;}
+    body.sketch .emp{color:#8a7f60;}
+    body.sketch .arch-pile{background:rgba(255,250,235,.35)!important;border:1px dashed #6b5d3e!important;color:#5c4e30!important;}
+    body.sketch .arch-pile .ap-n{color:#7a5c2a!important;}
+    body.sketch .arch-pile:hover,body.sketch .strip.show-arch .arch-pile{border-color:#4a3d20!important;color:#33291a!important;}
+    body.sketch .arch-btn{background:rgba(233,225,201,.75)!important;color:#33291a!important;}
+    body.sketch .arch-btn:hover{background:#8a7c5c!important;color:#fff!important;}
+    body.sketch .card.watched::after{color:#5c4e30;}
+  </style>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+    <filter id="sketch" color-interpolation-filters="sRGB">
+      <feColorMatrix type="saturate" values="0" result="g"/>
+      <feComponentTransfer in="g" result="shade">
+        <feFuncR type="gamma" amplitude="1" exponent="0.6" offset="0.34"/>
+        <feFuncG type="gamma" amplitude="1" exponent="0.6" offset="0.34"/>
+        <feFuncB type="gamma" amplitude="1" exponent="0.6" offset="0.34"/>
+      </feComponentTransfer>
+      <feGaussianBlur in="g" stdDeviation="0.8" result="b"/>
+      <feConvolveMatrix in="b" order="3" preserveAlpha="true" kernelMatrix="0 -1 0 -1 4 -1 0 -1 0" result="e"/>
+      <feComponentTransfer in="e" result="lines">
+        <feFuncR type="table" tableValues="1 0"/>
+        <feFuncG type="table" tableValues="1 0"/>
+        <feFuncB type="table" tableValues="1 0"/>
+      </feComponentTransfer>
+      <feBlend in="shade" in2="lines" mode="multiply"/>
+    </filter>
+  </defs></svg>
+  <header>
+    <div class="ht-wrap">
+      <span class="ht" id="lofe-ht">LOFE <span class="ht-sl">/</span> <span id="lofe-cat">Social Media</span> <span class="ht-sl">/</span> <span id="lofe-plat">YouTube</span> <span class="ht-sl">/</span> <span id="lofe-view">Daily</span> <span class="ht-caret">▾</span></span>
+      <div class="ht-menu" id="lofe-menu">
+        <div class="ht-mi has-sub">Social Media<span class="ht-arrow">›</span>
+          <div class="ht-submenu">
+            <div class="ht-mi has-sub">YouTube<span class="ht-arrow">›</span>
+              <div class="ht-submenu">
+                <div class="ht-si active" data-href="index.html">Daily</div>
+                <div class="ht-si" data-href="saved.html">Saved</div>
+              </div>
+            </div>
+            <div class="ht-mi has-sub soon">RedNote<span class="ht-arrow">›</span>
+              <div class="ht-submenu"><div class="ht-si soon">soon</div></div>
+            </div>
+            <div class="ht-mi has-sub soon">Instagram<span class="ht-arrow">›</span>
+              <div class="ht-submenu"><div class="ht-si soon">soon</div></div>
+            </div>
+            <div class="ht-mi has-sub soon">X<span class="ht-arrow">›</span>
+              <div class="ht-submenu"><div class="ht-si soon">soon</div></div>
+            </div>
+            <div class="ht-mi has-sub soon">Bilibili<span class="ht-arrow">›</span>
+              <div class="ht-submenu"><div class="ht-si soon">soon</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="ht-mi has-sub soon">Personal<span class="ht-arrow">›</span>
+          <div class="ht-submenu"><div class="ht-si soon">soon</div></div>
+        </div>
+        <div class="ht-mi has-sub soon">AI<span class="ht-arrow">›</span>
+          <div class="ht-submenu"><div class="ht-si soon">soon</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="hcenter">
+      <span class="hclock" id="clk"></span>
+    </div>
+    <div class="hm">
+      <button class="music-btn" id="music-btn" title="网易云音乐（页内小窗）" aria-label="音乐">&#9834;</button>
+      <span class="hdate">2026-10-31 08:49</span>
+      <span class="hnew">🆕 20 条新内容</span>
+      <span class="hbadge">20 条</span>
+      <button class="theme-btn" id="theme-btn" title="素描/纸质模式 · 开灯关灯">✏️</button>
+    </div>
+  </header>
+  <div class="board" id="board"><section id="today-top" class="shelf shelf-top">
+          <h2 class="shelf-head" style="border-color:#ffe600;color:#ffe600">
+            🎯 今天对你最要紧的<span class="cnt">8</span>
+          </h2>
+          <div class="strip"><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=t1iH2g3nVxI" target="_blank" data-vid="t1iH2g3nVxI" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/t1iH2g3nVxI/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">The One Synth Tame Impala Used All Across "Dracula" | Full Ableton Session Breakdown</div>
+              <div class="c-meta"><span class="c-new">🆕</span>Tape Notes Podcast</div>
+            </div>
+            <div class="c-date">11 hours ago</div>
+          </a>
+          <button class="arch-btn" data-vid="t1iH2g3nVxI" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          <div class="sum-ov"><p class="sh">🎯 为什么推荐</p>
+<p class="st">视频详细拆解了 Tame Impala 在 Ableton Live 中的合成器音色设计与混音工作流，直接对应你音乐制作任务中关注的 DAW 技巧、声音设计及编曲混音环节。</p>
+<p class="sh">一句话精华</p>
+<p class="st">视频深度解析了 Tame Impala 在专辑《Dracula》中全程使用的特定合成器，并完整展示了其在 Ableton Live 中的制作工作流。</p>
+<p class="sh">要点</p>
+<ul><li>聚焦于 Tame Impala 新专辑《Dracula》的核心音色来源，揭示其标志性的合成器选择。</li><li>提供完整的 Ableton Live 会话拆解，展示从音源处理到混音的具体操作细节。</li><li>旨在帮助听众理解该专辑独特的合成器音色是如何通过软件工作流构建而成的。</li></ul>
+<p class="st">（基于标题推断）</p></div>
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=SB85tROxxqc" target="_blank" data-vid="SB85tROxxqc" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/SB85tROxxqc/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Your Stereo Tracks Might Be Fake (Here’s How to Tell)</div>
+              <div class="c-meta"><span class="c-new">🆕</span>Why Logic Pro Rules</div>
+            </div>
+            <div class="c-date">8 hours ago</div>
+          </a>
+          <button class="arch-btn" data-vid="SB85tROxxqc" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          <div class="sum-ov"><p class="sh">🎯 为什么推荐</p>
+<p class="st">这条视频直接讲解 Logic Pro 中辨别伪立体声和修正混音空间感的技术，精准命中你音乐制作任务中关于混音和 DAW 技巧的核心需求。</p>
+<p class="sh">一句话精华</p>
+<p class="st">视频旨在揭示混音中常见的伪立体声陷阱，并教授如何通过技术手段辨别虚假的宽声场效果。</p>
+<p class="sh">要点</p>
+<ul><li>解析为何某些看似宽阔的立体声轨道实际上缺乏真实的立体声信息（如仅靠相位或人工加宽）。</li><li>演示在 Logic Pro 中使用频谱分析、相位相关性工具或监听技巧来检测立体声宽度的真实性。</li><li>提供修正建议，帮助制作人建立真正具有空间感和深度的立体声混音。</li></ul>
+<p class="st">（基于标题推断）</p></div>
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=57O3F4d2wlo" target="_blank" data-vid="57O3F4d2wlo" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/57O3F4d2wlo/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Elektron music jam in Tokyo 2026</div>
+              <div class="c-meta"><span class="c-new">🆕</span>True Cuckoo</div>
+            </div>
+            <div class="c-date">21 hours ago</div>
+          </a>
+          <button class="arch-btn" data-vid="57O3F4d2wlo" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          <div class="sum-ov"><p class="sh">🎯 为什么推荐</p>
+<p class="st">视频展示Elektron硬件（Digitakt/Octatrack）的即兴演奏与音色潜力，直接对应音乐制作中合成器操作、声音设计及编曲灵感的需求。</p>
+<p class="sh">一句话精华</p>
+<p class="st">视频记录了2026年在东京进行的一场以Elektron硬件为核心的即兴电子音乐Jam session。</p>
+<p class="sh">要点</p>
+<ul><li>视频核心内容为多位音乐人使用Elektron系列设备（如Digitakt、Octatrack等）进行的现场即兴合奏。</li><li>场景设定在2026年的东京，可能包含当地电子音乐场景的氛围或特定演出地点的背景介绍。</li><li>作为True Cuckoo频道的内容，重点可能在于展示Elektron设备的音色潜力、操作技巧以及即兴互动的过程。</li></ul>
+<p class="st">（基于标题推断）</p></div>
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=IAjsYvzi0Fk" target="_blank" data-vid="IAjsYvzi0Fk" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/IAjsYvzi0Fk/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">iZotope Ozone was originally built for bedroom producers</div>
+              <div class="c-meta"><span class="c-new">🆕</span>iZotope</div>
+            </div>
+            <div class="c-date">9 hours ago</div>
+          </a>
+          <button class="arch-btn" data-vid="IAjsYvzi0Fk" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          <div class="sum-ov"><p class="sh">🎯 为什么推荐</p>
+<p class="st">视频深入解析了 Ozone 从卧室制作到行业标准母带工具的功能演变与设计哲学，直接对应你音乐制作任务中关于混音、母带及 DAW 技巧的核心需求。</p>
+<p class="sh">一句话精华</p>
+<p class="st">视频回顾iZotope Ozone的起源，阐述其最初专为卧室制作人设计以解决空间限制与设备匮乏问题的历史背景。</p>
+<p class="sh">要点</p>
+<ul><li>解析Ozone早期版本如何针对家庭录音环境进行功能优化，如内置混响与均衡器以弥补硬件缺失。</li><li>探讨从“卧室神器”到行业标准母带处理工具的产品演变历程。</li><li>分享品牌视角下针对独立创作者与专业工作室不同需求的设计哲学。</li></ul>
+<p class="st">（基于标题推断）</p></div>
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=OzWRbhPQsU4" target="_blank" data-vid="OzWRbhPQsU4" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/OzWRbhPQsU4/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">my first cookup in ableton 12 #producer #beatmaker #cookup #experimental</div>
+              <div class="c-meta"><span class="c-new">🆕</span>floatboy333</div>
+            </div>
+            <div class="c-date">17 hours ago</div>
+          </a>
+          <button class="arch-btn" data-vid="OzWRbhPQsU4" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          <div class="sum-ov"><p class="sh">🎯 为什么推荐</p>
+<p class="st">这条视频展示了 Ableton Live 12 的即兴实验性制作流程，直接对应你音乐制作任务中关注的 DAW 技巧、声音设计及编曲逻辑，能提供具体的工具操作参考。</p>
+<p class="sh">一句话精华</p>
+<p class="st">视频展示了创作者在 Ableton Live 12 中首次进行的即兴实验性音乐制作过程。</p>
+<p class="sh">要点</p>
+<ul><li>重点呈现使用 Ableton Live 12 新功能或工作流进行“Cookup”（即兴创作）的真实体验。</li><li>风格偏向实验性（Experimental），可能包含非传统的音色设计或结构安排。</li><li>面向音乐制作人（Producer/Beatmaker）群体，分享从灵感到成品的快速构建逻辑。</li></ul>
+<p class="st">（基于标题推断）</p></div>
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=l-PQVqm_tRw" target="_blank" data-vid="l-PQVqm_tRw" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/l-PQVqm_tRw/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Why you can't choose how you react, and the moment that changes | Eckhart Tolle</div>
+              <div class="c-meta"><span class="c-new">🆕</span>Eckhart Tolle</div>
+            </div>
+            <div class="c-date">1 hour ago</div>
+          </a>
+          <button class="arch-btn" data-vid="l-PQVqm_tRw" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          <div class="sum-ov"><p class="sh">🎯 为什么推荐</p>
+<p class="st">Eckhart Tolle 是权重文件中 cognitive-science 项明确列出的订阅源，这条视频关于情绪觉察与反应机制的内容直接对应用户在自我提升和认知心理学方面的长期兴趣。</p>
+<p class="sh">一句话精华</p>
+<p class="st">托勒将阐释为何情绪反应往往是大脑自动化的防御机制而非个人选择，并揭示通过觉察当下瞬间打破这一自动反应模式的关键转折点。</p>
+<p class="sh">要点</p>
+<ul><li>解释“反应”（Reaction）与“回应”（Response）的区别，指出多数情绪爆发源于潜意识的小我（Ego）防御，而非有意识的选择。</li><li>强调“觉察”（Awareness）作为改变的关键，即当你在情绪升起的一刹那意识到它时，你就从“成为”情绪转变为“观察”情绪。</li><li>指出那个“改变的时刻”即是在刺激与反应之间创造出的微小空间，在此空间中，你重新获得了选择如何回应的自由。</li></ul>
+<p class="st">（基于标题推断）</p></div>
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=pfVDcWwfpzo" target="_blank" data-vid="pfVDcWwfpzo" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/pfVDcWwfpzo/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Go within. Use the inner body as a starting point for going deeper</div>
+              <div class="c-meta"><span class="c-new">🆕</span>Eckhart Tolle</div>
+            </div>
+            <div class="c-date">10 hours ago</div>
+          </a>
+          <button class="arch-btn" data-vid="pfVDcWwfpzo" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          <div class="sum-ov"><p class="sh">🎯 为什么推荐</p>
+<p class="st">Eckhart Tolle 是权重文件中 cognitive-science 项明确列出的订阅源，这条视频讲的‘内在身体’觉察法直接对应自我提升与正念练习，符合该兴趣项对专注与心理调节的需求。</p>
+<p class="sh">一句话精华</p>
+<p class="st">视频指导观众通过感知“内在身体”（inner body）的能量场，作为从头脑思维转向深层意识觉知的具体入口。</p>
+<p class="sh">要点</p>
+<ul><li>解释“内在身体”概念：指身体内部的感觉场域，是连接意识与物质世界的桥梁。</li><li>提供实践方法：教导如何停止过度思考，转而将注意力集中在身体内部的感受上，以此实现“向内看”（Go within）。</li><li>阐述深层意义：说明通过这种身体觉察，可以超越表层的思维活动，进入更宁静、更深层的存在状态。</li></ul>
+<p class="st">（基于标题推断）</p></div>
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=sQNTf-mHapo" target="_blank" data-vid="sQNTf-mHapo" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/sQNTf-mHapo/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">What Anger Really Does to You</div>
+              <div class="c-meta"><span class="c-new">🆕</span>Eckhart Tolle</div>
+            </div>
+            <div class="c-date">19 min ago</div>
+          </a>
+          <button class="arch-btn" data-vid="sQNTf-mHapo" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          <div class="sum-ov"><p class="sh">🎯 为什么推荐</p>
+<p class="st">Eckhart Tolle 是权重文件中 cognitive-science 项明确列出的订阅源，这条视频关于愤怒心理机制与正念接纳的内容直接对应用户在自我提升和认知层面的长期兴趣。</p>
+<p class="sh">一句话精华</p>
+<p class="st">埃克哈特·托利将深入剖析愤怒背后的心理机制，揭示这种情绪如何伪装成“正义感”或“受害者意识”，从而让人陷入痛苦并阻碍当下的觉知。</p>
+<p class="sh">要点</p>
+<ul><li>解析愤怒并非独立存在的情绪，而是对无法接受当下现实的抗拒与恐惧的投射。</li><li>阐述愤怒如何强化“小我”（Ego）的受害者身份，使人脱离当下的平静，陷入无意识的反应模式。</li><li>提供通过观察和接纳情绪能量来化解愤怒、回归内在宁静的具体修行视角。</li></ul>
+<p class="st">（基于标题推断）</p></div>
+          <div class="pbar"><div class="pfill"></div></div>
+        </article></div>
+        </section><section id="🎵_音乐制作" class="shelf">
+          <h2 class="shelf-head" style="border-color:#00e5ff;color:#00e5ff">
+            🎵 Music Production<span class="cnt">8</span>
+          </h2>
+          <div class="strip"><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=Xu6t8rVV_34" target="_blank" data-vid="Xu6t8rVV_34" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/Xu6t8rVV_34/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Bad Gear - THANK YOU so much!!!</div>
+              <div class="c-meta"><span class="c-new">🆕</span>AudioPilz</div>
+            </div>
+            <div class="c-date">7 hours ago</div>
+          </a>
+          <button class="arch-btn" data-vid="Xu6t8rVV_34" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          <div class="sum-ov"><p class="sh">一句话精华</p>
+<p class="st">AudioPilz 发布视频向名为“Bad Gear”的观众或合作伙伴表达感谢，内容可能涉及对特定设备的评价、赞助致谢或社区互动。</p>
+<p class="sh">要点</p>
+<ul><li>视频核心是表达感激之情，标题中的“THANK YOU so much!!!”表明情感基调强烈且积极。</li><li>“Bad Gear”可能是指某位经常批评装备的知名评论者、一位特定粉丝，或者是该频道近期评测中表现不佳但引发讨论的设备名称。</li><li>作为音频相关频道，视频可能包含对特定音频硬件的回顾，或是对支持者的公开答谢。</li></ul>
+<p class="st">（基于标题推断）</p></div>
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=57O3F4d2wlo" target="_blank" data-vid="57O3F4d2wlo" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/57O3F4d2wlo/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Elektron music jam in Tokyo 2026</div>
+              <div class="c-meta"><span class="c-new">🆕</span>True Cuckoo</div>
+            </div>
+            <div class="c-date">21 hours ago</div>
+          </a>
+          <button class="arch-btn" data-vid="57O3F4d2wlo" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          <div class="sum-ov"><p class="sh">一句话精华</p>
+<p class="st">视频记录了2026年在东京进行的一场以Elektron硬件为核心的即兴电子音乐Jam session。</p>
+<p class="sh">要点</p>
+<ul><li>视频核心内容为多位音乐人使用Elektron系列设备（如Digitakt、Octatrack等）进行的现场即兴合奏。</li><li>场景设定在2026年的东京，可能包含当地电子音乐场景的氛围或特定演出地点的背景介绍。</li><li>作为True Cuckoo频道的内容，重点可能在于展示Elektron设备的音色潜力、操作技巧以及即兴互动的过程。</li></ul>
+<p class="st">（基于标题推断）</p></div>
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=IAjsYvzi0Fk" target="_blank" data-vid="IAjsYvzi0Fk" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/IAjsYvzi0Fk/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">iZotope Ozone was originally built for bedroom producers</div>
+              <div class="c-meta"><span class="c-new">🆕</span>iZotope</div>
+            </div>
+            <div class="c-date">9 hours ago</div>
+          </a>
+          <button class="arch-btn" data-vid="IAjsYvzi0Fk" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          <div class="sum-ov"><p class="sh">一句话精华</p>
+<p class="st">视频回顾iZotope Ozone的起源，阐述其最初专为卧室制作人设计以解决空间限制与设备匮乏问题的历史背景。</p>
+<p class="sh">要点</p>
+<ul><li>解析Ozone早期版本如何针对家庭录音环境进行功能优化，如内置混响与均衡器以弥补硬件缺失。</li><li>探讨从“卧室神器”到行业标准母带处理工具的产品演变历程。</li><li>分享品牌视角下针对独立创作者与专业工作室不同需求的设计哲学。</li></ul>
+<p class="st">（基于标题推断）</p></div>
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=bwpLJuPxd9E" target="_blank" data-vid="bwpLJuPxd9E" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/bwpLJuPxd9E/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">how to kim petras (i like ur look)</div>
+              <div class="c-meta"><span class="c-new">🆕</span>Varsity Beats</div>
+            </div>
+            <div class="c-date">2 hours ago</div>
+          </a>
+          <button class="arch-btn" data-vid="bwpLJuPxd9E" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          <div class="sum-ov"><p class="sh">一句话精华</p>
+<p class="st">视频将详细拆解金·佩特拉（Kim Petras）在《I Like Ur Look》中的标志性造型，提供从妆容到发型的具体复刻教程。</p>
+<p class="sh">要点</p>
+<ul><li>重点讲解如何打造金·佩特拉极具辨识度的“芭比风”妆容，特别是标志性的粉色系眼妆和唇妆技巧。</li><li>分析并演示如何梳理或佩戴符合该歌曲MV风格的发型，以还原其独特的视觉美感。</li><li>可能涉及服装搭配建议，帮助观众整体还原该造型的时尚氛围。</li></ul>
+<p class="st">（基于标题推断）</p></div>
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=c6e5hqiT8L8" target="_blank" data-vid="c6e5hqiT8L8" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/c6e5hqiT8L8/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Can You Want Success Without Depending on It?</div>
+              <div class="c-meta"><span class="c-new">🆕</span>Holistic Songwriting</div>
+            </div>
+            <div class="c-date">5 hours ago</div>
+          </a>
+          <button class="arch-btn" data-vid="c6e5hqiT8L8" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          <div class="sum-ov"><p class="sh">一句话精华</p>
+<p class="st">视频探讨如何在渴望成功的同时保持心理独立，避免将自我价值完全绑定在结果上，从而获得更健康的创作动力。</p>
+<p class="sh">要点</p>
+<ul><li>区分“目标导向”与“结果依赖”的心理机制，强调内在动机的可持续性。</li><li>分析过度依赖成功可能带来的焦虑与创作瓶颈，提出平衡心态的策略。</li><li>结合歌曲创作场景，讨论如何在不确定中保持专注与创造力。</li></ul>
+<p class="st">（基于标题推断）</p></div>
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=t1iH2g3nVxI" target="_blank" data-vid="t1iH2g3nVxI" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/t1iH2g3nVxI/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">The One Synth Tame Impala Used All Across "Dracula" | Full Ableton Session Breakdown</div>
+              <div class="c-meta"><span class="c-new">🆕</span>Tape Notes Podcast</div>
+            </div>
+            <div class="c-date">11 hours ago</div>
+          </a>
+          <button class="arch-btn" data-vid="t1iH2g3nVxI" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          <div class="sum-ov"><p class="sh">一句话精华</p>
+<p class="st">视频深度解析了 Tame Impala 在专辑《Dracula》中全程使用的特定合成器，并完整展示了其在 Ableton Live 中的制作工作流。</p>
+<p class="sh">要点</p>
+<ul><li>聚焦于 Tame Impala 新专辑《Dracula》的核心音色来源，揭示其标志性的合成器选择。</li><li>提供完整的 Ableton Live 会话拆解，展示从音源处理到混音的具体操作细节。</li><li>旨在帮助听众理解该专辑独特的合成器音色是如何通过软件工作流构建而成的。</li></ul>
+<p class="st">（基于标题推断）</p></div>
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=dwVARtc2ONg" target="_blank" data-vid="dwVARtc2ONg" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/dwVARtc2ONg/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">男性也需要支持系統 #中年</div>
+              <div class="c-meta"><span class="c-new">🆕</span>Sherry's Notes</div>
+            </div>
+            <div class="c-date">12 hours ago</div>
+          </a>
+          <button class="arch-btn" data-vid="dwVARtc2ONg" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          <div class="sum-ov"><p class="sh">一句话精华</p>
+<p class="st">视频探讨中年男性在面临生活压力时，建立和维护情感支持网络的重要性及具体方法。</p>
+<p class="sh">要点</p>
+<ul><li>打破“男性必须坚强独立”的刻板印象，强调中年阶段寻求心理支持并非软弱。</li><li>分析中年男性常见的孤独感来源，如职业瓶颈、家庭角色变化或社交圈萎缩。</li><li>提供建立支持系统的具体建议，如与家人深入沟通、培养共同兴趣的社交圈或寻求专业心理咨询。</li></ul>
+<p class="st">（基于标题推断）</p></div>
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=SB85tROxxqc" target="_blank" data-vid="SB85tROxxqc" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/SB85tROxxqc/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Your Stereo Tracks Might Be Fake (Here’s How to Tell)</div>
+              <div class="c-meta"><span class="c-new">🆕</span>Why Logic Pro Rules</div>
+            </div>
+            <div class="c-date">8 hours ago</div>
+          </a>
+          <button class="arch-btn" data-vid="SB85tROxxqc" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          <div class="sum-ov"><p class="sh">一句话精华</p>
+<p class="st">视频旨在揭示混音中常见的伪立体声陷阱，并教授如何通过技术手段辨别虚假的宽声场效果。</p>
+<p class="sh">要点</p>
+<ul><li>解析为何某些看似宽阔的立体声轨道实际上缺乏真实的立体声信息（如仅靠相位或人工加宽）。</li><li>演示在 Logic Pro 中使用频谱分析、相位相关性工具或监听技巧来检测立体声宽度的真实性。</li><li>提供修正建议，帮助制作人建立真正具有空间感和深度的立体声混音。</li></ul>
+<p class="st">（基于标题推断）</p></div>
+          <div class="pbar"><div class="pfill"></div></div>
+        </article></div>
+        </section><section id="🎭_娱乐" class="shelf">
+          <h2 class="shelf-head" style="border-color:#ff9a00;color:#ff9a00">
+            🎭 Entertainment<span class="cnt">1</span>
+          </h2>
+          <div class="strip"><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=bHuLgxWgNWM" target="_blank" data-vid="bHuLgxWgNWM" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/bHuLgxWgNWM/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">KT: Behind the Tape (Ep: 791 Jim Norton + Anthony Cumia)</div>
+              <div class="c-meta"><span class="c-new">🆕</span>Kill Tony</div>
+            </div>
+            <div class="c-date">48 min ago</div>
+          </a>
+          <button class="arch-btn" data-vid="bHuLgxWgNWM" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          <div class="sum-ov"><p class="sh">一句话精华</p>
+<p class="st">Kill Tony 主持人 Tony Hinchcliffe 与嘉宾 Jim Norton 和 Anthony Cumia 在幕后环节分享录音带之外的真实故事与行业八卦。</p>
+<p class="sh">要点</p>
+<ul><li>这是 Kill Tony 节目第 791 期的“Behind the Tape”（幕后/录音带后）特别环节，通常包含主节目未播出的精彩片段或深度访谈。</li><li>嘉宾 Jim Norton（知名喜剧演员、编剧）和 Anthony Cumia（体育评论员、喜剧演员）将分享他们各自的行业经历或针对当下热点的看法。</li><li>内容风格偏向轻松幽默的对话，可能涉及喜剧圈内幕、体育圈趣事或两人之间的即兴互动。</li></ul>
+<p class="st">（基于标题推断）</p></div>
+          <div class="pbar"><div class="pfill"></div></div>
+        </article></div>
+        </section><section id="🧠_自我提升" class="shelf">
+          <h2 class="shelf-head" style="border-color:#39ff14;color:#39ff14">
+            🧠 Self Development<span class="cnt">9</span>
+          </h2>
+          <div class="strip"><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=WAFFDalOVUc" target="_blank" data-vid="WAFFDalOVUc" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/WAFFDalOVUc/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">我用 AI 開發了抄底策略，能跑贏 DCA 嗎？實盤完全公開</div>
+              <div class="c-meta"><span class="c-new">🆕</span>Terry Chen 泰瑞</div>
+            </div>
+            <div class="c-date">14 hours ago</div>
+          </a>
+          <button class="arch-btn" data-vid="WAFFDalOVUc" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          <div class="sum-ov"><p class="sh">一句话精华</p>
+<p class="st">视频作者展示利用AI算法构建的加密货币“抄底”交易策略，并通过公开实盘数据对比其收益率是否优于传统的定投（DCA）模式。</p>
+<p class="sh">要点</p>
+<ul><li>解析如何利用AI技术识别市场底部信号并生成具体的买入策略。</li><li>公开实盘交易记录，直观对比AI策略与定投法在特定周期内的绩效差异。</li><li>探讨AI量化策略在风险控制及收益增强方面相对于人工或固定策略的优势与局限。</li></ul>
+<p class="st">（基于标题推断）</p></div>
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=l-PQVqm_tRw" target="_blank" data-vid="l-PQVqm_tRw" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/l-PQVqm_tRw/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Why you can't choose how you react, and the moment that changes | Eckhart Tolle</div>
+              <div class="c-meta"><span class="c-new">🆕</span>Eckhart Tolle</div>
+            </div>
+            <div class="c-date">1 hour ago</div>
+          </a>
+          <button class="arch-btn" data-vid="l-PQVqm_tRw" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          <div class="sum-ov"><p class="sh">一句话精华</p>
+<p class="st">托勒将阐释为何情绪反应往往是大脑自动化的防御机制而非个人选择，并揭示通过觉察当下瞬间打破这一自动反应模式的关键转折点。</p>
+<p class="sh">要点</p>
+<ul><li>解释“反应”（Reaction）与“回应”（Response）的区别，指出多数情绪爆发源于潜意识的小我（Ego）防御，而非有意识的选择。</li><li>强调“觉察”（Awareness）作为改变的关键，即当你在情绪升起的一刹那意识到它时，你就从“成为”情绪转变为“观察”情绪。</li><li>指出那个“改变的时刻”即是在刺激与反应之间创造出的微小空间，在此空间中，你重新获得了选择如何回应的自由。</li></ul>
+<p class="st">（基于标题推断）</p></div>
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=sQNTf-mHapo" target="_blank" data-vid="sQNTf-mHapo" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/sQNTf-mHapo/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">What Anger Really Does to You</div>
+              <div class="c-meta"><span class="c-new">🆕</span>Eckhart Tolle</div>
+            </div>
+            <div class="c-date">19 min ago</div>
+          </a>
+          <button class="arch-btn" data-vid="sQNTf-mHapo" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          <div class="sum-ov"><p class="sh">一句话精华</p>
+<p class="st">埃克哈特·托利将深入剖析愤怒背后的心理机制，揭示这种情绪如何伪装成“正义感”或“受害者意识”，从而让人陷入痛苦并阻碍当下的觉知。</p>
+<p class="sh">要点</p>
+<ul><li>解析愤怒并非独立存在的情绪，而是对无法接受当下现实的抗拒与恐惧的投射。</li><li>阐述愤怒如何强化“小我”（Ego）的受害者身份，使人脱离当下的平静，陷入无意识的反应模式。</li><li>提供通过观察和接纳情绪能量来化解愤怒、回归内在宁静的具体修行视角。</li></ul>
+<p class="st">（基于标题推断）</p></div>
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=pfVDcWwfpzo" target="_blank" data-vid="pfVDcWwfpzo" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/pfVDcWwfpzo/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Go within. Use the inner body as a starting point for going deeper</div>
+              <div class="c-meta"><span class="c-new">🆕</span>Eckhart Tolle</div>
+            </div>
+            <div class="c-date">10 hours ago</div>
+          </a>
+          <button class="arch-btn" data-vid="pfVDcWwfpzo" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          <div class="sum-ov"><p class="sh">一句话精华</p>
+<p class="st">视频指导观众通过感知“内在身体”（inner body）的能量场，作为从头脑思维转向深层意识觉知的具体入口。</p>
+<p class="sh">要点</p>
+<ul><li>解释“内在身体”概念：指身体内部的感觉场域，是连接意识与物质世界的桥梁。</li><li>提供实践方法：教导如何停止过度思考，转而将注意力集中在身体内部的感受上，以此实现“向内看”（Go within）。</li><li>阐述深层意义：说明通过这种身体觉察，可以超越表层的思维活动，进入更宁静、更深层的存在状态。</li></ul>
+<p class="st">（基于标题推断）</p></div>
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=CYHNJTay_9Q" target="_blank" data-vid="CYHNJTay_9Q" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/CYHNJTay_9Q/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">老板亲测 Dots：订酒店、处理视频，甚至帮我退钱？</div>
+              <div class="c-meta"><span class="c-new">🆕</span>FireUserGroup</div>
+            </div>
+            <div class="c-date">14 hours ago</div>
+          </a>
+          <button class="arch-btn" data-vid="CYHNJTay_9Q" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          <div class="sum-ov"><p class="sh">一句话精华</p>
+<p class="st">视频博主（老板）亲自演示了名为“Dots”的工具或AI助手，展示其在预订酒店、自动化视频处理以及协助处理退款等实际场景中的应用效果。</p>
+<p class="sh">要点</p>
+<ul><li>重点展示“Dots”在旅行住宿（订酒店）和多媒体内容制作（处理视频）两大核心场景下的实操能力。</li><li>包含一个关于“退钱”的意外或亮点案例，可能涉及该工具在解决售后问题或自动化财务流程中的表现。</li><li>以“亲测”视角提供真实的使用体验和评价，旨在验证该工具在复杂任务处理上的可靠性与便利性。</li></ul>
+<p class="st">（基于标题推断）</p></div>
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=ur-HjD422ig" target="_blank" data-vid="ur-HjD422ig" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/ur-HjD422ig/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">杨天楠：看似体面的工作，实则都是表演</div>
+              <div class="c-meta"><span class="c-new">🆕</span>课代表立正</div>
+            </div>
+            <div class="c-date">9 hours ago</div>
+          </a>
+          <button class="arch-btn" data-vid="ur-HjD422ig" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          <div class="sum-ov"><p class="sh">一句话精华</p>
+<p class="st">视频通过杨天楠的视角，剖析那些表面光鲜亮丽、实则充满形式主义和虚假社交的职场现象，揭示其背后的“表演”本质。</p>
+<p class="sh">要点</p>
+<ul><li>解构“体面工作”背后的隐性成本，如过度包装、无效社交及情绪劳动。</li><li>探讨职场中“人设”维护与真实自我之间的冲突，指出许多工作本质上是向外界展示合规性的表演。</li><li>可能提供重新审视职业选择或工作态度的建议，帮助观众剥离表象，关注实际价值与个人感受。</li></ul>
+<p class="st">（基于标题推断）</p></div>
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=JNCIZIJLkak" target="_blank" data-vid="JNCIZIJLkak" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/JNCIZIJLkak/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">Agent落地必修课：数据库、开源选型与模型实战｜AIE实战派开聊02｜智慧芽、TONBO、阶跃星辰</div>
+              <div class="c-meta"><span class="c-new">🆕</span>课代表立正</div>
+            </div>
+            <div class="c-date">3 hours ago</div>
+          </a>
+          <button class="arch-btn" data-vid="JNCIZIJLkak" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          <div class="sum-ov"><p class="sh">一句话精华</p>
+<p class="st">视频聚焦AI Agent从理论到生产环境的落地难题，深入探讨底层数据库选型、开源技术栈对比及大模型实战应用。</p>
+<p class="sh">要点</p>
+<ul><li>解析Agent落地过程中数据库架构的关键选择与开源组件的优劣对比。</li><li>结合智慧芽、TONBO、阶跃星辰等企业的实际案例，分享模型工程化与业务融合的经验。</li><li>针对“实战派”主题，提供可复用的技术实施路径与避坑指南。</li></ul>
+<p class="st">（基于标题推断）</p></div>
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=i3Sm05WXlrE" target="_blank" data-vid="i3Sm05WXlrE" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/i3Sm05WXlrE/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">AI做出来之后，如何做系统管理？｜AIE实战派开聊01｜Raytone、Sonar、ClickHouse</div>
+              <div class="c-meta"><span class="c-new">🆕</span>课代表立正</div>
+            </div>
+            <div class="c-date">3 hours ago</div>
+          </a>
+          <button class="arch-btn" data-vid="i3Sm05WXlrE" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          <div class="sum-ov"><p class="sh">一句话精华</p>
+<p class="st">视频探讨在AI应用开发完成后，如何利用Raytone、Sonar和ClickHouse等技术栈构建高效的数据管理与系统运维体系。</p>
+<p class="sh">要点</p>
+<ul><li>解析AI系统落地后面临的数据存储、处理及监控挑战。</li><li>介绍Raytone、Sonar、ClickHouse在AI系统管理中的具体应用场景与选型逻辑。</li><li>分享从模型开发转向系统级工程管理的实战经验与最佳实践。</li></ul>
+<p class="st">（基于标题推断）</p></div>
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=ccQcsQQEwNI" target="_blank" data-vid="ccQcsQQEwNI" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/ccQcsQQEwNI/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">带娃，我觉得最重要的就这两件事</div>
+              <div class="c-meta"><span class="c-new">🆕</span>课代表立正</div>
+            </div>
+            <div class="c-date">41 min ago</div>
+          </a>
+          <button class="arch-btn" data-vid="ccQcsQQEwNI" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          <div class="sum-ov"><p class="sh">一句话精华</p>
+<p class="st">视频博主“课代表立正”将育儿核心精简为两项关键原则，旨在帮助家长在复杂的带娃过程中抓住重点，减少焦虑。</p>
+<p class="sh">要点</p>
+<ul><li>提炼出博主认为在儿童成长过程中最具决定性作用的两项具体行为或教育理念。</li><li>针对这两件事进行详细拆解，说明其重要性及在实际带娃场景中的落地方法。</li></ul>
+<p class="st">（基于标题推断）</p></div>
+          <div class="pbar"><div class="pfill"></div></div>
+        </article></div>
+        </section><section id="📦_未分类" class="shelf">
+          <h2 class="shelf-head" style="border-color:#ffe600;color:#ffe600">
+            📦 Uncategorized<span class="cnt">2</span>
+          </h2>
+          <div class="strip"><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=xOq1Z1IsqvI" target="_blank" data-vid="xOq1Z1IsqvI" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/xOq1Z1IsqvI/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">I Did Macro Photography Every Day for a Week</div>
+              <div class="c-meta"><span class="c-new">🆕</span>Jamie Spensley</div>
+            </div>
+            <div class="c-date">9 hours ago</div>
+          </a>
+          <button class="arch-btn" data-vid="xOq1Z1IsqvI" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          <div class="sum-ov"><p class="sh">一句话精华</p>
+<p class="st">视频记录了创作者在一周内每天进行微距摄影挑战的经历，展示了不同日期的拍摄成果及技巧变化。</p>
+<p class="sh">要点</p>
+<ul><li>展示为期七天的连续微距拍摄作品，可能包含花卉、昆虫或日常细微物体的特写。</li><li>分享每日拍摄过程中遇到的光线、对焦或构图挑战及应对方法。</li><li>通过时间线对比，体现创作者在微距摄影技术或审美上的短期进步。</li></ul>
+<p class="st">（基于标题推断）</p></div>
+          <div class="pbar"><div class="pfill"></div></div>
+        </article><article class="card">
+          <a class="thumb-link" href="https://youtube.com/watch?v=OzWRbhPQsU4" target="_blank" data-vid="OzWRbhPQsU4" title="点击在小窗播放（可拖动/缩放）">
+            <img class="thumb" src="https://img.youtube.com/vi/OzWRbhPQsU4/mqdefault.jpg" loading="lazy" onerror="this.style.opacity=0">
+            <div class="dim"></div>
+            <span class="play">▶</span>
+            <div class="tc">
+              <div class="c-title">my first cookup in ableton 12 #producer #beatmaker #cookup #experimental</div>
+              <div class="c-meta"><span class="c-new">🆕</span>floatboy333</div>
+            </div>
+            <div class="c-date">17 hours ago</div>
+          </a>
+          <button class="arch-btn" data-vid="OzWRbhPQsU4" title="归档 / 取消归档（不想看，但不取关）">🗄</button>
+          <div class="sum-ov"><p class="sh">一句话精华</p>
+<p class="st">视频展示了创作者在 Ableton Live 12 中首次进行的即兴实验性音乐制作过程。</p>
+<p class="sh">要点</p>
+<ul><li>重点呈现使用 Ableton Live 12 新功能或工作流进行“Cookup”（即兴创作）的真实体验。</li><li>风格偏向实验性（Experimental），可能包含非传统的音色设计或结构安排。</li><li>面向音乐制作人（Producer/Beatmaker）群体，分享从灵感到成品的快速构建逻辑。</li></ul>
+<p class="st">（基于标题推断）</p></div>
+          <div class="pbar"><div class="pfill"></div></div>
+        </article></div>
+        </section></div>
+  <div class="ticker ticker--bottom"><div class="ticker__track"><span class="tk-i"><span class="tk-o">🔴 3 need attention</span></span><span class="tk-i">✅ YT Cookie <span class="tk-n">(0 min ago)</span></span><span class="tk-i">✅ Game Library <span class="tk-n">(1 min ago)</span></span><span class="tk-i">✅ Code Backup <span class="tk-n">(2 min ago)</span></span><span class="tk-i">✅ Music Sync <span class="tk-n">(35 min ago)</span></span><span class="tk-i">✅ 雷达进料（上次连上信源） <span class="tk-n">(59 min ago)</span></span><span class="tk-i">✅ 夜补索引上次成功 <span class="tk-n">(3.6h ago)</span></span><span class="tk-i">✅ YouTube Digest <span class="tk-n">(23.8h ago)</span></span><span class="tk-i">🔴 EVA 异地备份(restic) <span class="tk-n">(34d ago)</span></span><span class="tk-i">🔴 治理欠账（写好未生效） <span class="tk-n">(39d ago)</span></span><span class="tk-i">✅ Capture Server <span class="tk-n">(listening)</span></span><span class="tk-i">✅ 音乐服务(网易云) <span class="tk-n">(listening)</span></span><span class="tk-i">✅ 主站服务(面板) <span class="tk-n">(listening)</span></span><span class="tk-i">✅ 已推送到 GitHub <span class="tk-n">(pushed)</span></span><span class="tk-i">🔴 Time Machine <span class="tk-n">(no-backup)</span></span><span class="tk-i">✅ 向量索引新鲜度 <span class="tk-n">(pending)</span></span><span class="tk-i">✅ 治理名单一致性（§十二 vs 代码副本） <span class="tk-n">(ok)</span></span><span class="tk-i">✅ 工程日志漏记（最近 14 天） <span class="tk-n">(ok)</span></span><span class="tk-i">✅ launchd 退出码 autosync <span class="tk-n">(ok)</span></span><span class="tk-i">✅ launchd 退出码 backup-age <span class="tk-n">(ok)</span></span><span class="tk-i">✅ launchd 退出码 capture-server <span class="tk-n">(ok)</span></span><span class="tk-i">✅ launchd 退出码 catalog-watch <span class="tk-n">(ok)</span></span><span class="tk-i">✅ launchd 退出码 cc-transcripts <span class="tk-n">(ok)</span></span><span class="tk-i">✅ launchd 退出码 daily-digest <span class="tk-n">(ok)</span></span><span class="tk-i">✅ launchd 退出码 dailyserver <span class="tk-n">(ok)</span></span><span class="tk-i">✅ launchd 退出码 eva-index <span class="tk-n">(ok)</span></span><span class="tk-i">✅ launchd 退出码 health-sentinel <span class="tk-n">(ok)</span></span><span class="tk-i">✅ launchd 退出码 jobs-nl <span class="tk-n">(ok)</span></span><span class="tk-i">✅ launchd 退出码 netease <span class="tk-n">(ok)</span></span><span class="tk-i">✅ launchd 退出码 radar <span class="tk-n">(ok)</span></span><span class="tk-i">⏸ launchd 退出码 remote <span class="tk-n">(shelved)</span></span><span class="tk-i">✅ launchd 退出码 spotify <span class="tk-n">(ok)</span></span><span class="tk-i">✅ launchd 退出码 status-page <span class="tk-n">(ok)</span></span><span class="tk-i">✅ launchd 退出码 steam-updater <span class="tk-n">(ok)</span></span><span class="tk-i">✅ launchd 退出码 voice <span class="tk-n">(ok)</span></span><span class="tk-i">✅ launchd 退出码 yt-cookies <span class="tk-n">(ok)</span></span><span class="tk-i">⏸ RedNote <span class="tk-n">(disabled)</span></span><span class="tk-i">as of 2026-10-31 08:31</span><span class="tk-i"><span class="tk-o">🔴 3 need attention</span></span><span class="tk-i">✅ YT Cookie <span class="tk-n">(0 min ago)</span></span><span class="tk-i">✅ Game Library <span class="tk-n">(1 min ago)</span></span><span class="tk-i">✅ Code Backup <span class="tk-n">(2 min ago)</span></span><span class="tk-i">✅ Music Sync <span class="tk-n">(35 min ago)</span></span><span class="tk-i">✅ 雷达进料（上次连上信源） <span class="tk-n">(59 min ago)</span></span><span class="tk-i">✅ 夜补索引上次成功 <span class="tk-n">(3.6h ago)</span></span><span class="tk-i">✅ YouTube Digest <span class="tk-n">(23.8h ago)</span></span><span class="tk-i">🔴 EVA 异地备份(restic) <span class="tk-n">(34d ago)</span></span><span class="tk-i">🔴 治理欠账（写好未生效） <span class="tk-n">(39d ago)</span></span><span class="tk-i">✅ Capture Server <span class="tk-n">(listening)</span></span><span class="tk-i">✅ 音乐服务(网易云) <span class="tk-n">(listening)</span></span><span class="tk-i">✅ 主站服务(面板) <span class="tk-n">(listening)</span></span><span class="tk-i">✅ 已推送到 GitHub <span class="tk-n">(pushed)</span></span><span class="tk-i">🔴 Time Machine <span class="tk-n">(no-backup)</span></span><span class="tk-i">✅ 向量索引新鲜度 <span class="tk-n">(pending)</span></span><span class="tk-i">✅ 治理名单一致性（§十二 vs 代码副本） <span class="tk-n">(ok)</span></span><span class="tk-i">✅ 工程日志漏记（最近 14 天） <span class="tk-n">(ok)</span></span><span class="tk-i">✅ launchd 退出码 autosync <span class="tk-n">(ok)</span></span><span class="tk-i">✅ launchd 退出码 backup-age <span class="tk-n">(ok)</span></span><span class="tk-i">✅ launchd 退出码 capture-server <span class="tk-n">(ok)</span></span><span class="tk-i">✅ launchd 退出码 catalog-watch <span class="tk-n">(ok)</span></span><span class="tk-i">✅ launchd 退出码 cc-transcripts <span class="tk-n">(ok)</span></span><span class="tk-i">✅ launchd 退出码 daily-digest <span class="tk-n">(ok)</span></span><span class="tk-i">✅ launchd 退出码 dailyserver <span class="tk-n">(ok)</span></span><span class="tk-i">✅ launchd 退出码 eva-index <span class="tk-n">(ok)</span></span><span class="tk-i">✅ launchd 退出码 health-sentinel <span class="tk-n">(ok)</span></span><span class="tk-i">✅ launchd 退出码 jobs-nl <span class="tk-n">(ok)</span></span><span class="tk-i">✅ launchd 退出码 netease <span class="tk-n">(ok)</span></span><span class="tk-i">✅ launchd 退出码 radar <span class="tk-n">(ok)</span></span><span class="tk-i">⏸ launchd 退出码 remote <span class="tk-n">(shelved)</span></span><span class="tk-i">✅ launchd 退出码 spotify <span class="tk-n">(ok)</span></span><span class="tk-i">✅ launchd 退出码 status-page <span class="tk-n">(ok)</span></span><span class="tk-i">✅ launchd 退出码 steam-updater <span class="tk-n">(ok)</span></span><span class="tk-i">✅ launchd 退出码 voice <span class="tk-n">(ok)</span></span><span class="tk-i">✅ launchd 退出码 yt-cookies <span class="tk-n">(ok)</span></span><span class="tk-i">⏸ RedNote <span class="tk-n">(disabled)</span></span><span class="tk-i">as of 2026-10-31 08:31</span></div></div>
+  <div class="player" id="lofe-player">
+    <div class="player-bar" id="lofe-bar">
+      <span class="player-title" id="lofe-ptitle"></span>
+      <button class="player-close" id="lofe-close" title="关闭">✕</button>
+    </div>
+    <div class="player-body"><div id="lofe-frame"></div></div>
+    <div class="player-resize" id="lofe-resize"></div>
+  </div>
+  <div id="lofe-music"></div>
+  <script>
+    // ── 居中活时钟（全数字；⌘/Ctrl+点击 换字体）──
+    const clk=document.getElementById('clk'),p=n=>String(n).padStart(2,'0');
+    function tick(){const d=new Date();
+      clk.textContent=`${d.getFullYear()}/${p(d.getMonth()+1)}/${p(d.getDate())} · ${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())} · ${d.getDay()+1}/7`;}
+    tick();setInterval(tick,1000);
+
+    // ── 整页等比缩放到窗口（等量缩小：布局永远桌面版，塞进任何窗口都不重叠）──
+    (function(){
+      const DESIGN=1340;
+      const fit=()=>{ document.body.style.zoom = Math.min(1, window.innerWidth/DESIGN); };
+      fit(); window.addEventListener('resize',fit);
+    })();
+
+    // ── 素描/纸质主题开关（开灯关灯，记 localStorage）──
+    (function(){
+      const tb=document.getElementById('theme-btn');
+      const apply=()=>document.body.classList.toggle('sketch',localStorage.getItem('lofe_theme')==='sketch');
+      apply();
+      if(tb) tb.addEventListener('click',()=>{ const s=!document.body.classList.contains('sketch');
+        localStorage.setItem('lofe_theme',s?'sketch':'neon'); apply(); });
+    })();
+
+    // ── ♫：注入异形音乐播放器组件（7899 的 widget），页内直接渲染、无外框 ──
+    const NEAPI='http://127.0.0.1:7899', mhost=document.getElementById('lofe-music');
+    let musicLoaded=false, musicVisible=false;
+    const loadScript=src=>new Promise((res,rej)=>{const s=document.createElement('script');
+      s.src=src;s.onload=res;s.onerror=rej;document.head.appendChild(s);});
+    async function initMusic(){
+      const v='?v='+Date.now();                    // 破缓存，永远拉最新 widget
+      const frag=await fetch(NEAPI+'/widget'+v).then(r=>r.text()).catch(()=>null);
+      if(!frag){ alert('音乐服务没在跑（localhost:7899）'); return false; }
+      mhost.innerHTML=frag;                       // 注入异形播放器（含 <style> 与 DOM）
+      await loadScript(NEAPI+'/widget.js'+v);      // 逻辑脚本自初始化
+      musicLoaded=true; return true;
+    }
+    document.getElementById('music-btn').addEventListener('click',async()=>{
+      if(!musicLoaded){ if(await initMusic()) musicVisible=true; return; }
+      musicVisible=!musicVisible; mhost.style.display=musicVisible?'block':'none';
+    });
+    const CF=["'Orbitron',sans-serif","'Audiowide',cursive","'Michroma',sans-serif","'Chakra Petch',sans-serif","'Share Tech Mono',monospace","'Wallpoet',cursive"];
+    let cfi=parseInt(localStorage.getItem('lofe_cf2')||'0',10)||0;
+    const applyCF=()=>{clk.style.fontFamily=CF[cfi%CF.length];};
+    applyCF(); clk.style.cursor='pointer'; clk.title='⌘+点击 换字体';
+    clk.addEventListener('click',e=>{ if(e.metaKey||e.ctrlKey){ cfi=(cfi+1)%CF.length; localStorage.setItem('lofe_cf2',cfi); applyCF(); } });
+
+    // ── 分类标题哥特字体（⌘/Ctrl+点击任一分类标题循环换体，同时钟逻辑）──
+    const GF=["'UnifrakturMaguntia'","'UnifrakturCook'","'Pirata One'","'Grenze Gotisch'","'MedievalSharp'"];
+    let gfi=parseInt(localStorage.getItem('lofe_gf')||'0',10)||0;
+    const applyGF=()=>document.documentElement.style.setProperty('--goth',GF[gfi%GF.length]);
+    applyGF();
+    const COL=JSON.parse(localStorage.getItem('lofe_collapsed')||'[]');
+    document.querySelectorAll('.shelf-head').forEach(h=>{
+      const shelf=h.closest('.shelf');
+      if(shelf&&COL.includes(shelf.id)) shelf.classList.add('collapsed');
+      h.title='点击折叠/展开 · ⌘+点击换字体';
+      h.addEventListener('click',e=>{
+        if(e.metaKey||e.ctrlKey){ gfi=(gfi+1)%GF.length; localStorage.setItem('lofe_gf',gfi); applyGF(); return; }
+        shelf.classList.toggle('collapsed');
+        const on=shelf.classList.contains('collapsed'), i=COL.indexOf(shelf.id);
+        if(on&&i<0)COL.push(shelf.id); if(!on&&i>=0)COL.splice(i,1);
+        localStorage.setItem('lofe_collapsed',JSON.stringify(COL));
+      });
+    });
+
+    // ── LOFE / daily 下拉菜单（daily 为当前视图；saved/work/Betty 待实现）──
+    const ht=document.getElementById('lofe-ht'), htMenu=document.getElementById('lofe-menu'),
+          catEl=document.getElementById('lofe-cat');
+    // ⌘/Ctrl+点击 LOFE：循环 LOFE/YouTube/view 大标题 + 整个菜单的哥特字体（独立记忆）
+    const GFH=GF;
+    let gfhi=parseInt(localStorage.getItem('lofe_gfh')||'0',10)||0;
+    const applyGFH=()=>document.documentElement.style.setProperty('--goth-hdr',GFH[gfhi%GFH.length]);
+    applyGFH(); ht.title='点击展开 · ⌘+点击换字体';
+    ht.addEventListener('click',e=>{ e.stopPropagation();
+      if(e.metaKey||e.ctrlKey){ gfhi=(gfhi+1)%GFH.length; localStorage.setItem('lofe_gfh',gfhi); applyGFH(); return; }
+      htMenu.style.left=catEl.offsetLeft+'px';   // 一级菜单从 Social Media(大类)处下拉
+      htMenu.classList.toggle('show'); });
+    htMenu.addEventListener('click',e=>e.stopPropagation());   // 菜单内点击不冒泡触发关闭
+    document.addEventListener('click',()=>htMenu.classList.remove('show'));
+    htMenu.querySelectorAll('.ht-si').forEach(si=>{        // 二级=视图，点击跳转
+      si.addEventListener('click',()=>{
+        if(si.classList.contains('soon')||si.classList.contains('active')) return;
+        const href=si.dataset.href; if(href) location.href=href; });
+    });
+
+    // ── 观看进度（localStorage；仅统计本站小窗播放）──
+    const PROG=JSON.parse(localStorage.getItem('lofe_prog')||'{}');
+    const vidOf=c=>{const a=c.querySelector('.thumb-link[data-vid]');return a?a.getAttribute('data-vid'):null;};
+    function paintBar(c){const v=vidOf(c);if(!v)return;const f=PROG[v]||0;
+      const fl=c.querySelector('.pfill');if(fl)fl.style.width=(Math.min(1,f)*100)+'%';
+      c.classList.toggle('watched',f>=0.9);}
+    function reflow(){
+      const board=document.getElementById('board'),done=[];
+      document.querySelectorAll('.shelf:not(.shelf-watched):not(.shelf-top) .strip').forEach(strip=>{
+        const cards=[...strip.querySelectorAll('.card')];
+        cards.forEach(c=>{if((PROG[vidOf(c)]||0)>=0.9)done.push(c);});
+        cards.filter(c=>(PROG[vidOf(c)]||0)<0.9)
+             .sort((a,b)=>(PROG[vidOf(a)]||0)-(PROG[vidOf(b)]||0))
+             .forEach(c=>strip.appendChild(c));
+      });
+      let w=document.getElementById('shelf-watched');
+      if(done.length){
+        if(!w){w=document.createElement('section');w.id='shelf-watched';w.className='shelf shelf-watched';
+          w.innerHTML='<h2 class="shelf-head" style="border-color:#888;color:#888">✅ Watched<span class="cnt">0</span></h2><div class="strip"></div>';
+          board.appendChild(w);}
+        const ws=w.querySelector('.strip'); done.forEach(c=>ws.appendChild(c));
+        w.querySelector('.cnt').textContent=ws.querySelectorAll('.card').length;
+      }
+    }
+    document.querySelectorAll('.card').forEach(paintBar); reflow();
+
+    // ── 归档（localStorage；每行最右 Archive 区，点开展开；不取关）──
+    const ARCH=JSON.parse(localStorage.getItem('lofe_arch')||'{}');
+    function applyArchive(){
+      document.querySelectorAll('.shelf:not(.shelf-watched):not(.shelf-top) .strip').forEach(strip=>{
+        let pile=strip.querySelector('.arch-pile');
+        if(!pile){
+          pile=document.createElement('div'); pile.className='arch-pile';
+          pile.innerHTML='<span class="ap-ic">🗄</span><span>Archive</span><span class="ap-n">0</span>';
+          pile.addEventListener('click',()=>strip.classList.toggle('show-arch'));
+        }
+        const cards=[...strip.querySelectorAll('.card')];
+        cards.filter(c=>!ARCH[vidOf(c)]).forEach(c=>{c.classList.remove('archived');strip.appendChild(c);});
+        strip.appendChild(pile);
+        const arch=cards.filter(c=>ARCH[vidOf(c)]);
+        arch.forEach(c=>{c.classList.add('archived');strip.appendChild(c);});
+        pile.querySelector('.ap-n').textContent=arch.length;
+        pile.style.display=arch.length?'flex':'none';
+      });
+    }
+    document.querySelectorAll('.arch-btn').forEach(b=>{
+      b.addEventListener('click',e=>{ e.preventDefault(); e.stopPropagation();
+        const v=b.dataset.vid; if(ARCH[v]) delete ARCH[v]; else ARCH[v]=true;
+        localStorage.setItem('lofe_arch',JSON.stringify(ARCH)); applyArchive(); });
+    });
+    applyArchive();
+
+    // 卡片 >7 的行自动缓慢滚动；方向逐行交替（第1滚动行 左→右，下一 右→左…）；hover 暂停
+    (function(){
+      let k=0;
+      document.querySelectorAll('.strip').forEach(s=>{
+        if(s.querySelectorAll('.card').length<=7) return;
+        let dir=(k%2===0)?1:-1; k++;
+        const mx=()=>s.scrollWidth-s.clientWidth;
+        if(dir<0) s.scrollLeft=mx();
+        let pos=s.scrollLeft, paused=false;
+        s.addEventListener('mouseenter',()=>{paused=true;});
+        s.addEventListener('mouseleave',()=>{paused=false;});
+        setInterval(()=>{
+          if(paused) return; const m=mx(); if(m<=0) return;
+          if(pos>m) pos=m;                       // 内容/尺寸变化后夹回
+          pos+=dir*0.5;                          // 0.5px/33ms ≈ 15px/s
+          if(pos<=0){pos=0;dir=1;} else if(pos>=m){pos=m;dir=-1;}
+          s.scrollLeft=pos;                      // 浮点累加,避免整数取整卡住不反弹
+        },33);
+      });
+    })();
+
+    // ── 页内小窗播放（YouTube IFrame API 追踪进度；可拖动 + 缩放）──
+    const P=document.getElementById('lofe-player'), T=document.getElementById('lofe-ptitle');
+    let ytP=null,cur=null,pTimer=null,apiReady=false;
+    (function(){var t=document.createElement('script');t.src='https://www.youtube.com/iframe_api';document.head.appendChild(t);})();
+    // 页面加载即预建播放器（隐藏容器里）；点击时在手势内 loadVideoById→带声播放，
+    // 避免首次走 new YT.Player 的异步 onReady 丢失手势 → 被浏览器拦成暂停灰罩（雾感）
+    window.onYouTubeIframeAPIReady=()=>{
+      ytP=new YT.Player('lofe-frame',{height:'100%',width:'100%',
+        playerVars:{rel:0,playsinline:1,modestbranding:1},
+        events:{onReady:()=>{apiReady=true;},onStateChange:onState}}); };
+    function saveProg(){ if(!ytP||!ytP.getDuration||!cur)return;
+      const d=ytP.getDuration(),t=ytP.getCurrentTime();
+      if(d>0){ PROG[cur]=Math.min(1,t/d); localStorage.setItem('lofe_prog',JSON.stringify(PROG));
+        const c=[...document.querySelectorAll('.card')].find(x=>vidOf(x)===cur); if(c)paintBar(c); } }
+    function onState(e){ clearInterval(pTimer); if(e.data===1){pTimer=setInterval(saveProg,2000);} else {saveProg();} }
+    function openP(vid,title){ cur=vid; T.textContent=title||''; P.classList.add('show');
+      if(!apiReady||!ytP){ setTimeout(()=>openP(vid,title),200); return; }
+      ytP.loadVideoById(vid); }   // 手势内加载→带声播放，无暂停灰罩
+    function closeP(){ saveProg(); if(ytP&&ytP.stopVideo)ytP.stopVideo(); P.classList.remove('show'); reflow(); }
+    document.getElementById('lofe-close').addEventListener('click',closeP);
+    document.querySelectorAll('.thumb-link[data-vid]').forEach(a=>{
+      a.addEventListener('click',e=>{ const vid=a.getAttribute('data-vid'); if(!vid)return; e.preventDefault();
+        const c=a.closest('.card'),tt=c&&c.querySelector('.c-title'); openP(vid,tt?tt.textContent:''); });
+    });
+    const bar=document.getElementById('lofe-bar'), rz=document.getElementById('lofe-resize');
+    let drag=false,rzing=false,ox=0,oy=0,sx=0,sy=0,sw=0,sh=0,sL=0,sT=0;
+    const shield=v=>{const f=P.querySelector('iframe');if(f)f.style.pointerEvents=v;};
+    bar.addEventListener('mousedown',e=>{ drag=true; const r=P.getBoundingClientRect();
+      ox=e.clientX-r.left; oy=e.clientY-r.top; P.style.right='auto'; P.style.bottom='auto';
+      shield('none'); document.body.style.userSelect='none'; });
+    rz.addEventListener('mousedown',e=>{ rzing=true; e.preventDefault(); e.stopPropagation();
+      sx=e.clientX; sy=e.clientY; const r=P.getBoundingClientRect();
+      sw=r.width; sh=r.height; sL=r.left; sT=r.top;
+      P.style.right='auto'; P.style.bottom='auto'; P.style.left=sL+'px'; P.style.top=sT+'px';
+      shield('none'); document.body.style.userSelect='none'; });
+    window.addEventListener('mousemove',e=>{
+      if(drag){ P.style.left=(e.clientX-ox)+'px'; P.style.top=(e.clientY-oy)+'px'; }
+      else if(rzing){ const nw=Math.max(280,sw-(e.clientX-sx)),nh=Math.max(200,sh-(e.clientY-sy));
+        P.style.width=nw+'px'; P.style.height=nh+'px';
+        P.style.left=(sL+(sw-nw))+'px'; P.style.top=(sT+(sh-nh))+'px'; }
+    });
+    window.addEventListener('mouseup',()=>{ drag=false; rzing=false; shield(''); document.body.style.userSelect=''; });
+  </script>
+</body>
+</html>
